@@ -1,0 +1,15 @@
+{
+  "name": "vuepress-starter",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vuepress dev docs --temp .temp",
+    "docs:build": "vuepress build docs",
+    "deploy": "bash build.sh"
+  },
+  "devDependencies": {
+    "vuepress": "^1.5.2",
+    "watchpack": "^1.6.1"
+  }
+}
