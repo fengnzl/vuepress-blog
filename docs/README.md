@@ -1,17 +1,22 @@
 ---
 home: true
 heroImage: /assets/kimtyping.gif
-heroText: Vue-learn
+heroText: 城南花已开
 tagline: Talk is cheap. Show me the code.
 actionText: 开始阅读 →
-actionLink: /dailyLearn/ground-up/
+actionLink: /daily-learn/JavaScript/call-apply-bind-simulator
 features:
-- title: Vue日常
-  details: 在学习Vue过程中整理的笔记，及项目中所遇相关问题，既可以加深记忆又可以查漏补缺。
-- title: 源码学习
-  details: 用于记录学习Vue源码的相关知识。
-- title: Vue-demo
-  details: 记录学习Vue的一些小demo或者项目。
-footer: Powered By VuePress | 城南花已开
+- title: 日常积累
+  details: 记录日常学习过程中整理的笔记，及项目中所遇相关问题，既可以加深记忆又可以查漏补缺。
+- title: 计算机基础
+  details: 用于记录学习计算机基础相关知识，打好基础。
+- title: 每周一译
+  details: 翻译外文技术文章，文章来源 JavaScript-Weekly、CSS-tricks 等网站，旨在提高个人阅读文献的能力。
+footer: MIT Licensed | Copyright © 2019-present 城南花已开
 ---
+::: tip
+
+本博客于 2020.07.18 从原先的 Gridea 静态博客迁移完成，后续将会持续更新。:tada:
+
+:::
 

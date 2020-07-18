@@ -1,15 +1,24 @@
 {
-  "name": "vuepress-starter",
+  "name": "vuepress-blog",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "A blog created by VuePress, Just for learning and recording",
+  "author": "城南花已开",
   "license": "MIT",
+  "homepage": "https://recoverymonster.github.io/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/recoveryMonster/vuepress-blog.git"
+  },
   "scripts": {
     "dev": "vuepress dev docs --temp .temp",
-    "docs:build": "vuepress build docs",
+    "build": "vuepress build docs",
     "deploy": "bash build.sh"
   },
   "devDependencies": {
     "vuepress": "^1.5.2",
     "watchpack": "^1.6.1"
+  },
+  "dependencies": {
+    "vuepress-plugin-gitalk-maker": "^0.1.0"
   }
 }
