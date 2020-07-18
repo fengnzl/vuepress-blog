@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/recoveryMonster/vuepress-blog.git"
   },
+  "bugs": {
+    "url": "https://github.com/recoveryMonster/vuepress-blog/issues"
+  },
   "scripts": {
     "dev": "vuepress dev docs --temp .temp",
     "build": "vuepress build docs",

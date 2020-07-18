@@ -7,19 +7,17 @@
   <a href="https://github.com/recoveryMonster/vuepress-blog/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
-  <a href="https://github.com/recoveryMonster/vuepress-blog/blob/master/LICENSE" target="_blank">
+  <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/recoveryMonster/vuepress-blog" />
   </a>
-  <a href="https://twitter.com/learnTech1010" target="_blank">
-    <img alt="Twitter: learnTech1010" src="https://img.shields.io/twitter/follow/learnTech1010.svg?style=social" />
+  <a href="https://twitter.com/learnTech10" target="_blank">
+    <img alt="Twitter: learnTech10" src="https://img.shields.io/twitter/follow/learnTech10.svg?style=social" />
   </a>
 </p>
 
 > A blog created by VuePress, Just for learning and recording
 
 ### 🏠 [Homepage](https://recoverymonster.github.io/)
-
-### ✨ [Demo](https://github.com/recoveryMonster/vuepress-blog.git)
 
 ## Install
 
@@ -31,17 +29,16 @@ yarn install
 
 👤 **城南花已开**
 
-* Twitter: [@learnTech1010](https://twitter.com/learnTech1010)
+* Twitter: [@learnTech10](https://twitter.com/learnTech10)
 * Github: [@recoveryMonster](https://github.com/recoveryMonster)
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/recoveryMonster/vuepress-blog/issues). 
 
 ## Show your support
 
 Give a ⭐️ if this project helped you!
-
-## 📝 License
-
-Copyright © 2020 [城南花已开](https://github.com/recoveryMonster).<br />
-This project is [MIT](https://github.com/recoveryMonster/vuepress-blog/blob/master/LICENSE) licensed.
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
