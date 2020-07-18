@@ -117,8 +117,6 @@ D:\UPUPW_AP7.2_64\vhosts\xdd\think\thinkphp\library\think\Debug.php:226:boolean 
 
 还可以用链式操作**allowField()方法**，过滤post数组中非数据表中的字段
 
-// 过滤post数组中的非数据表字段数据
-
 ```php
 // 过滤post数组中的非数据表字段数据
 $user->allowField(true)->save($_POST);
