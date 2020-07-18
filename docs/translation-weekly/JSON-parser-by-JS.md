@@ -14,21 +14,21 @@
 
 > 编写一个函数，它接收一个合法的 JSON 字符串参数，功能是将其转换为一个对象（或者根据你所选择的语言，转换为 dicts，maps 等类型）。接收的参数如下：
 
-``` json
+```json
 fakeParseJSON('{ "data": { "fish": "cake", "array": [1,2,3], "children": [ { "something": "else" }, { "candy": "cane" }, { "sponge": "bob" } ] } } ')
 ```
 
 最开始时，我很想这么编写：
 
-``` js
+```js
 const fakeParseJSON = JSON.parse
 ```
 
 但是，我想到我已经写了一些关于抽象语法树（Abstract Syntax Tree ，AST）的文章。
 
-* [通过 Babel 创建自定义 JavaScript 语法](https://lihautan.com/creating-custom-javascript-syntax-with-babel/)
-* [编写自定义 Babel 转换的指南](https://lihautan.com/step-by-step-guide-for-writing-a-babel-transformation/)
-* [使用 JavaScript 操作 AST](https://lihautan.com/manipulating-ast-with-javascript/)
+- [通过 Babel 创建自定义 JavaScript 语法](https://lihautan.com/creating-custom-javascript-syntax-with-babel/)
+- [编写自定义 Babel 转换的指南](https://lihautan.com/step-by-step-guide-for-writing-a-babel-transformation/)
+- [使用 JavaScript 操作 AST](https://lihautan.com/manipulating-ast-with-javascript/)
 
 上述文章涵盖了编译管道的综述，同样也描述了如何操作 AST，但是并没有涵盖太多关于如何实现编译的内容。
 
@@ -42,35 +42,31 @@ const fakeParseJSON = JSON.parse
 
 如果你查阅了[技术规范](https://www.json.org/json-en.html)，可以看到两个示意图：
 
-* 左边的语法图（轨道图）
+- 左边的语法图（轨道图）
 
   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191214180353.png)
 
   图片来源：[https://www.json.org/img/object.png](https://www.json.org/img/object.png)
 
-* 右边是 [McKeeman 形式](https://www.crockford.com/mckeeman.html)，[Backus-Naur 形式]([https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form](https://en.wikipedia.org/wiki/Backus–Naur_form))（BNF）的变体
+- 右边是 [McKeeman 形式](https://www.crockford.com/mckeeman.html)，[Backus-Naur 形式]([https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form](https://en.wikipedia.org/wiki/Backus–Naur_form))（BNF）的变体
 
-  
-
-``` js
+  ```js
   json
-  element
-
+    element
+  
   value
-  object
-  array
-  string
-  number
+    object
+    array
+    string
+    number
     "true"
-  "false"
-  "null"
-
+    "false"
+    "null"
+  
   object
-    '{'
-  ws '}'
-  '{'
-  members '}'
-```
+    '{' ws '}'
+    '{' members '}'
+  ```
 
 上面两个表达的意思是相同的。
 
@@ -86,21 +82,21 @@ const fakeParseJSON = JSON.parse
 
 我们从左边开始，跟着箭头，将在右边停止。
 
-圆圈里面的是字符： `{` ， `，` ， `:` ， `}` 。方框里面的则是其他语法中的占位符： `whitespace` ， `string` 和 `value` 。因此要解析”whitespace"，我们需要查看语法中的"whitespace"。
+圆圈里面的是字符：`{`，`，`，`:`，`}`。方框里面的则是其他语法中的占位符：`whitespace`，`string`和`value`。因此要解析”whitespace"，我们需要查看语法中的"whitespace"。
 
-因此，从左边开始，对于“object”，最开始的字符必须时花括号 `{` 。然后我们在这里有两个选择：
+因此，从左边开始，对于“object”，最开始的字符必须时花括号`{`。然后我们在这里有两个选择：
 
-* `whitespace` → `}` → end，或者
-* `whitespace` → `string` → `whitespace` → `:` → `value` → `}` → 结束
+- `whitespace` → `}` → end，或者
+- `whitespace` → `string` → `whitespace` → `:` → `value` → `}` → 结束
 
 当然，当你到达”value"时，你可以选择以下两条路径：
 
-* → `}` → end，或者
-* → `，` → `whitespace` → `...` → value
+- → `}` → end，或者
+- → `，` → `whitespace` → `...` → value
 
 然后你可以继续循环，直到你决定走第一条路径：
 
-* → `}` → end
+- → `}` → end
 
 我认为我们现在已经熟悉了轨道图，让我们进入到下一节。
 
@@ -108,21 +104,20 @@ const fakeParseJSON = JSON.parse
 
 首先从下面这个结构开始：
 
-``` js
+```js
 function fakeParseJSON(str) {
-  let i = 0;
-  // TODO
+	let i = 0;
+	// TODO
 }
 ```
 
-我们初始化 `i` ，作为当前字符的索引，直达 `i` 指向了 `str` 的结尾。
+我们初始化`i` ，作为当前字符的索引，直达`i`指向了`str`的结尾。
 
 然后实现**“object”**语法
 
-``` js
+```js
 function fakeParseJSON(str) {
   let i = 0;
-
   function parseObject() {
     if (str[i] === '{') {
       i++;
@@ -141,16 +136,15 @@ function fakeParseJSON(str) {
 }
 ```
 
-在 `parseObject` 函数中，我们将会解析其他语法，如“string“ 和”whitespace“。当我们实现了它们，一切都会正常工作🤞。
+在`parseObject`函数中，我们将会解析其他语法，如“string“ 和”whitespace“。当我们实现了它们，一切都会正常工作🤞。
 
-我忘了一件事，忘记添加逗号 `,` ，它只有当我们开始第二次循环 `whitespace` → `string` → `whitespace` → `:` → `…` 时才会出现。
+我忘了一件事，忘记添加逗号`,`，它只有当我们开始第二次循环`whitespace` → `string` → `whitespace` → `:` → `…`时才会出现。
 
 基于以上描述，我们添加以下几行代码
 
 ``` js
 function fakeParseJSON(str) {
   let i = 0;
-
   function parseObject() {
     if (str[i] === '{') {
       i++;
@@ -179,39 +173,38 @@ function fakeParseJSON(str) {
 
 一些命名约定：
 
-* 当我们基于语法分析代码，使用返回值时，将其命名为 `parseSomething`
-* 当我们期望这里出现字符，但是不使用字符时，将其命名为 `eatSomething`
-* 当我们确定不期望这里出现字符时，将其命名为 `skipSomething` 。
+- 当我们基于语法分析代码，使用返回值时，将其命名为`parseSomething`
+- 当我们期望这里出现字符，但是不使用字符时，将其命名为`eatSomething`
+- 当我们确定不期望这里出现字符时，将其命名为`skipSomething`。
 
-让我们来实现 `eatComma` 和 `eatColon` 函数：
+让我们来实现`eatComma`和`eatColon`函数：
 
-``` js
-function fakeParseJSON(str) {
-  // ...
-  function eatComma() {
-    if (str[i] !== ',') {
-      throw new Error('Expected ",".');
-    }
-    i++;
-  }
+```js
+function fakeParseJSON(str){
+	// ...
+	 function eatComma() {
+        if (str[i] !== ',') {
+          throw new Error('Expected ",".');
+        }
+        i++;
+      }
 
-  function eatColon() {
-    if (str[i] !== ':') {
-      throw new Error('Expected ":".');
-    }
-    i++;
-  }
+      function eatColon() {
+        if (str[i] !== ':') {
+          throw new Error('Expected ":".');
+        }
+        i++;
+      }
 }
 ```
 
-我们已经实现了 `parseObject` 语法，但是这个解析函数的返回值是什么？
+我们已经实现了`parseObject`语法，但是这个解析函数的返回值是什么？
 
 当然，我们需要返回一个 JavaScript 的对象：
 
-``` js
+```js
 function fakeParseJSON(str) {
   let i = 0;
-
   function parseObject() {
     if (str[i] === '{') {
       i++;
@@ -289,12 +282,12 @@ function fakeParseJSON(str) {
   function parseValue() {
     skipWhitespace();
     const value =
-      parseString() ? ?
-      parseNumber() ? ?
-      parseObject() ? ?
-      parseArray() ? ?
-      parseKeyword('true', true) ? ?
-      parseKeyword('false', false) ? ?
+      parseString() ??
+      parseNumber() ??
+      parseObject() ??
+      parseArray() ??
+      parseKeyword('true', true) ??
+      parseKeyword('false', false) ??
       parseKeyword('null', null);
     skipWhitespace();
     return value;
@@ -302,9 +295,9 @@ function fakeParseJSON(str) {
 }
 ```
 
-`??` 是 [nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator)（空联合操作符），它与 `||` 操作符类似。 `||` 通常被用于默认值 `foo || default` ，只有当 `foo` 是 falsey 的时候， `||` 返回 `default` 。然而，只有当 `foo` 是 `null` 或者 `undefined` 的时候， `??` 操作符才会返回 `default` 。
+`??`是 [nullish coalescing operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator)（空联合操作符），它与`||`操作符类似。`||`通常被用于默认值`foo || default`，只有当`foo`是 falsey 的时候，`||`返回`default`。然而，只有当`foo`是`null`或者`undefined`的时候，`??`操作符才会返回`default`。
 
-parseKeyword 函数将会检查 `str.slice(i)` 的值是否与 keyword 字符串相等，如果相等，将会返回 keyword 值。
+parseKeyword 函数将会检查`str.slice(i)`的值是否与 keyword 字符串相等，如果相等，将会返回 keyword 值。
 
 ``` js
 function fakeParseJSON(str) {
@@ -318,11 +311,11 @@ function fakeParseJSON(str) {
 }
 ```
 
-这就是 `parseValue` ！
+这就是`parseValue`！
 
 我们还有 3 个语法要编写，但是为了减小本篇文章的篇幅，将实现剩余的函数展示在 [CodeSandBox](https://codesandbox.io/s/json-parser-k4c3w?from-embed):
 
-``` js
+```js
 function fakeParseJSON(str) {
   let i = 0;
 
@@ -381,12 +374,12 @@ function fakeParseJSON(str) {
   function parseValue() {
     skipWhitespace();
     const value =
-      parseString() ? ?
-      parseNumber() ? ?
-      parseObject() ? ?
-      parseArray() ? ?
-      parseKeyword("true", true) ? ?
-      parseKeyword("false", false) ? ?
+      parseString() ??
+      parseNumber() ??
+      parseObject() ??
+      parseArray() ??
+      parseKeyword("true", true) ??
+      parseKeyword("false", false) ??
       parseKeyword("null", null);
     skipWhitespace();
     return value;
@@ -509,7 +502,7 @@ function fakeParseJSON(str) {
 }
 ```
 
-当我们完成所有的语法实现后，我们需要返回 JSON 的值，它是由 `parseValue` 返回的。
+当我们完成所有的语法实现后，我们需要返回 JSON 的值，它是由`parseValue`返回的。
 
 ``` js
 function fakeParseJSON(str) {
@@ -530,19 +523,19 @@ function fakeParseJSON(str) {
 
 处理 2 个常见的错误情况
 
-* 未知字符
-* 字符串意外结束
+- 未知字符
+- 字符串意外结束
 
 ### 未知字符和字符串意外结束
 
-在整个循环中，例如 `parseObject` 函数中的 while 循环：
+在整个循环中，例如`parseObject`函数中的 while 循环：
 
 ``` js
 function fakeParseJSON(str) {
   // ...
   function parseObject() {
     // ...
-    while (str[i] !== '}') {
+    while(str[i] !== '}') {
 ```
 
 我们在获取字符时，需要确保没有超出字符串的长度。当字符串意外结束时会产生这种问题，然而在这个例子中，我们仍然在等待结尾字符“}”。
@@ -597,15 +590,12 @@ JSON_ERROR_002 Unexpected end of input
 
 ``` js
 // instead of
-Unexpected token "a"
-at position 5
+Unexpected token "a" at position 5
 
 // show
-{
-  "b"
-  a
-    ^
-    JSON_ERROR_001 Unexpected token "a"
+{ "b"a
+      ^
+JSON_ERROR_001 Unexpected token "a"
 ```
 
 这是一个示例，关于如何输出代码片段：
@@ -633,20 +623,16 @@ function fakeParseJSON(str) {
 
 ``` js
 // instead of
-Unexpected token "a"
-at position 5
+Unexpected token "a" at position 5
 
 // show
-{
-  "b"
-  a
-    ^
-    JSON_ERROR_001 Unexpected token "a".
-  Expecting a ":"
-  over here, eg: {
-      "b": "bar"
-    } ^
-    You can learn more about valid JSON string in http: //goo.gl/xxxxx
+{ "b"a
+      ^
+JSON_ERROR_001 Unexpected token "a".
+Expecting a ":" over here, eg:
+{ "b": "bar" }
+      ^
+You can learn more about valid JSON string in http://goo.gl/xxxxx
 ```
 
 如果可能，建议应该基于上下文，即解析器到目前位置所收集的相关信息。
@@ -655,25 +641,25 @@ at position 5
 fakeParseJSON('"Lorem ipsum');
 
 // instead of
-Expecting a `"`
-over here, eg:
-  "Foo Bar" ^
+Expecting a `"` over here, eg:
+"Foo Bar"
+        ^
 
-  // show
-  Expecting a `"`
-over here, eg:
-  "Lorem ipsum" ^
+// show
+Expecting a `"` over here, eg:
+"Lorem ipsum"
+            ^
 ```
 
 基于上下文的建议更具有相关性和可操作性。
 
 考虑到所有的建议，通过以下几个方面检查更新后的 [CodeSandbox](https://codesandbox.io/s/json-parser-with-error-handling-hjwxk?from-embed) :
 
-* 有意义的错误信息
-* 指出错误所在之处的代码片段
-* 提供错误修复建议
+- 有意义的错误信息
+- 指出错误所在之处的代码片段
+- 提供错误修复建议
 
-``` js
+```js
 function fakeParseJSON(str) {
   let i = 0;
 
@@ -739,12 +725,12 @@ function fakeParseJSON(str) {
   function parseValue() {
     skipWhitespace();
     const value =
-      parseString() ? ?
-      parseNumber() ? ?
-      parseObject() ? ?
-      parseArray() ? ?
-      parseKeyword("true", true) ? ?
-      parseKeyword("false", false) ? ?
+      parseString() ??
+      parseNumber() ??
+      parseObject() ??
+      parseArray() ??
+      parseKeyword("true", true) ??
+      parseKeyword("false", false) ??
       parseKeyword("null", null);
     skipWhitespace();
     return value;
@@ -873,8 +859,7 @@ function fakeParseJSON(str) {
   // error handling
   function expectNotEndOfInput(expected) {
     if (i === str.length) {
-      printCodeSnippet( `Expecting a \` ${expected}\ `
-        here ` );
+      printCodeSnippet(`Expecting a \`${expected}\` here`);
       throw new Error("JSON_ERROR_0001 Unexpected End of Input");
     }
   }
@@ -887,108 +872,92 @@ function fakeParseJSON(str) {
   }
 
   function expectObjectKey() {
-    printCodeSnippet(`
-        Expecting object key here
+    printCodeSnippet(`Expecting object key here
 
-        For example: {
-          "foo": "bar"
-        } ^
-        ^
-        ^
-        ^
-        ^
-        `);
+For example:
+{ "foo": "bar" }
+  ^^^^^`);
     throw new Error("JSON_ERROR_0003 Expecting JSON Key");
   }
 
   function expectCharacter(expected) {
     if (str[i] !== expected) {
-      printCodeSnippet( `
-        Expecting a\ ` ${expected}\ `
-        here ` );
+      printCodeSnippet(`Expecting a \`${expected}\` here`);
       throw new Error("JSON_ERROR_0004 Unexpected token");
     }
   }
 
   function expectDigit(numSoFar) {
     if (!(str[i] >= "0" && str[i] <= "9")) {
-      printCodeSnippet(`
-        JSON_ERROR_0005 Expecting a digit here
+      printCodeSnippet(`JSON_ERROR_0005 Expecting a digit here
 
-        For example:
-        $ {
-          numSoFar
-        }
-        5 $ {
-          " ".repeat(numSoFar.length)
-        } ^ `);
+For example:
+${numSoFar}5
+${" ".repeat(numSoFar.length)}^`);
       throw new Error("JSON_ERROR_0006 Expecting a digit");
     }
   }
 
   function expectEscapeCharacter(strSoFar) {
-    printCodeSnippet(`
-        JSON_ERROR_0007 Expecting escape character
+    printCodeSnippet(`JSON_ERROR_0007 Expecting escape character
 
-        For example:
-        "${strSoFar}\\n"
-        $ {
-          " ".repeat(strSoFar.length + 1)
-        } ^ ^
-        List of escape characters are: \\", \\\\, \\/, \\b, \\f, \\n, \\r, \\t, \\u`);
-        throw new Error("JSON_ERROR_0008 Expecting an escape character");
-      }
+For example:
+"${strSoFar}\\n"
+${" ".repeat(strSoFar.length + 1)}^^
+List of escape characters are: \\", \\\\, \\/, \\b, \\f, \\n, \\r, \\t, \\u`);
+    throw new Error("JSON_ERROR_0008 Expecting an escape character");
+  }
 
-      function expectEscapeUnicode(strSoFar) {
-        printCodeSnippet(`Expect escape unicode
+  function expectEscapeUnicode(strSoFar) {
+    printCodeSnippet(`Expect escape unicode
 
 For example:
 "${strSoFar}\\u0123
 ${" ".repeat(strSoFar.length + 1)}^^^^^^`);
-        throw new Error("JSON_ERROR_0009 Expecting an escape unicode");
-      }
+    throw new Error("JSON_ERROR_0009 Expecting an escape unicode");
+  }
 
-      function printCodeSnippet(message) {
-        const from = Math.max(0, i - 10);
-        const trimmed = from > 0;
-        const padding = (trimmed ? 4 : 0) + (i - from);
-        const snippet = [
-          (trimmed ? "... " : "") + str.slice(from, i + 1),
-          " ".repeat(padding) + "^",
-          " ".repeat(padding) + message
-        ].join("\n");
-        console.log(snippet);
-      }
-    }
+  function printCodeSnippet(message) {
+    const from = Math.max(0, i - 10);
+    const trimmed = from > 0;
+    const padding = (trimmed ? 4 : 0) + (i - from);
+    const snippet = [
+      (trimmed ? "... " : "") + str.slice(from, i + 1),
+      " ".repeat(padding) + "^",
+      " ".repeat(padding) + message
+    ].join("\n");
+    console.log(snippet);
+  }
+}
 
-    // console.log("Try uncommenting the fail cases and see their error message");
-    // console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
+// console.log("Try uncommenting the fail cases and see their error message");
+// console.log("↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓");
 
-    // Fail cases:
-    printFailCase("-");
-    printFailCase("-1.");
-    printFailCase("1e");
-    printFailCase("-1e-2.2");
-    printFailCase("{");
-    printFailCase("{}{");
-    printFailCase('{"a"');
-    printFailCase('{"a": "b",');
-    printFailCase('{"a":"b""c"');
-    printFailCase('{"a":"foo\\}');
-    printFailCase('{"a":"foo\\u"}');
-    printFailCase("[");
-    printFailCase("[][");
-    printFailCase("[[]");
-    printFailCase('["]');
+// Fail cases:
+printFailCase("-");
+printFailCase("-1.");
+printFailCase("1e");
+printFailCase("-1e-2.2");
+printFailCase("{");
+printFailCase("{}{");
+printFailCase('{"a"');
+printFailCase('{"a": "b",');
+printFailCase('{"a":"b""c"');
+printFailCase('{"a":"foo\\}');
+printFailCase('{"a":"foo\\u"}');
+printFailCase("[");
+printFailCase("[][");
+printFailCase("[[]");
+printFailCase('["]');
 
-    function printFailCase(json) {
-      try {
-        console.log( `fakeParseJSON('${json}')` );
-        fakeParseJSON(json);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+function printFailCase(json) {
+  try {
+    console.log(`fakeParseJSON('${json}')`);
+    fakeParseJSON(json);
+  } catch (error) {
+    console.error(error);
+  }
+}
 ```
 
 ## 总结
@@ -1003,7 +972,7 @@ ${" ".repeat(strSoFar.length + 1)}^^^^^^`);
 
 现在你已经知道如何实现一个简答的解析器了，是时候着眼于复杂的解析器了
 
-* [Babel parser](https://github.com/babel/babel/tree/master/packages/babel-parser)
-* [Svelte parser](https://github.com/sveltejs/svelte/tree/master/src/compiler/parse)
+- [Babel parser](https://github.com/babel/babel/tree/master/packages/babel-parser)
+- [Svelte parser](https://github.com/sveltejs/svelte/tree/master/src/compiler/parse)
 
 最后，请关注 [@cassidoo](https://twitter.com/cassidoo)，她的周刊令人惊叹！

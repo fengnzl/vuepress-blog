@@ -24,7 +24,7 @@ yarn install
 
 👤 **城南花已开**
 
-* Twitter: [@ learnTech10](https://twitter.com/ learnTech10)
+* Twitter: [@ learnTech10](https://twitter.com/learnTech10)
 * Github: [@recoveryMonster](https://github.com/recoveryMonster)
 
 ## 🤝 Contributing
