@@ -14,9 +14,9 @@ features:
   details: 翻译外文技术文章，文章来源 JavaScript-Weekly、CSS-tricks 等网站，旨在提高个人阅读文献的能力。
 footer: MIT Licensed | Copyright © 2019-present 城南花已开
 ---
-::: tip
 
+::: tip 提示
 本博客于 2020.07.18 从原先的 Gridea 静态博客迁移完成，后续将会持续更新。:tada:
-
 :::
+
 

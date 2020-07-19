@@ -3377,6 +3377,11 @@ find-up@^3.0.0:
   dependencies:
     locate-path "^3.0.0"
 
+flow-bin@^0.129.0:
+  version "0.129.0"
+  resolved "https://registry.npm.taobao.org/flow-bin/download/flow-bin-0.129.0.tgz#50294d6e335dd97d095c27b096ea0b94c2415d55"
+  integrity sha1-UClNbjNd2X0JXCewluoLlMJBXVU=
+
 flush-write-stream@^1.0.0:
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/flush-write-stream/download/flush-write-stream-1.1.1.tgz#8dd7d873a1babc207d94ead0c2e0e44276ebf2e8"

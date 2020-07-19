@@ -12,7 +12,9 @@ const dailyLearnSidebar = [
   {
     title: 'Vue',
     children: [
+      'vue/',
       ['vue/ground-up/', 'From the Ground Up'],
+      ['vue/sourcecode-analysis/prepare/', '2.X 源码学习']
     ]
   },
   {
@@ -42,17 +44,16 @@ const dailyLearnSidebar = [
   },
 ];
 
-const vueSidebar = [
+const vueGroundUpSidebar = [
   {
     title: 'From the Ground Up',
     children: [
-      ['ground-up/', 'Introduction'],
-      'ground-up/reactivity',
-      'ground-up/render-fun',
-      'ground-up/vuex-simulator',
-      'ground-up/vue-router-hash',
-      'ground-up/form-validate',
-      'ground-up/i18n',
+      ['', 'Introduction'],
+      'reactivity',
+      'render-fun',
+      'vuex-simulator',
+      'vue-router-hash',
+      'form-validate',
     ]
   },
 ];
@@ -72,9 +73,20 @@ const wxTpFullstackSidebar = [
   },
 ];
 
+const vueSourceCodeAnalysisSidebar = [
+  {
+    title: '准备工作',
+    children: [
+      ['prepare/', 'Introduction'],
+      'prepare/flow',
+    ]
+  },
+];
+
 
 module.exports = {
   dailyLearnSidebar,
-  vueSidebar,
-  wxTpFullstackSidebar
+  vueGroundUpSidebar,
+  wxTpFullstackSidebar,
+  vueSourceCodeAnalysisSidebar
 }

@@ -16,6 +16,7 @@ module.exports = {
   themeConfig: {
     nav,
     sidebar,
+    editLinks: true,
     editLinkText: '在 GitHub 上编辑此页',
     repo: 'recoveryMonster',
     logo: '/assets/logo.png',

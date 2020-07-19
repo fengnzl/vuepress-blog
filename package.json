@@ -18,6 +18,7 @@
     "deploy": "bash build.sh"
   },
   "devDependencies": {
+    "flow-bin": "^0.129.0",
     "vuepress": "^1.5.2",
     "watchpack": "^1.6.1"
   },
