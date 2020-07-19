@@ -16,11 +16,12 @@ module.exports = {
   themeConfig: {
     nav,
     sidebar,
-    editLinks: true,
-    editLinkText: '在 GitHub 上编辑此页',
     repo: 'recoveryMonster',
-    logo: '/assets/logo.png',
+    editLinks: true,
     docsDir: 'docs',
+    docsRepo: 'recoveryMonster/vuepress-blog',
+    editLinkText: '在 GitHub 上编辑此页',
+    logo: '/assets/logo.png',
     lastUpdated: '上次更新',
     searchMaxSuggestoins: 10,
     sidebarDepth: 2
