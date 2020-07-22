@@ -170,4 +170,22 @@ var obj = {
 
 其中若想  `?T`  代表变量除了规定的类型之外，还可以为 `null` 或者 `undefined` 。而对象中问号在属性名后，冒号前代表该对象可以没有这个属性，但是如果存在这个属性，就必须为规定的 number 类型。
 
-基本上常用的几种类型注释就是上面几种，如果想要了解更多的类型，请移步[官方文档](https://flow.org/en/docs/types/)。
+基本上常用的几种类型注释就是上面几种，如果想要了解更多的类型，请移步[官方文档](https://flow.org/en/docs/types/)。同时由于我们加入了类型检查，这对于 JavaScript 来说属于不规范的。因此我们需要在上线前将其移除，Flow 提供了 [flow-remove-types](https://link.zhihu.com/?target=https%3A//flow.org/en/docs/tools/flow-remove-types/) 和 [babel 插件](https://link.zhihu.com/?target=https%3A//flow.org/en/docs/tools/babel/)两种方法来去除标注内容。
+
+## Vue.js 中的 Flow
+
+Vue.js 的目录下存在 `.flowconfig` 文件，用于 Flow 的配置，其中 `[libs]` 中指明了当前 Flow 的配置目录，为 `flow` ，表示指定的自定义类型和库都在该文件下。注意，其默认的配置目录为 `flow-typed` 。以下是 `flow` 目录下的相关文件信息。
+
+``` bash
+flow
+├── compiler.js        # 编译相关
+├── component.js       # 组件数据结构
+├── global-api.js      # Global API 结构
+├── modules.js         # 第三方库定义
+├── options.js         # 选项相关
+├── ssr.js             # 服务端渲染相关
+├── vnode.js           # 虚拟 node 相关
+```
+
+在阅读源码中，遇到了某种类型想要进行了解的时候，再回来查阅即可。
+
