@@ -23,6 +23,7 @@
     "watchpack": "^1.6.1"
   },
   "dependencies": {
+    "markdown-it-footnote": "^3.0.2",
     "vuepress-plugin-gitalk-maker": "^0.1.0"
   }
 }

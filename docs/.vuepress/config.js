@@ -11,7 +11,11 @@ module.exports = {
     ['link', { rel: 'icon', href: `/assets/logo.ico` }],
   ],
   markdown: {
-    lineNumbers: true // 代码块显示行号
+    lineNumbers: true, // 代码块显示行号
+    extendMarkdown: md => {
+      // markdown 的脚注!
+      md.use(require('markdown-it-footnote'))
+    }
   },
   themeConfig: {
     nav,

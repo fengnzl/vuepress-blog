@@ -10,5 +10,5 @@ module.exports = [
     ]
   },
   { text: '计算机基础', link: '/cs-basic/' },
-  { text: '每周一译', link: '/translation-weekly/understanding-async-await' },
+  { text: '每周一译', link: '/translation-weekly/A Font-Like SVG Icon System for Vue' },
 ];
