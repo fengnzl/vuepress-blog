@@ -79,6 +79,7 @@ const vueSourceCodeAnalysisSidebar = [
     children: [
       ['prepare/', 'Introduction'],
       'prepare/flow',
+      'prepare/rollup'
     ]
   },
 ];
