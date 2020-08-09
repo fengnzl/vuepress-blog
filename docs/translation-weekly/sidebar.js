@@ -2,6 +2,7 @@ const translationWeeklySidebar = [
   {
     title: '每周一译',
     children: [
+      'Arrays-symbols-and-realms',
       'A Font-Like SVG Icon System for Vue',
       'understanding-async-await',
       'write-js-by-six-letters',
