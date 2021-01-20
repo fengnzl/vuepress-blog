@@ -14,7 +14,8 @@ const dailyLearnSidebar = [
     children: [
       'vue/',
       ['vue/ground-up/', 'From the Ground Up'],
-      ['vue/sourcecode-analysis/prepare/', '2.X 源码学习']
+      ['vue/sourcecode-analysis/prepare/', '2.X 源码学习'],
+      'vue/componentChange'
     ]
   },
   {
