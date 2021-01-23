@@ -10,5 +10,5 @@ module.exports = [
     ]
   },
   { text: '计算机基础', link: '/cs-basic/' },
-  { text: '每周一译', link: '/translation-weekly/Arrays-symbols-and-realms' },
+  { text: '外文翻译', link: '/translation/Arrays-symbols-and-realms' },
 ];

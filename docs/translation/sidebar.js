@@ -1,6 +1,6 @@
 const translationWeeklySidebar = [
   {
-    title: '每周一译',
+    title: '外文翻译',
     children: [
       'Arrays-symbols-and-realms',
       'A-Font-Like-SVG-Icon-System-for-Vue',

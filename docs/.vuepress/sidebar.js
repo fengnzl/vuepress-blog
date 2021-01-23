@@ -1,6 +1,6 @@
 const { vueGroundUpSidebar, dailyLearnSidebar, wxTpFullstackSidebar, vueSourceCodeAnalysisSidebar } = require('../daily-learn/sidebar');
 const { CSBasicSidebar } = require('../cs-basic/sidebar');
-const { translationWeeklySidebar } = require('../translation-weekly/sidebar');
+const { translationWeeklySidebar } = require('../translation/sidebar');
 
 
 module.exports = {
@@ -9,5 +9,5 @@ module.exports = {
   '/daily-learn/PHP/wx-tp-fullstack/': wxTpFullstackSidebar,
   '/daily-learn/': dailyLearnSidebar,
   '/cs-basic/': CSBasicSidebar,
-  '/translation-weekly/': translationWeeklySidebar,
+  '/translation/': translationWeeklySidebar,
 }
