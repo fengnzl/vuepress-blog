@@ -3,3 +3,4 @@ dist
 .temp
 vue
 docs/.vuepress/plugin.js
+.DS_Store
