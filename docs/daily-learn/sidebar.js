@@ -80,9 +80,15 @@ const vueSourceCodeAnalysisSidebar = [
     children: [
       ['prepare/', 'Introduction'],
       'prepare/flow',
-      'prepare/rollup'
+      'prepare/rollup',
     ]
   },
+  {
+    title: '架构设计',
+    children: [
+      'architect/architecture-design'
+    ]
+  }
 ];
 
 
