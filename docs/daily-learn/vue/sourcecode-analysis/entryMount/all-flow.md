@@ -1,4 +1,4 @@
-# 整体流程
+## Vue 入口
 
 通过之前提到的架构设计，我们来分析在 Web 平台下构建出来的完整版本的（runtime + compiler ）版本的 Vue.js，其入口文件为 `src/platforms/web/entry-runtime-with-compiler.js` ，其代码如下：
 
@@ -197,6 +197,7 @@ if (inBrowser) {
 
 export default Vue
 ```
+## 流程图示
 
 这里主要是对 Vue 这个对象进行一些扩展，这时我们可以看到，其真正导出的地方来自 `src/core/index.js`，根据其文件进一步分析可知，Vue 入口到构造函数的流程图大致如下所示：
 

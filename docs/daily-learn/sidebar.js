@@ -92,7 +92,8 @@ const vueSourceCodeAnalysisSidebar = [
   {
     title: '从入口到整体流程',
     children: [
-      'entryMount/all-flow'
+      ['entryMount/all-flow', '整体流程'],
+      ['entryMount/init-mixin', 'initMixin 流程']
     ]
   }
 ];
