@@ -88,6 +88,12 @@ const vueSourceCodeAnalysisSidebar = [
     children: [
       'architect/architecture-design'
     ]
+  },
+  {
+    title: '从入口到整体流程',
+    children: [
+      'entryMount/all-flow'
+    ]
   }
 ];
 
