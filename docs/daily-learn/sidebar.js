@@ -24,6 +24,7 @@ const dailyLearnSidebar = [
       'CSS/make-talkbubble',
       'CSS/content-ellipsis',
       'CSS/context-center',
+      'CSS/css-secrets1',
     ]
   },
   {
