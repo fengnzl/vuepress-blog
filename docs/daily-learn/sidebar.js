@@ -7,6 +7,7 @@ const dailyLearnSidebar = [
       'JavaScript/learn-closure',
       'JavaScript/learn-functional',
       'JavaScript/let-var-const',
+      'JavaScript/konwledge-point',
     ]
   },
   {
