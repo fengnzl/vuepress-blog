@@ -1,4 +1,4 @@
-# 日常巩固
+# JavaScript 小知识点
 
 class 和modules 会自动设置“use strict”，因此无需单独进行设置
 
@@ -297,3 +297,42 @@ JSON.stringify(meetup); // Error: Converting circular structure to JSON
 ```
 
  转换 JSON 的完整语法如下： `JSON.stringify(value[, replacer, space])`
+
+其中 replacer 为要进行编码的数据，或者映射函数 `function(key, value)` 对上述数据进行如下处理可得：
+
+```js
+JSON.stringify(meetup, function replacer(key, value) {
+  return (key == 'occupiedBy') ? undefined : value;
+}, 2)
+// 
+'{
+  "title": "Conference",
+  "participants": [
+    {
+      "name": "John"
+    },
+    {
+      "name": "Alice"
+    }
+  ],
+  "place": {
+    "number": 23
+  }
+}'
+```
+
+**自定义 toJSON**
+
+我们可以在对象中提供 `toJSON` 方法来进行 JSON 转换
+
+```js
+const numObj = {
+  num: 12,
+  toJSON() {
+    return this.num
+  }
+}
+JSON.stringify(numObj) // '12'
+```
+
+`JSON.parse(str, [reviver])`  其中 receiver 函数将为每个 `(key, value)` 进行调用，并对值进行转换
