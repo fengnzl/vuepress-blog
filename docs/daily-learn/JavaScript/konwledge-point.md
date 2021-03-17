@@ -336,3 +336,64 @@ JSON.stringify(numObj) // '12'
 ```
 
 `JSON.parse(str, [reviver])`  其中 receiver 函数将为每个 `(key, value)` 进行调用，并对值进行转换
+
+## 递归和堆栈
+
+**执行上下文**是一个内部数据结构，包含函数执行时的详细细节，每次函数调用都会产生一个全新的执行上下文
+
+简单来说函数内部调用其本身称之为递归调用，其执行细节：
+
+- 当前函数暂停
+- 与其关联的执行上下文保存在一个特殊的**执行上下文堆栈**数据结构中
+- 执行嵌套调用
+- 当嵌套调用结束后，从执行上下文堆栈中恢复之前的执行上下文
+
+一般来说 JavaScript 引擎所支持的最大递归深度为 1000，虽然一些自动优化可以帮助减轻这种情况（[尾部调用优化](https://www.ruanyifeng.com/blog/2015/04/tail-call.html)），但尚未完全支持,递归函数可用于以更优雅的方式解决问题。
+
+```js
+// 斐波那契数 序列有这样的公式： Fn = Fn-1 + Fn-2     1, 1, 2, 3, 5, 8, 13, 21...
+function fib(num) {
+  if (typeof num !== 'number') {
+    throw new TypeError('num must be a number')
+  }
+  return num <= 1 ? num : fib(num - 1) + fib(num - 2)
+}
+
+console.time()
+console.log(fib(30))
+console.timeEnd() // default: 14.211ms
+
+function fib2(num) {
+  if (typeof num !== 'number') {
+    throw new TypeError('num must be a number')
+  }
+  let a = 1;
+  let b = 1;
+  for (let i = 3; i <= num; i++) {
+    let c = a + b;
+    [a, b] = [b, c];
+  }
+  return b
+}
+
+console.time()
+console.log(fib2(30))
+console.timeEnd() // default: 0.099ms
+```
+
+这里递归函数产生了太多的子调用。同样的值被一遍又一遍地计算，从而在计算数比较大的情况会耗时特别久。
+
+例如，我们看下计算 `fib(5)` 的片段：
+
+```js
+...
+fib(5) = fib(4) + fib(3)
+fib(4) = fib(3) + fib(2)
+```
+
+## Spread 语法
+
+- `Array.from` 适用于类数组对象也适用于可迭代对象。
+- Spread 语法只适用于可迭代对象。
+
+因此，对于将一些“东西”转换为数组的任务，`Array.from` 往往更通用。
