@@ -1,6 +1,10 @@
 # JavaScript 小知识点
 
-class 和modules 会自动设置“use strict”，因此无需单独进行设置
+class 和 modules 会自动设置“use strict”，因此无需单独进行设置
+
+`globalThis` 作为全局对象的标准名称加入到了 JavaScript 中
+
+使用 `new Function` 创建的函数，它的 `[[Environment]]` 指向全局词法环境，而不是函数所在的外部词法环境。它有助于降低我们代码出错的可能，详见[文档](https://zh.javascript.info/new-function#zong-jie)
 
 ## 运算符
 
@@ -397,3 +401,34 @@ fib(4) = fib(3) + fib(2)
 - Spread 语法只适用于可迭代对象。
 
 因此，对于将一些“东西”转换为数组的任务，`Array.from` 往往更通用。
+
+## 任意数量的括号求和
+
+写一个函数 `sum`，它有这样的功能：
+
+```javascript
+sum(1)(2) == 3; // 1 + 2
+sum(1)(2)(3) == 6; // 1 + 2 + 3
+sum(5)(-1)(2) == 6
+sum(6)(-1)(-2)(-3) == 0
+sum(0)(1)(2)(3)(4)(5) == 15
+```
+
+- 为了任意数量的调用，`sum` 的结果必须是函数
+- 该函数需要将两次调用的当前值保存在内存中
+- 由于返回的是函数，为了正常比较，需要提供自定义转换规则
+
+```js
+function sum(a) {
+	let currentSum = a
+	function f(b) {
+		currentSum += b
+		return f
+	}
+	f[Symbol.toPrimitive] = function() {
+		return currentSum
+	}
+	return f
+}
+```
+
