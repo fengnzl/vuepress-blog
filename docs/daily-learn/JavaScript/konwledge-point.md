@@ -432,3 +432,120 @@ function sum(a) {
 }
 ```
 
+## 原型、继承
+
+**访问原型上的属性和对象直接访问自身的属性，哪个速度快？**
+
+```
+let head = {
+  glasses: 1
+};
+
+let table = {
+  pen: 3,
+  __proto__: head
+};
+
+let bed = {
+  sheet: 1,
+  pillow: 2,
+  __proto__: table
+};
+
+let pockets = {
+  money: 2000,
+  __proto__: bed
+};
+```
+
+在现代引擎中，从性能的角度来看，我们是从对象还是从原型链获取属性都是没区别的。它们（引擎）会记住在哪里找到的该属性，并在下一次请求中重用它。并且引擎足够聪明，一旦有内容更改，它们就会自动更新内部缓存，因此，该优化是安全的
+
+# F.prototype
+
+- 当我们通过构造函数来创建对象的时候，如果 `F.prototype` 属性（其与对象的 `[[Prototype]]` 不是同一个东西） 是一个对象，那么 `new` 操作符会使用它为新对象设置 `[[Prototype]]`， `F.prototype` 仅在 `new F` 被调用的时候使用
+- `F.prototype` 的值要么是一个对象，要么为 `null`
+- 默认情况下，所有函数都有 `F.prototype = {constructor: F}`，所以可以通过访问其 `"constructor"` 属性来获取一个对象的构造器
+
+只有 `undefined` 和 `null` 没有包装器对象
+
+## 类
+
+**重写 constructor**
+
+如果一个类扩展（extends）了另一个类，并且没有 `constructor` ，那么将生成下面这样的 “空” `contructor`
+
+```js
+class Rabbit extends Animal {
+  // 为没有自己的 constructor 的扩展类生成的
+  constructor(...args) {
+    super(...args);
+  }
+}
+```
+
+**继承类的 constructor 必须在使用 `this` 之前调用 `super()` 方法**
+
+继承类（派生构造器）的构造函数与其它函数之间相比，具有特殊的内部属性 `[[ConstructorKind]]: "derived"`，其会影响它的 `new` 行为：
+
+- 当 `new` 执行常规函数的时候，会创建一个对象，并将这个空对象赋值给 `this`
+- 当继承的 constructor 执行时，其不会执行这个操作，会期望父类的 constructor 来完成这项工作，因此必须调用 `super` 来执行父类的 constructor，否则 `this` 指向的对象将不会被创建
+
+**父类构造器总会使用它自己的字段值，而不是被重写的那个**
+
+```js
+class Animal {
+  name = 'animal'
+  constructor() {
+    console.log(this.name)
+  }
+}
+
+class Rabbit extends Animal {
+  name = 'rabbit'
+}
+
+new Animal() // animal
+new Rabbit() // animal
+```
+
+而使用方法是，则会使用被重写的方法
+
+```js
+class Animal {
+  showName() {
+    console.log('animal')
+  }
+  constructor() {
+    this.showName()
+  }
+}
+
+class Rabbit extends Animal {
+  showName() {
+    console.log('rabbit')
+  }
+}
+
+new Animal() // animal
+new Rabbit() // rabbit
+```
+
+这是由于字段初始化顺序导致：
+
+- 对于基类（尚未继承任何东西），在构造函数调用前初始化
+- 对于派生类，在 `super()` 后立即初始化
+
+所以第一个 `new Rabbit()` 的时候调用了自动生成的空构造器中的 `super(...args)`，因此执行了父类构造器，根据字段生成顺序，只有在这之后 `Rabbit` 类字段才会被初始化，因此父构造器在执行的时候，会使用 `Animal` 类的字段。
+
+内部：
+
+- 方法在内部的 `[[HomeObject]]` 属性中记住了它们的类/对象。这就是 `super` 如何解析父方法的。
+- `[[HomeObject]]` 是为类和普通对象中的方法定义的。但是对于对象而言，方法必须确切指定为 `method()`
+- 因此，将一个带有 `super` 的方法从一个对象复制到另一个对象是不安全的。
+
+我们可以把一个方法赋值给类的函数本身，而不是赋给它的 `"prototype"`。这样的方法被称为 **静态的（static）**。静态属性类型，静态属性和方法都是可以继承的。
+
+**“extends” 语法会设置两个原型：**
+
+1. 在构造函数的 `"prototype"` 之间设置原型（为了获取实例方法）。
+2. 在构造函数之间会设置原型（为了获取静态方法）
