@@ -549,3 +549,153 @@ new Rabbit() // rabbit
 
 1. 在构造函数的 `"prototype"` 之间设置原型（为了获取实例方法）。
 2. 在构造函数之间会设置原型（为了获取静态方法）
+
+### 扩展内建类
+
+我们可以编写一个继承自内建类的类
+
+```js
+// 给 PowerArray 新增了一个方法（可以增加更多）
+class PowerArray extends Array {
+  isEmpty() {
+    return this.length === 0;
+  }
+}
+
+let arr = new PowerArray(1, 2, 5, 10, 50);
+alert(arr.isEmpty()); // false
+
+let filteredArr = arr.filter(item => item >= 10);
+alert(filteredArr); // 10, 50
+alert(filteredArr.isEmpty()); // false
+```
+
+这里 `arr.filter()` 被调用时，它的内部使用的是 `arr.constructor` 来创建新的结果数组，而不是使用原生的 `Array`，我们可以通过给类添加**静态方法 getter `Symbol.species`**。如果存在，则返回 JavaScript 在内部用来在 `map` 和 `filter` 等方法中创建新实体的 `constructor`
+
+```js
+class PowerArray extends Array {
+  isEmpty() {
+    return this.length === 0;
+  }
+
+  // 内建方法将使用这个作为 constructor
+  static get [Symbol.species]() {
+    return Array;
+  }
+}
+
+const a = new PowerArray(1, 2, 3)
+console.log(a.isEmpty()) // false
+
+// filter 使用 arr.constructor[Symbol.species] 作为 constructor 创建新数组
+let fil = a.filter(item => item > 1)
+
+// fil 不是 PowerArray，而是 Array
+console.log(fil.isEmpty()); // Error: fil.isEmpty is not a function
+```
+
+**内建类之间不继承静态方法。**
+
+### instanceof 操作符
+
+`instanceof` 在检查中会将原型链考虑在内，其只关心原型链匹配的 `prototype`。同时我们可以通过设置**静态方法 `Symbol.hasInstance`** 中来自定义逻辑
+
+```js
+class Animal {
+  static [Symbol.hasInstance](obj) {
+    if (obj.animal) {
+      return true
+    }
+  }
+}
+
+const obj = {
+  animal: true
+}
+
+console.log(obj instanceof Animal) // true Animal[Symbol.hasInstance](obj) 被调用
+```
+
+### Symbol.toStringTag 属性
+
+我们可以通过设置对象属性 `Symbol.toStringTag` 来自定义对象的 `toString` 方法
+
+```js
+const User = {
+  [Symbol.toStringTag]: 'User'
+}
+
+console.log(({}.toString.call(User))) // [object User]
+```
+
+对于大多数特定环境的对象，都有此属性，如：
+
+```js
+// 特定于环境的对象和类的 toStringTag：
+console.log( window[Symbol.toStringTag]); // Window
+console.log( XMLHttpRequest.prototype[Symbol.toStringTag] ); // XMLHttpRequest
+
+console.log( {}.toString.call(window) ); // [object Window]
+console.log( {}.toString.call(new XMLHttpRequest()) ); // [object XMLHttpRequest]
+```
+
+## 模块
+
+同一个模块被导入到多个其他位置，那么它的代码仅会在第一次导入时执行，然后将导出（export）的内容提供给所有的导入（import）。
+
+因为模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。而常规脚本则会立即运行，所以我们会先看到常规脚本的输出。
+
+## 柯里化
+
+柯里化是将一个函数从可调用的 `f(a, b, c)` 转换为可调用的 `f(a)(b)(c)`。柯里化只是对函数进行转换，并不会调用函数。如果调用函数的参数不全，则返回一个偏函数。
+
+**只有确定参数长度的函数才可柯里化**
+
+柯里化要求函数具有固定数量的参数，如果使用 `rest` 参数的函数，如 `f(...args)`，就不能进行柯里化
+
+**柯里化实现**
+
+```js
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args)
+    } else {
+      return function (...args2) {
+        return curried.apply(this, args.concat(args2))
+      }
+    }
+  }
+}
+```
+
+## 易错点
+
+1. 下面会输出什么？
+
+   ```js
+   let user = {
+     name: "John",
+     go: function() { alert(this.name) }
+   }
+   
+   (user.go)()
+   ```
+
+   上面代码会报 `ReferenceError: user is not defined`，这是因为 **JavaScript 不会再括号前面自动添加分号**，因此，上述代码会被解析成如下形式 `let user = { go:... }(user.go)()`，这时 `user` 对象还没有定义，就开始调用了 `user.go` 方法，从而报错。
+
+2. 以下结果是什么？
+
+   ```js
+   var b = 10;
+   (function b() {
+     b = 20;
+     console.log(b)
+   })()
+   ```
+
+   上面会输出函数 `ƒ b() {  b = 20;  console.log(b)}` 
+
+   一个声明在函数体内都是可见的，函数声明优先于变量声明；在非匿名自执行函数中，函数变量为只读状态无法修改；
+
+   
