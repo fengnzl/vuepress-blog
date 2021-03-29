@@ -1,6 +1,10 @@
-# 日常巩固
+# JavaScript 小知识点
 
-class 和modules 会自动设置“use strict”，因此无需单独进行设置
+class 和 modules 会自动设置“use strict”，因此无需单独进行设置
+
+`globalThis` 作为全局对象的标准名称加入到了 JavaScript 中
+
+使用 `new Function` 创建的函数，它的 `[[Environment]]` 指向全局词法环境，而不是函数所在的外部词法环境。它有助于降低我们代码出错的可能，详见[文档](https://zh.javascript.info/new-function#zong-jie)
 
 ## 运算符
 
@@ -297,3 +301,401 @@ JSON.stringify(meetup); // Error: Converting circular structure to JSON
 ```
 
  转换 JSON 的完整语法如下： `JSON.stringify(value[, replacer, space])`
+
+其中 replacer 为要进行编码的数据，或者映射函数 `function(key, value)` 对上述数据进行如下处理可得：
+
+```js
+JSON.stringify(meetup, function replacer(key, value) {
+  return (key == 'occupiedBy') ? undefined : value;
+}, 2)
+// 
+'{
+  "title": "Conference",
+  "participants": [
+    {
+      "name": "John"
+    },
+    {
+      "name": "Alice"
+    }
+  ],
+  "place": {
+    "number": 23
+  }
+}'
+```
+
+**自定义 toJSON**
+
+我们可以在对象中提供 `toJSON` 方法来进行 JSON 转换
+
+```js
+const numObj = {
+  num: 12,
+  toJSON() {
+    return this.num
+  }
+}
+JSON.stringify(numObj) // '12'
+```
+
+`JSON.parse(str, [reviver])`  其中 receiver 函数将为每个 `(key, value)` 进行调用，并对值进行转换
+
+## 递归和堆栈
+
+**执行上下文**是一个内部数据结构，包含函数执行时的详细细节，每次函数调用都会产生一个全新的执行上下文
+
+简单来说函数内部调用其本身称之为递归调用，其执行细节：
+
+- 当前函数暂停
+- 与其关联的执行上下文保存在一个特殊的**执行上下文堆栈**数据结构中
+- 执行嵌套调用
+- 当嵌套调用结束后，从执行上下文堆栈中恢复之前的执行上下文
+
+一般来说 JavaScript 引擎所支持的最大递归深度为 1000，虽然一些自动优化可以帮助减轻这种情况（[尾部调用优化](https://www.ruanyifeng.com/blog/2015/04/tail-call.html)），但尚未完全支持,递归函数可用于以更优雅的方式解决问题。
+
+```js
+// 斐波那契数 序列有这样的公式： Fn = Fn-1 + Fn-2     1, 1, 2, 3, 5, 8, 13, 21...
+function fib(num) {
+  if (typeof num !== 'number') {
+    throw new TypeError('num must be a number')
+  }
+  return num <= 1 ? num : fib(num - 1) + fib(num - 2)
+}
+
+console.time()
+console.log(fib(30))
+console.timeEnd() // default: 14.211ms
+
+function fib2(num) {
+  if (typeof num !== 'number') {
+    throw new TypeError('num must be a number')
+  }
+  let a = 1;
+  let b = 1;
+  for (let i = 3; i <= num; i++) {
+    let c = a + b;
+    [a, b] = [b, c];
+  }
+  return b
+}
+
+console.time()
+console.log(fib2(30))
+console.timeEnd() // default: 0.099ms
+```
+
+这里递归函数产生了太多的子调用。同样的值被一遍又一遍地计算，从而在计算数比较大的情况会耗时特别久。
+
+例如，我们看下计算 `fib(5)` 的片段：
+
+```js
+...
+fib(5) = fib(4) + fib(3)
+fib(4) = fib(3) + fib(2)
+```
+
+## Spread 语法
+
+- `Array.from` 适用于类数组对象也适用于可迭代对象。
+- Spread 语法只适用于可迭代对象。
+
+因此，对于将一些“东西”转换为数组的任务，`Array.from` 往往更通用。
+
+## 任意数量的括号求和
+
+写一个函数 `sum`，它有这样的功能：
+
+```javascript
+sum(1)(2) == 3; // 1 + 2
+sum(1)(2)(3) == 6; // 1 + 2 + 3
+sum(5)(-1)(2) == 6
+sum(6)(-1)(-2)(-3) == 0
+sum(0)(1)(2)(3)(4)(5) == 15
+```
+
+- 为了任意数量的调用，`sum` 的结果必须是函数
+- 该函数需要将两次调用的当前值保存在内存中
+- 由于返回的是函数，为了正常比较，需要提供自定义转换规则
+
+```js
+function sum(a) {
+	let currentSum = a
+	function f(b) {
+		currentSum += b
+		return f
+	}
+	f[Symbol.toPrimitive] = function() {
+		return currentSum
+	}
+	return f
+}
+```
+
+## 原型、继承
+
+**访问原型上的属性和对象直接访问自身的属性，哪个速度快？**
+
+```
+let head = {
+  glasses: 1
+};
+
+let table = {
+  pen: 3,
+  __proto__: head
+};
+
+let bed = {
+  sheet: 1,
+  pillow: 2,
+  __proto__: table
+};
+
+let pockets = {
+  money: 2000,
+  __proto__: bed
+};
+```
+
+在现代引擎中，从性能的角度来看，我们是从对象还是从原型链获取属性都是没区别的。它们（引擎）会记住在哪里找到的该属性，并在下一次请求中重用它。并且引擎足够聪明，一旦有内容更改，它们就会自动更新内部缓存，因此，该优化是安全的
+
+# F.prototype
+
+- 当我们通过构造函数来创建对象的时候，如果 `F.prototype` 属性（其与对象的 `[[Prototype]]` 不是同一个东西） 是一个对象，那么 `new` 操作符会使用它为新对象设置 `[[Prototype]]`， `F.prototype` 仅在 `new F` 被调用的时候使用
+- `F.prototype` 的值要么是一个对象，要么为 `null`
+- 默认情况下，所有函数都有 `F.prototype = {constructor: F}`，所以可以通过访问其 `"constructor"` 属性来获取一个对象的构造器
+
+只有 `undefined` 和 `null` 没有包装器对象
+
+## 类
+
+**重写 constructor**
+
+如果一个类扩展（extends）了另一个类，并且没有 `constructor` ，那么将生成下面这样的 “空” `contructor`
+
+```js
+class Rabbit extends Animal {
+  // 为没有自己的 constructor 的扩展类生成的
+  constructor(...args) {
+    super(...args);
+  }
+}
+```
+
+**继承类的 constructor 必须在使用 `this` 之前调用 `super()` 方法**
+
+继承类（派生构造器）的构造函数与其它函数之间相比，具有特殊的内部属性 `[[ConstructorKind]]: "derived"`，其会影响它的 `new` 行为：
+
+- 当 `new` 执行常规函数的时候，会创建一个对象，并将这个空对象赋值给 `this`
+- 当继承的 constructor 执行时，其不会执行这个操作，会期望父类的 constructor 来完成这项工作，因此必须调用 `super` 来执行父类的 constructor，否则 `this` 指向的对象将不会被创建
+
+**父类构造器总会使用它自己的字段值，而不是被重写的那个**
+
+```js
+class Animal {
+  name = 'animal'
+  constructor() {
+    console.log(this.name)
+  }
+}
+
+class Rabbit extends Animal {
+  name = 'rabbit'
+}
+
+new Animal() // animal
+new Rabbit() // animal
+```
+
+而使用方法是，则会使用被重写的方法
+
+```js
+class Animal {
+  showName() {
+    console.log('animal')
+  }
+  constructor() {
+    this.showName()
+  }
+}
+
+class Rabbit extends Animal {
+  showName() {
+    console.log('rabbit')
+  }
+}
+
+new Animal() // animal
+new Rabbit() // rabbit
+```
+
+这是由于字段初始化顺序导致：
+
+- 对于基类（尚未继承任何东西），在构造函数调用前初始化
+- 对于派生类，在 `super()` 后立即初始化
+
+所以第一个 `new Rabbit()` 的时候调用了自动生成的空构造器中的 `super(...args)`，因此执行了父类构造器，根据字段生成顺序，只有在这之后 `Rabbit` 类字段才会被初始化，因此父构造器在执行的时候，会使用 `Animal` 类的字段。
+
+内部：
+
+- 方法在内部的 `[[HomeObject]]` 属性中记住了它们的类/对象。这就是 `super` 如何解析父方法的。
+- `[[HomeObject]]` 是为类和普通对象中的方法定义的。但是对于对象而言，方法必须确切指定为 `method()`
+- 因此，将一个带有 `super` 的方法从一个对象复制到另一个对象是不安全的。
+
+我们可以把一个方法赋值给类的函数本身，而不是赋给它的 `"prototype"`。这样的方法被称为 **静态的（static）**。静态属性类型，静态属性和方法都是可以继承的。
+
+**“extends” 语法会设置两个原型：**
+
+1. 在构造函数的 `"prototype"` 之间设置原型（为了获取实例方法）。
+2. 在构造函数之间会设置原型（为了获取静态方法）
+
+### 扩展内建类
+
+我们可以编写一个继承自内建类的类
+
+```js
+// 给 PowerArray 新增了一个方法（可以增加更多）
+class PowerArray extends Array {
+  isEmpty() {
+    return this.length === 0;
+  }
+}
+
+let arr = new PowerArray(1, 2, 5, 10, 50);
+alert(arr.isEmpty()); // false
+
+let filteredArr = arr.filter(item => item >= 10);
+alert(filteredArr); // 10, 50
+alert(filteredArr.isEmpty()); // false
+```
+
+这里 `arr.filter()` 被调用时，它的内部使用的是 `arr.constructor` 来创建新的结果数组，而不是使用原生的 `Array`，我们可以通过给类添加**静态方法 getter `Symbol.species`**。如果存在，则返回 JavaScript 在内部用来在 `map` 和 `filter` 等方法中创建新实体的 `constructor`
+
+```js
+class PowerArray extends Array {
+  isEmpty() {
+    return this.length === 0;
+  }
+
+  // 内建方法将使用这个作为 constructor
+  static get [Symbol.species]() {
+    return Array;
+  }
+}
+
+const a = new PowerArray(1, 2, 3)
+console.log(a.isEmpty()) // false
+
+// filter 使用 arr.constructor[Symbol.species] 作为 constructor 创建新数组
+let fil = a.filter(item => item > 1)
+
+// fil 不是 PowerArray，而是 Array
+console.log(fil.isEmpty()); // Error: fil.isEmpty is not a function
+```
+
+**内建类之间不继承静态方法。**
+
+### instanceof 操作符
+
+`instanceof` 在检查中会将原型链考虑在内，其只关心原型链匹配的 `prototype`。同时我们可以通过设置**静态方法 `Symbol.hasInstance`** 中来自定义逻辑
+
+```js
+class Animal {
+  static [Symbol.hasInstance](obj) {
+    if (obj.animal) {
+      return true
+    }
+  }
+}
+
+const obj = {
+  animal: true
+}
+
+console.log(obj instanceof Animal) // true Animal[Symbol.hasInstance](obj) 被调用
+```
+
+### Symbol.toStringTag 属性
+
+我们可以通过设置对象属性 `Symbol.toStringTag` 来自定义对象的 `toString` 方法
+
+```js
+const User = {
+  [Symbol.toStringTag]: 'User'
+}
+
+console.log(({}.toString.call(User))) // [object User]
+```
+
+对于大多数特定环境的对象，都有此属性，如：
+
+```js
+// 特定于环境的对象和类的 toStringTag：
+console.log( window[Symbol.toStringTag]); // Window
+console.log( XMLHttpRequest.prototype[Symbol.toStringTag] ); // XMLHttpRequest
+
+console.log( {}.toString.call(window) ); // [object Window]
+console.log( {}.toString.call(new XMLHttpRequest()) ); // [object XMLHttpRequest]
+```
+
+## 模块
+
+同一个模块被导入到多个其他位置，那么它的代码仅会在第一次导入时执行，然后将导出（export）的内容提供给所有的导入（import）。
+
+因为模块脚本是被延迟的，所以要等到 HTML 文档被处理完成才会执行它。而常规脚本则会立即运行，所以我们会先看到常规脚本的输出。
+
+## 柯里化
+
+柯里化是将一个函数从可调用的 `f(a, b, c)` 转换为可调用的 `f(a)(b)(c)`。柯里化只是对函数进行转换，并不会调用函数。如果调用函数的参数不全，则返回一个偏函数。
+
+**只有确定参数长度的函数才可柯里化**
+
+柯里化要求函数具有固定数量的参数，如果使用 `rest` 参数的函数，如 `f(...args)`，就不能进行柯里化
+
+**柯里化实现**
+
+```js
+function curry(fn) {
+  return function curried(...args) {
+    if (args.length >= fn.length) {
+      return fn.apply(this, args)
+    } else {
+      return function (...args2) {
+        return curried.apply(this, args.concat(args2))
+      }
+    }
+  }
+}
+```
+
+## 易错点
+
+1. 下面会输出什么？
+
+   ```js
+   let user = {
+     name: "John",
+     go: function() { alert(this.name) }
+   }
+   
+   (user.go)()
+   ```
+
+   上面代码会报 `ReferenceError: user is not defined`，这是因为 **JavaScript 不会再括号前面自动添加分号**，因此，上述代码会被解析成如下形式 `let user = { go:... }(user.go)()`，这时 `user` 对象还没有定义，就开始调用了 `user.go` 方法，从而报错。
+
+2. 以下结果是什么？
+
+   ```js
+   var b = 10;
+   (function b() {
+     b = 20;
+     console.log(b)
+   })()
+   ```
+
+   上面会输出函数 `ƒ b() {  b = 20;  console.log(b)}` 
+
+   一个声明在函数体内都是可见的，函数声明优先于变量声明；在非匿名自执行函数中，函数变量为只读状态无法修改；
+
+   
