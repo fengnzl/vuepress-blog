@@ -92,3 +92,199 @@ class Stack {
 
 我们可以通过栈来存储访问过的任务、路径或撤销的操作。这里我们只是简单介绍其解决十进制转二进制的问题，以及任意进制转换的算法。
 
+```js
+function decimalToBinary(decNumber) {
+  const remStack = new Stack();
+  let number = decNumber;
+  let rem;
+  let binaryString = "";
+
+  while (number > 0) {
+    rem = Math.floor(number % 2);
+    remStack.push(rem);
+    number = Math.floor(number / 2);
+  }
+
+  while (!remStack.isEmpty()) {
+    binaryString += remStack.pop().toString();
+  }
+  return binaryString;
+}
+
+console.log(decimalToBinary(233)); // 11101001
+console.log(decimalToBinary(10)); // 1010
+console.log(decimalToBinary(1000)); // 1111101000
+```
+
+## 队列和双端队列
+
+### 队列
+
+队列遵循 **先进先出(FIFO)** 原则的一组有序的项。队列在尾部添加新元素，并从顶部移除元素。现实中，最常见的队列就是排队。
+
+队列中一般可用的方法有：
+
+- `enqueue(element(s))`：向队列尾部添加一个（ 或多个 ）新的元素。
+- `dequeue()` ：移除队列的第一项（ 排在最前面的一项 ）并返回被移除的元素。
+- `peek()`：返回队列中的第一个元素。
+- `isEmpty()` ：队列中不包含任何元素，返回 true，否则返回 false。
+- `size()`：返回队列中包含的元素个数。
+- `clear()`：清除队列中的元素。
+- `toString()`：返回队列的内容。
+
+与栈类似，我们也可以通过数组来实现队列，但是为了获取元素更高效，我们同样通过对象来实现队列。
+
+```js
+class Queue {
+  constructor() {
+    this.items = [];
+    this.count = 0;
+    this.lowestCount = 0; // 用来追踪第一个元素
+  }
+
+  size() {
+    return this.count - this.lowestCount;
+  }
+
+  isEmpty() {
+    return this.size() === 0;
+  }
+  // 添加新的项
+  enqueue(item) {
+    this.items[this.count] = item;
+    this.count++;
+  }
+
+  // 移除队列第一项
+  dequeue() {
+    if (this.isEmpty()) {
+      return undefined;
+    }
+
+    const result = this.items[this.lowestCount];
+    delete this.items[this.lowestCount];
+    this.lowestCount++;
+    return result;
+  }
+
+  // 返回第一项
+  peek() {
+    return this.items[this.lowestCount];
+  }
+
+  // 清空队列
+  clear() {
+    this.items = {};
+    this.count = 0;
+    this.lowestCount = 0;
+  }
+
+  // 添加 toString 方法
+  toString() {
+    if (this.isEmpty()) {
+      return "";
+    }
+    let objString = `${this.items[this.lowestCount]}`;
+    for (let i = this.lowestCount + 1; i < this.count; i++) {
+      objString = `${objString},${this.items[i]}`;
+    }
+    return objString;
+  }
+}
+```
+
+### 双端队列
+
+**双端队列**（ deque，或称 double-ended queue ）是把队列和栈相结合的一种数据结构。同时遵循了先进先出和后进先出的原则。例如电影中的队伍，一个刚买票的人如果只是需要简单询问信息，可以直接回到队伍头部。另外，在队伍末尾的人如果赶时间，他可以直接离开队伍。
+
+双端队列中的方法有：
+
+- `addFront(element)` ：该方法在双端队列前端添加新的元素。
+- `addBack(element) `：该方法在双端队列后端添加新的元素（实现方法和  Queue 类中的 enqueue 方法相同）。
+- `removeFront()` ：该方法会从双端队列前端移除第一个元素（实现方法和 Queue 类中的 dequeue 方法相同）。
+- `removeBack()` ：该方法会从双端队列后端移除第一个元素（实现方法和 Stack 类中的 pop 方法一样）。
+- `peekFront()` ：该方法返回双端队列前端的第一个元素（实现方法和 Queue 类中的 peek 方法一样）。
+- `peekBack() `：该方法返回双端队列后端的第一个元素（实现方法和 Stack 类中的 peek 方法一样）。
+- `isEmpty()`、`size()`、`clear()` 和 `toString() `方法
+
+```js
+class Deque {
+  constructor() {
+    this.items = {};
+    this.count = 0;
+    this.lowestCount = 0;
+  }
+
+  size() {
+    return this.count - this.lowestCount;
+  }
+
+  isEmpty() {
+    return this.size() === 0;
+  }
+
+  clear() {
+    this.items = {};
+    this.count = 0;
+    this.lowestCount = 0;
+  }
+
+  addBack(item) {
+    this.items[this.count] = item;
+    this.count++;
+  }
+
+  addFront(item) {
+    if (this.isEmpty()) {
+      this.addBack(item);
+    } else if (this.lowestCount > 0) {
+      this.lowestCount--;
+      this.items[this.lowestCount] = item;
+    } else {
+      for (let i = this.count; i > 0; i--) {
+        this.items[i] = this.items[i - 1];
+      }
+      this.count++;
+      this.lowestCount = 0;
+      this.items[0] = item;
+    }
+  }
+
+  removeBack() {
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    this.count--;
+    const result = this.items[this.count];
+    delete this.items[this.count];
+    return result;
+  }
+
+  removeFront() {
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    const result = this.items[this.lowestCount];
+    delete this.items[this.lowestCount];
+    this.lowestCount++;
+    return result;
+  }
+
+  toString() {
+    if (this.isEmpty()) {
+      return "";
+    }
+    let objString = `${this.items[this.lowestCount]}`;
+    for (let i = this.lowestCount + 1; i < this.count; i++) {
+      objString = `${objString},${this.items[i]}`;
+    }
+    return objString;
+  }
+}
+```
+
+### 相关问题
+
+#### 击鼓传花
+
+在队列实际应用过程中，我们会使用一些修改版本，其中就有**循环队列**，其中的典型的例子就是击鼓传花游戏。一群人围成一圈，把花尽快的传递到旁边的人，停止的时候花在谁手上就淘汰谁，直至剩下最后一人。
