@@ -84,3 +84,83 @@ elem.children[0].previousSibling 值一直都是 null，这个判定是不是真
 - `elem.attributes` — 读取所有特性，其返回具有 `name` 和 `value` 属性的对象集合
 
 特性名称是大小写不敏感的，**所有以 “data-” 开头的特性均被保留供程序员使用。它们可在 `dataset` 属性中使用。**
+
+### 元素滚动
+
+元素滚动相关属性的整体图片如下图：
+
+![scroll](/js/scroll-property.png)
+
+**注意**：除了 `scrollTop` 和 `scrollLeft` 可以改变外，其他属性都为只读属性
+
+**CSS width 与 clientWidth 的不同点**
+
+1. `clientWidth` 值是数值，而 `getComputedStyle(elem).width` 返回一个以 `px` 作为后缀的字符串。
+2. `getComputedStyle` 可能会返回非数值的 width，例如内联（inline）元素的 `"auto"`。
+3. `clientWidth` 是元素的内部内容区域加上 padding，而 CSS width（具有标准的 `box-sizing`）是内部内容区域，**不包括 padding**。
+4. 如果有滚动条，并且浏览器为其保留了空间，那么某些浏览器会从 CSS width 中减去该空间（因为它不再可用于内容），而有些则不会这样做。`clientWidth` 属性总是相同的：如果为滚动条保留了空间，那么将减去滚动条的大小。
+
+### window 滚动
+
+**几何：**
+
+- 文档可见部分的 width/height（内容区域的 width/height）：`document.documentElement.clientWidth/clientHeight`
+
+- 整个文档的 width/height，其中包括滚动出去的部分：
+
+  ```javascript
+  let scrollHeight = Math.max(
+    document.body.scrollHeight, document.documentElement.scrollHeight,
+    document.body.offsetHeight, document.documentElement.offsetHeight,
+    document.body.clientHeight, document.documentElement.clientHeight
+  );
+  ```
+
+**滚动：**
+
+- 读取当前的滚动：`window.pageYOffset/pageXOffset`。
+- 更改当前的滚动：
+  - `window.scrollTo(pageX,pageY)` — 绝对坐标，
+  - `window.scrollBy(x,y)` — 相对当前位置进行滚动，
+  - `elem.scrollIntoView(top)` — 滚动以使 `elem` 可见（`elem` 与窗口的顶部/底部对齐）。
+
+## 事件简介
+
+分配事件处理程序有以下三种方式：
+
+1. HTML 特性（attribute）：`onclick="..."`。这里函数需要添加括号，因为浏览器在读取其属性的时候，会创建如下处理程序
+
+   ```js
+   button.onclick = function() {
+   	sayThanks()
+   }
+   ```
+
+2. DOM 属性（property）：`elem.onclick = function`。
+
+3. 方法（method）：`elem.addEventListener(event, handler[, phase])` 用于添加，`removeEventListener` 用于移除。
+
+ `transtionend` 和 `DOMContentLoaded` 等少数事件必须使用第三种方法才可发生作用。无论 `addEventListener` 怎样，DOM属性的处理程序都会触发，且先于 `addEventListener` 触发事件。
+
+### 冒泡和捕获
+
+几乎所有事件都会“冒泡”，如 `focus` 事件就不会冒泡
+
+`event.stopPropagation()` 阻止事件冒泡，但是当前元素上的其他处理程序都会继续运行。 `event.stopImmediatePropagation()` 方法，不仅会阻止冒泡，还会阻止当前元素上其他处理程序的执行。
+
+事件被阻止冒泡后，则不会被 `addEventListener` 所监听。
+
+[DOM 事件](http://www.w3.org/TR/DOM-Level-3-Events/)标准描述了事件传播的 3 个阶段：
+
+1. 捕获阶段（Capturing phase）—— 事件（从 Window）向下走近元素。
+2. 目标阶段（Target phase）—— 事件到达目标元素。
+3. 冒泡阶段（Bubbling phase）—— 事件从元素上开始冒泡。
+
+### 阻止浏览器行为
+
+有两种方式来告诉浏览器我们不希望它执行默认行为：
+
+- 主流的方式是使用 `event` 对象。有一个 `event.preventDefault()` 方法。
+- 如果处理程序是使用 `on<event>`（而不是 `addEventListener`）分配的，那返回 `false` 也同样有效。
+
+如果默认行为被阻止，那么 `event.defaultPrevented` 属性为 `true`，否则为 `false`
