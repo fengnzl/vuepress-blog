@@ -23,7 +23,7 @@ export function stateMixin () {
   }
 ```
 
-从上述代码可知，`stateMixin` 中主要实现了对  `_data` 和 `_props` 代理，根据约定俗称的观点可知，一般以下划线开头的变量，我们都认为是私有变量。这里框架提供了 `$data` 和 `$props` 两个对外访问的属性。因此在项目中我们也可以通过 `this.$data` 来获取定义在 `data` 中的变量。虽然提供了这两个私有变量的访问器，但是我们仍然不能随意修改它。对于 `_data` 来说我们不能替换根实例，对于 `_props` 来说，其只是可读。当我们在试图给其重新赋值时，会进行报错：
+从上述代码可知，`stateMixin` 中主要实现了对  `_data` 和 `_props` 代理，根据约定俗称的观点可知，一般以下划线开头的变量，我们都认为是私有变量。这里框架提供了 `$data` 和 `$props` 两个对外访问的属性。因此在项目中我们也可以通过 `this.$data` 来获取定义在 `data` 中的变量。虽然提供了这两个私有变量的访问器，但是我们仍然不能随意修改它。对于 `_data` 来说我们不能替换根实例的，对于 `_props` 来说，其只是可读。当我们在试图给其重新赋值时，会进行报错：
 
 ```js
 if (process.env.NODE_ENV !== 'production') {
@@ -90,3 +90,4 @@ Vue.prototype.$watch = function (
 
 以上简单分析了 `stateMixin` 的代码，下面是其整体流程：
 
+![state-mixin](/vue/state-mixin.png)
