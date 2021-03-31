@@ -164,3 +164,35 @@ elem.children[0].previousSibling 值一直都是 null，这个判定是不是真
 - 如果处理程序是使用 `on<event>`（而不是 `addEventListener`）分配的，那返回 `false` 也同样有效。
 
 如果默认行为被阻止，那么 `event.defaultPrevented` 属性为 `true`，否则为 `false`
+
+## UI 事件
+
+### 鼠标事件
+
+鼠标事件有以下属性：
+
+- 按钮：`button`。
+- 组合键（如果被按下则为 `true`）：`altKey`，`ctrlKey`，`shiftKey` 和 `metaKey`（Mac）。
+  - 如果你想处理 `ctrl`，那么不要忘记 Mac 用户，他们通常使用的是 `Cmd`，所以最好检查 `if (e.metaKey || e.ctrlKey)`。
+- 窗口相对坐标：`clientX/clientY`。
+- 文档相对坐标：`pageX/pageY`。
+
+`mousedown` 的默认浏览器操作是文本选择，如果不想实现该行为，则应该避免它。如想在双击时，避免选中文本，我们可以像以下这么做。
+
+```js
+<b ondblclick="alert('Click!')" onmousedown="return false">
+```
+
+在有些网站里我们可以发先我们无法复制页面的内容，这是由于使用了 `oncopy` 事件，并返回了 `false`。
+
+### 鼠标移动
+
+主要有 `mouseover`、`mouseout`、`mousemove`、`mouseenter` 和 `mouseleave` 事件
+
+其中主要需要关注的有以下几点：
+
+- 快速移动鼠标可能会跳过中间元素
+- `mouseover/out` 和 `mouseenter/leave` 事件还有一个附加属性：`relatedTarget`。这就是我们来自/到的元素，是对 `target` 的补充。
+- `mouseenter/leave` 事件不会冒泡，元素内部与后代之间的转换不会产生影响。但是它们的通用性较差，如果我们想引入事件委托时，它则无法使用
+
+鼠标拖放事件详见[文档](https://zh.javascript.info/mouse-drag-and-drop)

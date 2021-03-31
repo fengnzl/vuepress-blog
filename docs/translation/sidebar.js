@@ -7,7 +7,8 @@ const translationWeeklySidebar = [
       'understanding-async-await',
       'write-js-by-six-letters',
       'JSON-parser-by-JS',
-      'cors-fix'
+      'cors-fix',
+      'creating-javascript-promise-from-scratch-constructor'
     ]
   },
 ];
