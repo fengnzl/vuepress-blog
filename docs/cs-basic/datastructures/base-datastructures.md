@@ -288,3 +288,12 @@ class Deque {
 #### 击鼓传花
 
 在队列实际应用过程中，我们会使用一些修改版本，其中就有**循环队列**，其中的典型的例子就是击鼓传花游戏。一群人围成一圈，把花尽快的传递到旁边的人，停止的时候花在谁手上就淘汰谁，直至剩下最后一人。
+
+[循环队列-击鼓传花游戏](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Queue/hotPotato.mjs)
+
+#### 回文检查器
+
+**回文**是正反都能读通的单词、词组、数或一系列字符的序列，例如 madam 或 racecar。
+
+[双端队列-回文检查器](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Queue/palindromeChecker.mjs)
+

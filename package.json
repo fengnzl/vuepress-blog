@@ -18,11 +18,11 @@
     "deploy": "bash build.sh"
   },
   "devDependencies": {
-    "@vuepress/plugin-back-to-top": "^1.8.0",
-    "@vuepress/plugin-nprogress": "^1.8.0",
+    "@vuepress/plugin-back-to-top": "^1.8.2",
+    "@vuepress/plugin-nprogress": "^1.8.2",
     "flow-bin": "^0.129.0",
-    "vuepress": "^1.5.2",
-    "watchpack": "^1.6.1"
+    "vuepress": "^1.8.2",
+    "watchpack": "^1.7.5"
   },
   "dependencies": {
     "markdown-it-footnote": "^3.0.2",
