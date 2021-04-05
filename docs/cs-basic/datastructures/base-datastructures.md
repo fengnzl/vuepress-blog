@@ -297,3 +297,74 @@ class Deque {
 
 [双端队列-回文检查器](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Queue/palindromeChecker.mjs)
 
+## 链表
+
+由于数组的大小是固定的，从数组的起点或中间插入或移除项的成本很高，需要移动元素。（ JavaScript 内部实现同样如此。）
+
+链表存储有序的元素集合，但不同于数组，链表中的每个元素由一个存储元素本身的节点和一个指向下一个元素的引用（ 也称指针或链接 ）组成。
+
+![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20200117090006.png)
+
+链表的好处在于，添加或移除元素的时候不需要移动其他元素，然而链表需要使用指针，因此想要访问链表中间的一个元素，则需要从起点（ **表头** ）开始迭代链表直到找到所需的元素。就像寻宝元素一样，你只能从第一条线索顺着往下找。
+
+### 创建链表
+
+下面是 LinkedList 类的 ”骨架“。
+
+```js
+import { equalsFn } from "../util.mjs";
+import { Node } from "../models/LinkedListModels.mjs";
+
+class LinekedList {
+  constructor() {
+    this.count = 0; // 链表中存储的数量
+    this.head = undefined; // 第一个元素的引用
+    this.equalsFn = equalsFn; // 用于比较链表中的元素是否相同，也可以实例化时自行传
+  }
+}
+```
+
+这里默认的比较函数写在 util 文件中，便于复用：
+
+```js
+export function equalsFn(a, b) {
+  return a === b;
+}
+```
+
+然后需要一个助手类，用于表示链表中的元素：
+
+```js
+export class Node {
+  constructor(element) {
+    this.element = element; // 要加入链表中元素的值
+    this.next = undefined; // 链表中下一个元素的指针
+  }
+}
+```
+
+**链表所需要的方法：**
+
+`push(element)` ：向链表尾部添加一个新元素。
+
+`insert(element, position)` ：向链表的特定位置插入一个新元素。
+
+`getElementAt(index)`：返回链表中特定位置的元素。如果链表中不存在这样的元素，
+
+  则返回 undefined 。
+
+`remove(element)` ：从链表中移除一个元素。
+
+`indexOf(element)` ：返回元素在链表中的索引。如果链表中没有该元素则返回 -1 。
+
+`removeAt(position)` ：从链表的特定位置移除一个元素。
+
+`isEmpty() `：如果链表中不包含任何元素，返回 true ，如果链表长度大于0则返回 false 。
+
+`size()` ：返回链表包含的元素个数，与数组的 length 属性类似。
+
+`toString()` ：返回表示整个链表的字符串。由于列表项使用了 Node 类，就需要重写继
+
+  承自 JavaScript 对象默认的 toString 方法，让其只输出元素的值。
+
+点击查看[链表数据结构代码实现](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/LinkedList.mjs)
