@@ -187,3 +187,64 @@ Vue.prototype.$emit = function (event: string): Component {
 > - 如果没有提供参数，则移除所有的事件监听器；
 > - 如果只提供了事件，则移除该事件所有的监听器；
 > - 如果同时提供了事件与回调，则只移除这个回调的监听器。
+
+其内部代码实现如下所示：
+
+```js
+Vue.prototype.$off = function (event?: string | Array<string>, fn?: Function): Component {
+    const vm: Component = this
+    // 没有提供参数，关闭全部事件监听器
+    if (!arguments.length) {
+      vm._events = Object.create(null)
+      return vm
+    }
+    // 传递的是 events 数组，则递归调用
+    if (Array.isArray(event)) {
+      for (let i = 0, l = event.length; i < l; i++) {
+        vm.$off(event[i], fn)
+      }
+      return vm
+    }
+    // 提供了具体的某个事件名
+    const cbs = vm._events[event]
+    if (!cbs) {
+      return vm
+    }
+  	// fn 回调函数不存在，将事件监听器变为 null，返回 vm
+    if (!fn) {
+      vm._events[event] = null
+      return vm
+    }
+    // 提供了回调函数
+    let cb
+    let i = cbs.length
+    while (i--) {
+      cb = cbs[i]
+      if (cb === fn || cb.fn === fn) {
+        // 移除 fn 这个事件监听器
+        cbs.splice(i, 1)
+        break
+      }
+    }
+    return vm
+  }
+```
+
+## `$once` 实现
+
+`$once` 内部实现比较简单，在回调之后立即调用 `$off` ，即可实现一个简单的 `$once` 方法：
+
+```js
+  Vue.prototype.$once = function (event: string, fn: Function): Component {
+    const vm: Component = this
+    function on () {
+      vm.$off(event, on)
+      fn.apply(vm, arguments)
+    }
+    on.fn = fn
+    vm.$on(event, on)
+    return vm
+  }
+```
+
+这里我们自己组装了注册事件的回调函数，并将原回调函数作为其属性，从而在移除的时候可以通过 `cb.fn === fn` 来进行判断移除。
