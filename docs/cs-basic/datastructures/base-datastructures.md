@@ -307,7 +307,7 @@ class Deque {
 
 链表的好处在于，添加或移除元素的时候不需要移动其他元素，然而链表需要使用指针，因此想要访问链表中间的一个元素，则需要从起点（ **表头** ）开始迭代链表直到找到所需的元素。就像寻宝元素一样，你只能从第一条线索顺着往下找。
 
-### 创建链表
+### 单向链表
 
 下面是 LinkedList 类的 ”骨架“。
 
@@ -368,3 +368,111 @@ export class Node {
   承自 JavaScript 对象默认的 toString 方法，让其只输出元素的值。
 
 点击查看[链表数据结构代码实现](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/LinkedList.mjs)
+
+### 双向链表
+
+双向链表与单向链表的区别在于，单向链表中，一个节点只有对下一个节点的引用；而在双向链表中，引用是双向的，一个链向下一个节点，一个链向上一个节点。因此，在双向链表中进行删除或者添加节点时，其要比单向链表复杂的多。如下图所示：
+
+![doublyLinkedList](/cs/doublyLinkedList.png)
+
+首先我们先根据单向链表实现 DoublyLinkedList 类
+
+```js
+class DoublyLinkedList extends LinkedList {
+  constructor(equalsFn) {
+    super(equalsFn);
+    this.tail = undefined; // 链表最后一个元素的引用
+  }
+}
+```
+
+同样，我们需要一个双向节点的助手类，其继承自 `Node` 类，并对 `Node` 类改造如下：
+
+```js
+export class Node {
+  constructor(element, next) {
+    this.element = element; // 要加入链表中元素的值
+    this.next = next; // 链表中下一个元素的指针
+  }
+}
+
+export class DoublyNode extends Node {
+  constructor(element, next, prev) {
+    super(element, next);
+    this.prev = prev; // 链表中上一元素的指针
+  }
+}
+```
+
+这里我们主要介绍其重写的插入和移除元素的方法，双向链表与单向链表相比，多了控制前一个（prev）指针，其主要实现如下：
+
+```js
+insert(element, index) {
+    if (index >= 0 && index <= this.count) {
+      const node = new DoublyNode(element);
+      let current = this.head;
+      if (index === 0) {
+        // 如果不存在首节点
+        if (this.head == null) {
+          this.head = node;
+          this.tail = node;
+        } else {
+          node.next = this.head;
+          current.prev = node;
+          this.head = node;
+        }
+      } else if (index === this.count) {
+        // 在最后进行插入
+        current = this.tail;
+        node.prev = current;
+        current.next = node;
+        this.tail = node;
+      } else {
+        const previous = this.getElementAt(index - 1);
+        curernt = previous.next;
+        node.next = current;
+        previous.next = node;
+        current.prev = node;
+        node.prev = previous;
+      }
+      this.count++;
+      return true;
+    }
+    return false;
+  }
+
+  removeAt (index) {
+    if (this.count === 0) {
+      return undefined
+    }
+    if (index >= 0 && index < this.count) {
+      let current = this.head;
+      if (index === 0) {
+        this.head = current.next;
+        // 如果只有一个元素
+        if (this.count === 1) {
+          this.tail = undefined
+        } else {
+          this.head.prev = undefined
+        }
+      } else if (index === this.count - 1) {
+        // 移除最后一个元素
+        current = this.tail
+        this.tail = current.prev
+        this.tail.next = undefined
+      } else {
+        current = this.getElementAt(index)
+        const previous = current.prev
+        // 将previous 的下一项与 current 的下一项链接起来，跳过current
+        previous.next = current.next
+        current.next.previous = previous
+      }
+      this.count--;
+      return current.element
+    }
+    return undefined
+  }
+```
+
+其内部还增加了 `getTail` 和 `inverseToString` 方法，具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/DoublyLinkedList.mjs)。
+
