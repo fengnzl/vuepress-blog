@@ -90,6 +90,8 @@ const vueSourceCodeAnalysisSidebar = [
       ["entryMount/init-mixin", "initMixin 流程"],
       ["entryMount/state-mixin", "stateMixin 流程"],
       ["entryMount/events-mixin", "eventsMixin 流程"],
+      ["entryMount/lifecycle-mixin", "lifecycleMixin 流程"],
+      ["entryMount/others", "其它流程"],
     ],
   },
 ];
