@@ -94,6 +94,10 @@ const vueSourceCodeAnalysisSidebar = [
       ["entryMount/others", "其它流程"],
     ],
   },
+  {
+    title: "响应式原理",
+    children: [["reactive/prepare", "前置知识"]],
+  },
 ];
 
 module.exports = {
