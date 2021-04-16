@@ -535,6 +535,8 @@ depend () {
   }
 ```
 
+## addDep 和 cleanupDeps
+
 由之前调用的 `pushTarget` 可知，`Dep.target` 已经被赋值为当前 `Watcher`，从而可以执行 `addDep` 方法：
 
 ```js
@@ -555,6 +557,65 @@ depend () {
 
 `addDep `方法首先判断了当前 `dep` 是否已经在新 `dep ids` 集合中，不在则更新 `dep ids` 集合以及新 `dep` 数组，随后又判断了当前 `dep` 是否在旧 `dep id` 集合中，不在则说明没有将当前 `Watcher` 订阅到当前数据负责依赖管理 `dep` 中的 `subs`（用于后续派发更新）， 因此会调用 `dep.addSub(this)` 方法，把当前 `Watcher` 实例添加到 `subs` 数组中。
 
+### addDep 运行示例说明
+
+为了加深对 `addDep` 的理解，我们通过以下示例说明
+
+```js
+<template>
+  <p>first:{{msg}}</p>
+  <p>second:{{msg}}</p>
+</template>
+<script>
+export default {
+  name: 'App',
+  data () {
+    return {
+      msg: 'hello world'
+    }
+  }
+}
+</script>
+```
+
+- 当初次渲染该组件的时候，会实例化 `render Watcher`，此时 `Dep.target` 上的 `Watcher` 实例就是 `render Watcher`
+
+  ```js
+   updateComponent = () => {
+   	vm._update(vm._render(), hydrating)
+   }
+  
+  // we set this to vm._watcher inside the watcher's constructor
+  // since the watcher's initial patch may call $forceUpdate (e.g. inside child
+  // component's mounted hook), which relies on vm._watcher being already defined
+  new Watcher(vm, updateComponent, noop, {
+  	before () {
+  		if (vm._isMounted && !vm._isDestroyed) {
+  		callHook(vm, 'beforeUpdate')
+  		}
+  	}
+  }, true /* isRenderWatcher */)
+  ```
+
+- 当第一次读取页面的 `msg` 变量时，会触发 `getter` 从而调用 `dep.depend` 方法进行依赖收集，在该方法内部调用 `addDep` 方法，这时 `deps`、`depIds`、`newDeps` 和 `newDepIds` 被初始化为空数组或者空的集合。当执行完 `addDep` 方法后，会将当前的 `dep` 添加到 `newDeps` 数组中，其 `id` 被添加到 `newDepIds` 中，最后会讲当前 `Watcher` 实例添加到 `dep` 的订阅数组 `subs`中。
+
+  ```js
+  // 实例化 Dep
+  const dep = { id: 0, subs: [] }
+  // 第一次执行 addDep 之后
+  // 此时的 Watcher 实例
+  const watcher = {
+  	newDeps: [dep],
+  	newDepIds: [0],
+  }
+  
+  dep = { id: 0, subs: [watcher] }
+  ```
+
+- 当第二次读取 `msg` 变量的时候，会再次出发 `getter` 进行依赖收集，由于实例化的 `dep` 对于 `getter` 是定义在 `defineReactive` 函数中的闭包变量，因此两个触发的 `getter` 中是同一个 `dep` 实例，此时调用 `addDep` 方法，会判断 `newDepIds` 集合中已经存在 `dep.id` 为 `1` 的，因此会直接跳过依赖收集。
+
+- 在 `getter` 代码中，可以看到
+
 依赖收集完成之后，会执行以下几个逻辑，首先是：
 
 ```js
@@ -565,5 +626,79 @@ if (this.deep) {
 
 这时当我们设置了 `deep` 属性的时候，会通过调用 `traverse(value)` 方法，递归来触发所有子项的 `getter`，从而对每个嵌套的属性都会进行依赖收集，这个将在后面介绍 `$watcher` API 的时候详细说明。
 
+然后会执行 `popTarget()` 方法，其定义在 `core/observe/dep.js` 文件中，如下：
 
+```js
+export function popTarget () {
+  targetStack.pop()
+  Dep.target = targetStack[targetStack.length - 1]
+}
+```
 
+这里实际上将 `targetStack` 出栈，然后将 `Dep.target` 设置为最后一项，即恢复到上一个状态，因为当前的数据依赖已经收集完成，对应的 `Dep.target` 也需变化。后面将会提供示例便于理解。
+
+### cleanDeps
+
+最后我们会执行 `this.cleanupDeps()` 方法，这里主要是进行了依赖清空操作，那么我们为什么要进行清空依赖呢？具体又是怎样清空依赖的？
+
+首先我们可以看到 `Watcher` 类中其代码实现如下：
+
+```js
+export default Watcher {
+  // 精简代码
+  constructor () {
+    this.deps = []              // 旧dep列表
+    this.newDeps = []           // 新dep列表
+    this.depIds = new Set()     // 旧dep id集合
+    this.newDepIds = new Set()  // 新dep id集合
+  }
+  cleanupDeps () {
+    let i = this.deps.length
+    while (i--) {
+      const dep = this.deps[i]
+      if (!this.newDepIds.has(dep.id)) {
+        dep.removeSub(this)
+      }
+    }
+    let tmp = this.depIds
+    this.depIds = this.newDepIds
+    this.newDepIds = tmp
+    this.newDepIds.clear()
+    tmp = this.deps
+    this.deps = this.newDeps
+    this.newDeps = tmp
+    this.newDeps.length = 0
+  }
+}
+```
+
+为了更好的说明其作用，我们举例来说明，假如我们有以下组件：
+
+```js
+<template>
+  <div id="app">
+    <p v-if="count < 1">{{msg}}</p>
+    <p v-else>{{age}}</p>
+    <button @click="changeCount">Add Count</button>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      msg: 'hello world',
+      age: 12,
+      count: 0
+    };
+  },
+  methods: {
+    changeCount() {
+      this.count++
+    }
+  }
+};
+</script>
+```
+
+当组件初次进行渲染的时候，`render Watcher` 实例上面的 `newDeps` 数组里面有两个 `dep` 实例，
