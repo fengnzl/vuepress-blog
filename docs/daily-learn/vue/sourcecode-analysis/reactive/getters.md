@@ -614,7 +614,7 @@ export default {
 
 - 当第二次读取 `msg` 变量的时候，会再次出发 `getter` 进行依赖收集，由于实例化的 `dep` 对于 `getter` 是定义在 `defineReactive` 函数中的闭包变量，因此两个触发的 `getter` 中是同一个 `dep` 实例，此时调用 `addDep` 方法，会判断 `newDepIds` 集合中已经存在 `dep.id` 为 `1` 的，因此会直接跳过依赖收集。
 
-- 在 `getter` 代码中，可以看到
+### popTarget
 
 依赖收集完成之后，会执行以下几个逻辑，首先是：
 
@@ -635,9 +635,51 @@ export function popTarget () {
 }
 ```
 
-这里实际上将 `targetStack` 出栈，然后将 `Dep.target` 设置为最后一项，即恢复到上一个状态，因为当前的数据依赖已经收集完成，对应的 `Dep.target` 也需变化。后面将会提供示例便于理解。
+这里实际上将 `targetStack` 出栈，然后将 `Dep.target` 设置为最后一项，即恢复到上一个状态，因为当前的数据依赖已经收集完成，对应的 `Dep.target` 也需变化。那么我们为什么要进行这样的操作呢？
 
-### cleanDeps
+这样的目的主要是为了保持正常的依赖关系，如以下代码：
+
+ <iframe height="265" style="width: 100%;" scrolling="no" title="pushTargetPopTarget" src="https://codepen.io/lullabies/embed/yLgxBMz?height=265&theme-id=dark&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/lullabies/pen/yLgxBMz'>pushTargetPopTarget</a> by ScriptLearner
+  (<a href='https://codepen.io/lullabies'>@lullabies</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+
+当渲染组件时，会先渲染子组件，当子组件渲染完成之后，父组件才能渲染完毕，其渲染时的钩子函数如下：
+
+```js
+parent beforeMount()
+child beforeMount()
+child mounted()
+parent mounted()
+```
+
+当 `parent beforeMount` 执行时，会执行父组件的 `render watcher` 进行实例化，然后调用 `this.get()` 方法，这时的 `Dep.target` 为父组件的 `render watcher` 。`targetStack` 的伪代码如下：
+
+```js
+// 伪代码，实际为 Watcher 实例
+Dep.target = 'parent render watcher'
+targetStack = ['parent render watcher']
+```
+
+当子组件的 `beforeMount`  开始执行时，会对子组件的 `render watcher` 进行实例化，然后调用 `this.get()` 方法，这时的 `Dep.target` 为子组件的 `render Watcher` 。其伪代码如下所示：
+
+```js
+// 伪代码，实际为 Watcher 实例
+Dep.target = 'child render watcher'
+targetStack = ['parent render watcher', 'child render watcher']
+```
+
+当执行子组件的 `mounted` 方法时，代表 `this.getter()` 调用完毕，之后会执行 `popTarget` 方法，执行出栈操作，此时栈数组和 `Dep.target` 都会发生变化
+
+```js
+// 伪代码，实际为 Watcher 实例
+Dep.target = 'parent render watcher'
+targetStack = ['parent render watcher']
+```
+
+这样就保证了父子组件正确的依赖关系。
+
+### cleanupDeps
 
 最后我们会执行 `this.cleanupDeps()` 方法，这里主要是进行了依赖清空操作，那么我们为什么要进行清空依赖呢？具体又是怎样清空依赖的？
 
@@ -672,6 +714,8 @@ export default Watcher {
 }
 ```
 
+### cleanupDeps 示例
+
 为了更好的说明其作用，我们举例来说明，假如我们有以下组件：
 
 ```js
@@ -701,4 +745,44 @@ export default {
 </script>
 ```
 
-当组件初次进行渲染的时候，`render Watcher` 实例上面的 `newDeps` 数组里面有两个 `dep` 实例，
+当组件初次进行渲染的时候，`render Watcher` 实例上面的 `newDeps` 数组里面有两个 `dep` 实例，分别是 `msg`  和  `count` 属性触发 `getter` 的时候被收集，这里由于 `v-if/v-else` 的原因，并不会触发 `age` 属性的 `getter`。执行 `addDep` 之后的伪代码如下所示：
+
+```js
+// 伪代码
+this.deps = []
+this.depIds = new Set()
+this.newDepIds = new Set([1,3])
+this.newDeps = [
+  { id: 1, subs: [new Watcher()] },
+  { id: 2, subs: [new Watcher()] }
+]
+```
+
+当我们点击 `Add Count` 之后，会执行 `this.count++` ，触发 `count` 的 `setter` 函数，从而会触发组件更新，由于此时 `count <  1` 判断不再成立，因此会触发 `age` 的 `getter` ，在进行依赖收集 `addDep` 之后，会发生如下变化：
+
+```js
+// 伪代码
+this.deps = [
+  { id: 1, subs: [new Watcher()] },
+  { id: 2, subs: [new Watcher()] }
+]
+this.newDeps = [
+  { id: 1, subs: [new Watcher()] },
+  { id: 3, subs: [new Watcher()] }
+]
+this.depIds = new Set([1, 2])
+this.newDepIds = new Set([1, 3])
+```
+
+在调用 `this.get()` 函数的最后会执行 `cleanupDeps` 函数，这个方法首先会遍历 `this.deps` 旧的依赖列表，当发现其中的某个 `dep.id` 不存在于 `newDepIds` 集合中，那么就会调用 `dep.removeSub(this)` 方法将依赖进行移除，现在这里的 `this` 代表 `render watcher`。调用完这个方法之后，后续我们再次修改 `msg` 属性的值的时候就不会在触发组件渲染了。之后会将 `deps` 与 `newDeps` 以及 `depIds` 与 `newDepIds` 的值进行更换，然后清空 `newDeps` 和 `newDepIds` 的值，如下最终伪代码：
+
+```js
+this.depIds = new Set([1, 3])
+this.deps = [
+  { id: 1, subs: [new Watcher()] },
+  { id: 3, subs: [new Watcher()] }
+]
+this.newDeps = []
+this.newDepIds = new Set()
+```
+
