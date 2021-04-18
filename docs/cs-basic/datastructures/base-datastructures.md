@@ -611,3 +611,45 @@ insert(element) {
 ```
 
 由于我们需要保持元素具有一定的顺序，因此我们指将元素插入到指定位置，同理 `push` 方法与 `insert` 方法其实是相同的。
+
+## 集合
+
+**集合**是一组无序且唯一的项组成。这里我们将从头创建 `Set` 类，并实现原生 `Set` 类所没有提供的集合运算，如并集、交集和差集。
+
+```js
+export class Set {
+  constructor() {
+    this.set = Object.create(null);
+  }
+
+  add(key) {
+    this.set[key] = true;
+  }
+
+  has(key) {
+    return this.set[key] === true;
+  }
+
+  delete(key) {
+    if (this.has(key)) {
+      delete this.set[key];
+      return true;
+    }
+    return false;
+  }
+
+  clear() {
+    this.set = Object.create(null);
+  }
+
+  // 自定义size 方法
+  size() {
+    return Object.keys(this.set);
+  }
+
+  values() {
+    return Object.keys();
+  }
+}
+```
+
