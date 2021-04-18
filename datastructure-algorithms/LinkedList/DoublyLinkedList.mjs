@@ -1,9 +1,9 @@
-import { equalsFn } from "../util.mjs";
+import { defaultEquals } from "../util.mjs";
 import { DoublyNode } from "../models/LinkedListModels.mjs";
-import { LinekedList } from "./LinkedList.mjs";
+import { LinkedList } from "./LinkedList.mjs";
 
 class DoublyLinkedList extends LinkedList {
-  constructor(equalsFn) {
+  constructor(equalsFn = defaultEquals) {
     super(equalsFn);
     this.tail = undefined; // 链表最后一个元素的引用
   }

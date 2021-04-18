@@ -312,11 +312,11 @@ class Deque {
 下面是 LinkedList 类的 ”骨架“。
 
 ```js
-import { equalsFn } from "../util.mjs";
+import { defaultEquals } from "../util.mjs";
 import { Node } from "../models/LinkedListModels.mjs";
 
 class LinekedList {
-  constructor() {
+  constructor(equalsFn = defaultEquals) {
     this.count = 0; // 链表中存储的数量
     this.head = undefined; // 第一个元素的引用
     this.equalsFn = equalsFn; // 用于比较链表中的元素是否相同，也可以实例化时自行传
@@ -379,7 +379,7 @@ export class Node {
 
 ```js
 class DoublyLinkedList extends LinkedList {
-  constructor(equalsFn) {
+  constructor(equalsFn = defaultEquals) {
     super(equalsFn);
     this.tail = undefined; // 链表最后一个元素的引用
   }
@@ -476,3 +476,138 @@ insert(element, index) {
 
 其内部还增加了 `getTail` 和 `inverseToString` 方法，具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/DoublyLinkedList.mjs)。
 
+### 循环链表
+
+**循环列表**可以向链表一样只有单向引用，也可以像双向链表一样有双向引用。循环链表和链表中的唯一区别在于，最后一个元素指向下一个元素的指针（`tail.next`）不是引用 `undefined` ，而是指向第一个元素。
+
+**双向循环列表**则是有指向 `head` 元素的 `tail.next` 和指向 `tail` 元素的 `head.prev`。
+
+这里我们主要编写的是单向循环列表，首先创建 `CircularLinkedList` 类：
+
+```js
+export class CircularLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals) {
+    super(equalsFn)
+  }
+}
+```
+
+同样我们主要介绍其插入元素和删除元素的实现方法，主要是对最后一个元素进行处理。
+
+```js
+insert(element, index) {
+    if (index >= 0 && index <= this.count) {
+      const node = new Node(element);
+      let current = this.head;
+      if (index === 0) {
+        // 没有元素
+        if (this.head == null) {
+          this.head = node;
+          node.next = this.head;
+        } else {
+          node.next = current;
+          // 获取最后一个元素, 正常获取最后一个元素应该是 this.size() - 1
+          // 这里使用 this.sizez() 是因为已经多了新增的 node 元素
+          current = this.getElementAt(this.size());
+          this.head = node;
+          // 将最后一个元素指向第一个元素
+          current.next = this.head;
+        }
+      } else {
+        const previous = this.getElementAt(index - 1);
+        node.next = previous.next;
+        previous.mext = node;
+      }
+      this.count++;
+      return true;
+    }
+    return false;
+  }
+
+  removeAt(index) {
+    if (index >= 0 && index < this.count) {
+      let current = this.head;
+      if (index === 0) {
+        if (this.size() === 1) {
+          this.head = undefined;
+        } else {
+          const removed = this.head;
+          // 最后一个元素
+          current = this.getElementAt(this.size() - 1);
+          this.head = removed.next;
+          current.next = this.head;
+          current = removed
+        }
+      } else {
+        // 不需要改变循环列表的最后一个元素
+        const previous = this.getElementAt(index - 1)
+        current = previous.next;
+        previous.next = current.next
+      }
+      this.count--;
+      return current.element
+    }
+    return undefined
+  }
+```
+
+其内部还重写了 `push` 方法，具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/CircularLinkedList.mjs)。
+
+### 有序链表
+
+**有序链表**是指保持元素有序的链表结构，我们插入元素时，也需要将元素插入到正确的位置，来保证链表的有序性。
+
+首先我们需要定义一个自定义的比较函数 `defaultCompare`
+
+```js
+export const Compare = {
+  LESS_THAN: -1,
+  BIGGER_THAN: 1
+}
+
+export function defaultCompare (a, b) {
+  if (a === b) {
+    return 0
+  }
+  return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN
+}
+```
+
+然后声明 `SortedLinkedList` 类，骨架如下所示：
+
+```js
+export class SortedLinkedList extends LinkedList {
+  constructor(equalsFn = defaultEquals, compareFn = defaultCompare) {
+    super(equalsFn);
+    this.compateFn = compareFn;
+  }
+}
+```
+
+接下来我们来编写 `insert` 方法来覆盖其默认方法
+
+```js
+insert(element) {
+    if (this.isEmpty()) {
+      super.insert(element, 0);
+    } else {
+      const pos = this.getIndexNextSortedElement(element);
+      super.insert(element, pos);
+    }
+  }
+
+  getIndexNextSortedElement(element) {
+    let current = this.head;
+    let i = 0;
+    for (; i < this.size() && current; i++) {
+      const compare = this.compateFn(element, current.element);
+      if (compare === Compare.LESS_THEN) {
+        return i;
+      }
+      current = current.next;
+    }
+    return i;
+  }
+```
+
+由于我们需要保持元素具有一定的顺序，因此我们指将元素插入到指定位置，同理 `push` 方法与 `insert` 方法其实是相同的。
