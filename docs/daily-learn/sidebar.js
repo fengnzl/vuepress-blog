@@ -96,7 +96,11 @@ const vueSourceCodeAnalysisSidebar = [
   },
   {
     title: "响应式原理",
-    children: ["reactive/prepare", "reactive/getters"],
+    children: [
+      "reactive/prepare",
+      "reactive/getters",
+      "reactive/setters",
+    ],
   },
 ];
 
