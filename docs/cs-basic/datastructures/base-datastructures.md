@@ -730,3 +730,156 @@ isSubsetOf(otherSet) {
 
 以上就是我们模拟的 `Set` 集合，具体[详见代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Set/Set.mjs)。 ES2015 已经有原生的 `Set` 类供我们使用，具体[查看文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)。
 
+## 字典和散列表
+
+### 字典
+
+从上文可知集合是用来表示一组不重复的元素。在字典中，存储的[键，值]对，其中键名用来查询特定元素。字典也称作为映射或关联数组。
+
+**ES6 中的 Map 类即我们所说的字典。**
+
+首先我们来实现 `Dictionary` 类的骨架：
+
+```js
+import { defaultToString } from '../util.mjs'
+
+export class Dictinoary {
+  constructor(toStrFn = defaultToString) {
+    this.toStrFn = toStrFn;
+    this.table = {};
+  }
+}
+```
+
+这里 `defaultToString` 是我们定义的工具函数，作用是将 `key` 转换为字符串，如果直接通过 [键] 来设置是不友好的，因为对于对象作为键的时候，会变成 `[object Object]`。
+
+```js
+export function defaultToString (item) {
+  if (item === null) {
+    return 'UNLL'
+  } else if (item === undefined) {
+    return 'UNDEFINED'
+  } else if (typeof item === 'string' || item instanceof String) {
+    return `${item}`
+  }
+  return item.toString();
+}
+```
+
+字典所能使用的方法如下所示：
+
+- `set(key,value)`：向字典中添加新元素。如果 `key` 已经存在，则进行覆盖。
+- `delete(key)`：通过使用键值来从字典中移除键值对应的数据值。
+- `has(key)`：如果某个键值存在于这个字典中，则返回 true，反之则返回 false。
+- `get(key)`：通过键值查找特定的数值并返回。
+- `clear()`：将这个字典中的所有元素全部删除。
+- `size()`：返回字典所包含元素的数量。与数组的 length 属性类似。
+- `isEmpty()`：在 size 为零的时候返回 true，否则返回 false。
+- `keys()`：将字典所包含的所有键名以数组形式返回。
+- `values()`：将字典所包含的所有数值以数组形式返回。
+- `keyValues()`：将字典中所有的[键，值]对返回。
+- `forEach(cb)`：迭代字典中所有的简直对。cb 函数有两个参数：key 和 value。该方法可以在回调函数返回 false 时被中止（类似 Array 中的 every 方法）。
+
+在字典中我们通过 `ValuePair` 类来设置键和值。为了保存信息的需要我们会同时保存 `key` 和 `value`，同时提供 `toString` 方法。
+
+```js
+export class ValuePair {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+  }
+
+  toString() {
+    return `[#${this.key}: ${this.value}]`;
+  }
+}
+```
+
+最后我们编写的 `Dictionary` 类如下所示：
+
+```js
+import { defaultToString } from "../util.mjs";
+import { ValuePair } from "../models/ValuePair.mjs";
+
+export class Dictinoary {
+  constructor(toStrFn = defaultToString) {
+    this.toStrFn = toStrFn;
+    this.table = {};
+  }
+
+  has(key) {
+    return this.table[this.toStrFn[key]] != null;
+  }
+
+  set(key, value) {
+    if (key != null && value != null) {
+      const tableKey = this.toStrFn[key];
+      this.table[tableKey] = new ValuePair(key, value);
+      return true;
+    }
+    return false;
+  }
+
+  get(key) {
+    const valuePair = this.table[this.toStrFn[key]];
+    return valuePair == null ? undefined : valuePair.value;
+  }
+
+  delete(key) {
+    if (this.has(key)) {
+      delete this.table[this.toStrFn[key]];
+      return true;
+    }
+    return false;
+  }
+
+  keyValues() {
+    return Object.values(this.table);
+  }
+
+  values() {
+    return this.keyValues().map((valuePair) => valuePair.value);
+  }
+
+  keys() {
+    return this.keyValues().map((valuePair) => valuePair.key);
+  }
+
+  forEach (cb) {
+    const valuePairs = this.keyValues();
+    for (let i = 0, len = valuePairs.length; i < len; i++){
+      const result = cb(valuePairs[i].key, valuePairs[i].value);
+      if (result === false) {
+        break;
+      }
+    }
+  }
+
+  size() {
+    return this.keyValues().length;
+  }
+
+  isEmpty() {
+    return this.size() === 0;
+  }
+
+  clear() {
+    this.table = {};
+  }
+
+  toString() {
+    if (this.isEmpty()) {
+      return "";
+    }
+
+    const valuePairs = this.keyValues();
+    let objString = `${valuePairs[0].toString()}`;
+    for (let i = 1, len = valuePairs.length; i < len; i++) {
+      objString = `${objString},${valuePairs[i].toString()}`;
+    }
+    return objString;
+  }
+}
+```
+
+验证相关详见[代码文件](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Dictionary/Dictionary.mjs)。

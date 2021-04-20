@@ -81,7 +81,3 @@ export class _Set {
     return true;
   }
 }
-
-const setA = new _Set([1, 2, 3]);
-const setB = new _Set([4, 5, 6]);
-setA.union(setA);
