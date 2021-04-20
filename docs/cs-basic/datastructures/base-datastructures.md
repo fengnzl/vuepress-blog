@@ -612,12 +612,14 @@ insert(element) {
 
 由于我们需要保持元素具有一定的顺序，因此我们指将元素插入到指定位置，同理 `push` 方法与 `insert` 方法其实是相同的。
 
+具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/SortedLinkedList.mjs)。
+
 ## 集合
 
-**集合**是一组无序且唯一的项组成。这里我们将从头创建 `Set` 类，并实现原生 `Set` 类所没有提供的集合运算，如并集、交集和差集。
+**集合**是一组无序且唯一的项组成。这里我们将从头模拟创建 `Set` 类，并实现原生 `Set` 类所没有提供的集合运算，如并集、交集和差集。
 
 ```js
-export class Set {
+export class _Set {
   constructor() {
     this.set = Object.create(null);
   }
@@ -644,12 +646,87 @@ export class Set {
 
   // 自定义size 方法
   size() {
-    return Object.keys(this.set);
+    return Object.keys(this.set).length;
   }
 
   values() {
-    return Object.keys();
+    return Object.keys(this.set);
   }
 }
 ```
+
+### 并集
+
+对于给定的两个集合，返回包含两个集合中所有元素的新集合
+
+```js
+union(otherSet) {
+    const unionSet = new _Set();
+    this.values().forEach((key) => unionSet.add(key));
+    otherSet.values().forEach((key) => unionSet.add(key));
+    return unionSet;
+  }
+```
+
+### 交集
+
+对给定两个集合，返回一个包含两个集合中共有元素的新集合。
+
+```js
+intersection(otherSet) {
+    const intersectionSet = new _Set();
+    // 减少循环次数
+    const values = this.values();
+    const otherValues = otherSet.values();
+    let smallValues = values;
+    let biggerSet = otherSet;
+    if (values.length > otherValues.length) {
+      smallValues = otherValues;
+      biggerSet = this;
+    }
+    smallValues.forEach((key) => {
+      if (biggerSet.has(key)) {
+        intersectionSet.add(key);
+      }
+    });
+    return intersectionSet;
+  }
+```
+
+### 差集
+
+对于给定的两个集合，返回一个包含所有存在于第一个集合而不存在于第二个集合的元素的新集合。
+
+```js
+difference (otherSet) {
+    const diffSet = new _Set()
+    this.values().forEach(key => {
+      if (!otherSet.has(key)) {
+        diffSet.add(key)
+      }
+    })
+    return diffSet;
+  }
+```
+
+### 子集
+
+验证一个给定集合是否是另一个集合的子集。
+
+```js
+isSubsetOf(otherSet) {
+    if (this.size() > otherSet.size()) {
+      return false;
+    }
+    const values = this.values()
+    for (let i = 0; i < values.length; i++) {
+      if (!otherSet.has(values[i])) {
+        return false
+      }
+    }
+    return true
+  }
+```
+
+以上就是我们模拟的 `Set` 集合，具体[详见代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Set/Set.mjs)。 ES2015 已经有原生的 `Set` 类供我们使用，具体[查看文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)。
 
