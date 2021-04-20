@@ -1,6 +1,6 @@
 const nav = require('./nav');
 const sidebar = require('./sidebar');
-const plugins = require('./plugin');
+// const plugins = require('./plugin');
 
 module.exports = {
   title: '城南花已开',
@@ -30,5 +30,5 @@ module.exports = {
     searchMaxSuggestoins: 10,
     sidebarDepth: 2
   },
-  plugins,
+  // plugins,
 }
