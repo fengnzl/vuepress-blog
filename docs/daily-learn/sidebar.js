@@ -77,14 +77,17 @@ const wxTpFullstackSidebar = [
 const vueSourceCodeAnalysisSidebar = [
   {
     title: "准备工作",
+    collapsable: false,
     children: [["prepare/", "Introduction"], "prepare/flow", "prepare/rollup"],
   },
   {
     title: "架构设计",
+    collapsable: false,
     children: ["architect/architecture-design"],
   },
   {
     title: "从入口到整体流程",
+    collapsable: false,
     children: [
       ["entryMount/all-flow", "整体流程"],
       ["entryMount/init-mixin", "initMixin 流程"],
@@ -96,6 +99,7 @@ const vueSourceCodeAnalysisSidebar = [
   },
   {
     title: "响应式原理",
+    collapsable: false,
     children: [
       "reactive/prepare",
       "reactive/getters",
