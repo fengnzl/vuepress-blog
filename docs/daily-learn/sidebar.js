@@ -105,6 +105,7 @@ const vueSourceCodeAnalysisSidebar = [
       "reactive/getters",
       "reactive/setters",
       "reactive/nextTick",
+      "reactive/reactiveAPI",
     ],
   },
 ];
