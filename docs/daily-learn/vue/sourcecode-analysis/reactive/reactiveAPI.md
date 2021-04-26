@@ -4,7 +4,7 @@
 
 ## vm.$set
 
-`Vue.set` 和 `vm.$set` 引用的是同一个 `set` 方法，其中 `set` 方法定义在 `core/instance/observe/index.js` 文件中。
+`Vue.set` 和 `vm.$set` 引用的是同一个 `set` 方法，其中 `set` 方法定义在 `core/observe/index.js` 文件中。
 
 ```js
 /**
@@ -85,3 +85,62 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 - 通过判断 `target` 对象如果不存在 `__ob__` 属性，那么说明其不是响应式的，因此只需直接设置对象上该属性的值即可。
 
 - 上述情况不满足，那么是响应式对象新增属性，这时我们需要通过 `defineReactive` 将该属性转换成响应式，然后派发更新，通知相应依赖进行更新即可，并返回 `val`。
+
+## vm.$delete
+
+由于 `Object.defineProperty` 并不能侦测一个属性在对象中被删除，因此需要一个方法，可以在我们删除属性的同时，会自动向依赖发送消息，这就是该 API 的实现原理。
+
+`Vue.delete` 和 `vm.$delete` 使用的是同一个 `delete` 方法，被定义在 `src/observe/index.js` 文件中。
+
+```js
+/**
+ * Delete a property and trigger change if necessary.
+ */
+export function del (target: Array<any> | Object, key: any) {
+  if (process.env.NODE_ENV !== 'production' &&
+    (isUndef(target) || isPrimitive(target))
+  ) {
+    warn(`Cannot delete reactive property on undefined, null, or primitive value: ${(target: any)}`)
+  }
+  if (Array.isArray(target) && isValidArrayIndex(key)) {
+    target.splice(key, 1)
+    return
+  }
+  const ob = (target: any).__ob__
+  if (target._isVue || (ob && ob.vmCount)) {
+    process.env.NODE_ENV !== 'production' && warn(
+      'Avoid deleting properties on a Vue instance or its root $data ' +
+      '- just set it to null.'
+    )
+    return
+  }
+  if (!hasOwn(target, key)) {
+    return
+  }
+  delete target[key]
+  if (!ob) {
+    return
+  }
+  ob.dep.notify()
+}
+```
+
+- 首先同样是判断 `target` 如果不是对象，那么在开发环境会报错。
+
+- 当为数组时，通过调用数组拦截器 `splice` 方法，从而达到自动向依赖发送通知的效果，由于只是删除指定索引位置的元素，因此只需判断索引合法即可。
+
+- 同 `$set` 方法一样，同样该方法不可在 Vue 实例或实例上面的根数据对象使用。
+
+- 如果对象中没有待删除的属性，那么直接返回。
+
+  ```js
+  const hasOwnProperty = Object.prototype.hasOwnProperty
+  export function hasOwn (obj: Object | Array<*>, key: string): boolean {
+    return hasOwnProperty.call(obj, key)
+  }
+  ```
+
+- 删除对象中的属性，如果该对象不是响应式，那么直接退出函数执行，否则向依赖发送通知。
+
+
+
