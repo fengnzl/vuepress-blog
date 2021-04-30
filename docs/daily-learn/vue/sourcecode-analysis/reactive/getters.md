@@ -74,7 +74,7 @@ export function defineReactive (
 这里我们可以看到首先执行了这串代码 `const dep = new Dep()`，然后在定义的 `getter` 函数中先判断了 `Dep.target` 存在后，则调用 `dep.depend()` 函数来进行依赖收集，同时还对 `childOb` 进行判断及后续处理，因此我们首先需要高清以下几个问题：
 
 - 什么是 `Dep`?
-- `Dep.target` 有时什么？
+- `Dep.target` 又是什么？
 - `dep.depend()` 方法内部是如何实现依赖收集的
 
 ## Dep
@@ -497,6 +497,7 @@ export function pushTarget (target: ?Watcher) {
 ```
 
 该方法的作用主要是将当前 `Watcher` 实例添加到 `targetStack` 中，然后把 `Dep.target` 设置为当前的 `Watcher` 实例。
+**所以 `Dep.target` 实际上就是一个 `Watcher` 实例。**
 
 然后会调用 `this.getter` 函数来进行求值。
 
