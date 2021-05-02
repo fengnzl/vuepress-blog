@@ -43,6 +43,10 @@ const dailyLearnSidebar = [
     title: "Git",
     children: ["Git/git-des", "Git/git-time-machine"],
   },
+  {
+    title: "scaffold",
+    children: ["scaffold/Introduction"],
+  },
 ];
 
 const vueGroundUpSidebar = [
