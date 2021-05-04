@@ -74,6 +74,7 @@ vue create vue-test
 我们如果想为某个命令创建别名，可以在别名上增加软链接指向原命令，如下所示：
 
 ```js
+ln -s  指向的文件路径(指令) 软连接名称
 ln -s ./vue vue2
 
 // 创建之后
@@ -84,3 +85,251 @@ lrwxr-xr-x  1 xxx  admin     5B  5  3 01:11 vue2 -> ./vue
 脚手架执行全过程流程图
 
 ![scaffol-run](/scaffold/scaffold-run.png)
+
+## 开发流程
+
+开发一个脚手架最简单的流程如下所示：
+
+1. 创建项目，并使用 `npm init` 初始化项目
+2. 创建脚手架入口文件，并在第一行中添加 `#!/usr/bin/env node`
+3. 配置 package.json 文件，添加 bin 属性
+4. 编写并将脚手架发布
+
+### 开发难点
+
+- 分包：即将复杂的系统分成若干个小模块
+
+- 命令注册：如 vue-cli 中
+
+  ```bash
+  vue create
+  vue add
+  vue invoke
+  ```
+
+- 参数解析
+
+  ```bash
+  vue command [options] <params>
+  ```
+
+  - options 全称：`--version`、`--help`
+
+  - options 简写：`-V`、`-h`
+
+  - 带 params 的 options：`--git initial commit`
+
+  - 帮助文档：
+
+    - global help
+      - Usage
+      - Options
+      - Commands
+
+    示例：`vue` 的帮助信息：
+
+    ```bash
+    Usage: vue <command> [options]
+    
+    Options:
+      -V, --version                              output the version number
+      -h, --help                                 output usage information
+    
+    Commands:
+      create [options] <app-name>                create a new project powered by vue-cli-service
+      add [options] <plugin> [pluginOptions]     install a plugin and invoke its generator in an already created project
+      invoke [options] <plugin> [pluginOptions]  invoke the generator of a plugin in an already created project
+      inspect [options] [paths...]               inspect the webpack config in a project with vue-cli-service
+      serve [options] [entry]                    serve a .js or .vue file in development mode with zero config
+      build [options] [entry]                    build a .js or .vue file in production mode with zero config
+      ui [options]                               start and open the vue-cli ui
+      init [options] <template> <app-name>       generate a project from a remote template (legacy API, requires @vue/cli-init)
+      config [options] [value]                   inspect and modify the config
+      outdated [options]                         (experimental) check for outdated vue cli service / plugins
+      upgrade [options] [plugin-name]            (experimental) upgrade vue cli service / plugins
+      migrate [options] [plugin-name]            (experimental) run migrator for an already-installed cli plugin
+      info                                       print debugging information about your environment
+    
+      Run vue <command> --help for detailed usage of given command.
+    ```
+
+还有如：
+
+- 命令行交互
+- 日志打印
+- 命令行文字变色
+- 文件处理等
+
+## 简易分包示例及参数解析
+
+首先我们通过 `npm init` 初始化一个 `recovery-cli` 项目，然后在 package.json 文件中添加 `bin` 字段如下：
+
+```json
+"bin": {
+    "recovery-cli": "bin/index.js"
+  },
+```
+
+然后我们在该项目下新建 `bin/index.js` 文件，并编写如下代码：
+
+```js
+#!/usr/bin/env node
+
+console.log("hello world");
+```
+
+为了可以使用 `recovery-cli` 命令，我们可以有如下两种方法：
+
+1. 先通过 `npm publish` 发布，然后 `npm install -g recovery-cli` 全局安装该项目，之后就可以直接使用 `recovery-cli`
+
+2. 在开发中，我们更推荐该方法，通过使用 `npm link` 命令，将 `recovery-cli` 注册到全局命令，然后软链接到本地项目，如下所示：
+
+   ```bash
+   // /usr/local/bin 目录中查看命令软链接
+   lrwxr-xr-x  1 root  admin    45B  5  3 11:31 recovery-cli -> ../lib/node_modules/recovery-cli/bin/index.js
+   // /usr/local/lib/node_modules 目录 
+   lrwxr-xr-x   1 root  wheel    55B  5  3 11:31 recovery-cli -> ../../../../Users/fengliu/Desktop/test-cli/recovery-cli
+   ```
+
+### 分包示例
+
+我们新建并初始化一个库文件夹 `recovery-lib`，之后在 package.json 文件中 `main` 字段指定该项目的入口文件：
+
+```json
+"main": "lib/index.js",
+```
+
+然后在该项目 `lib/index.js` 文件中编写如下代码：
+
+```js
+function sum(a, b) {
+  return a + b;
+}
+
+function multi(a, b) {
+  return a * b;
+}
+
+module.exports = {
+  sum,
+  multi,
+};
+```
+
+然后通过在该项目使用 `npm link` 将该模块添加到全局 node_modules 中，这时我们在进入到 `recovery-cli` 主项目中，通过 `npm link recovery-lib` 中，从而将该模块中 node_modules 下指定库文件链接到全局 node_modules 文件夹。同时在主目录中的 package.json 文件中添加如下代码
+
+```json
+"dependencies": {
+    "recovery-lib": "1.0.0"
+  },
+```
+
+之后在 `recovery-cli` 主目录下执行 `npm install` 进行依赖安装，并在 `bin/index.js` 文件中，添加如下代码
+
+```js
+const { sum, multi } = require("recovery-lib");
+
+console.log("2 + 3 =", sum(2, 3));
+console.log("2 * 4 =", multi(2, 4));
+```
+
+这时我们运行 `recovery-cli` 命令，可以看到命令行中输出如下代码，即表明简单的分包已经完成：
+
+```
+hello world
+2 + 3 = 5
+2 * 4 = 8
+```
+
+### 参数解析
+
+我们首先在 `recovery-cli` 主目录中添加 `bin/command.js` 文件，其中代码如下：
+
+```js
+function init({ option, param }) {
+  console.log("执行 init 流程", option, param);
+}
+
+module.exports = {
+  init,
+};
+
+```
+
+然后我们在 `bin/index.js` 文件中引入，并进行简单的相关参数解析，代码如下：
+
+```js
+const args = process.argv;
+const [command, userOption = "", param] = args.slice(2);
+if (command) {
+  if (commandFun[command]) {
+    const option = userOption.replace(/--|-/g, "");
+    commandFun[command]({ option, param });
+  } else {
+    // 如果是全局选型 --version -V
+    if (command.startsWith("--") || command.startsWith("-")) {
+      const gloabOption = command.replace(/--|-/g, "");
+      if (gloabOption === "version" || gloabOption === "V") {
+        console.log(version);
+      }
+      return;
+    }
+    console.log("无效的命令");
+  }
+} else {
+  console.log("请输入命令");
+}
+```
+
+然后我们在命令行中，输入以下命令，可以看到输出的结果如下：
+
+```bash
+~/Desktop/test-cli/recovery-cli » recovery-cli init --name test
+hello world
+2 + 3 = 5
+2 * 4 = 8
+执行 init 流程 name test
+~/Desktop/test-cli/recovery-cli » recovery-cli -V
+hello world
+2 + 3 = 5
+2 * 4 = 8
+1.0.0
+```
+
+以上简单的命令解析已经完成，但实际上的命令及选项和参数远比这个复杂，这里只是简单的模拟。
+
+## 本地 link 流程
+
+**新建&连接本地脚手架**
+
+```bash
+mkdir recovery-cli
+cd erdan-test
+npm init -y
+npm link
+```
+
+**新建本地库文件并在本地脚手架中使用**
+
+```bash
+mkdir recovery-lib
+cd recovery-lib
+npm init -y
+npm link
+cd recovery-cli
+npm link recovery-lib
+```
+
+**取消链接本地库文件**
+
+```bash
+cd recovery-lib
+npm unlink
+cd recovery-cli
+# link存在的情况下执行下面这行
+npm unlink recovery-lib
+# link不存在的情况下删除node_modules
+# 从安装发布到远程仓库上的库文件
+npm i -S recovery-lib
+```
+
