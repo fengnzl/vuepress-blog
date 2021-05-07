@@ -1,4 +1,4 @@
-# 从零搭建脚手架之 Lerna
+# 从零搭建脚手架之 Lerna 和 Yargs
 
 > 本文主要介绍 Lerna 使用及其源码的简单分析。首先我们来看原生脚手架开发时的痛点：
 
@@ -68,3 +68,57 @@ Lerna 是一个基于 git 和 npm 的多 package 项目的优化流程的管理�
   "access":"public"
 }
 ```
+
+**建议：**在搭建脚手架，内部相关的库互相引用时，建议通过如下方式进行配置，然后 `npm install` 安装，这样最后在根目录发布脚手架时就无需 各种`npm unlink` 操作，直接 `lerna publish` 即可， lerna 会帮我们分析相关依赖关系。
+
+```json
+"dependencies": {
+    "@recovery-test/util": "file:../util"
+  },
+```
+
+## Yargs
+
+> Yargs helps you build interactive command line tools, by parsing arguments and generating an elegant user interface.
+
+Yargs 用于帮助构建交互式命令行的工具，它会解析命令行参数，并生成一个美观的用户界面。
+
+其基本用法如下所示，建议配置一个命令即可观察其具体效果。
+
+```js
+#!/usr/bin/env node
+
+const dedent = require("dedent");
+const yargs = require("yargs/yargs");
+const {
+  hideBin
+} = require("yargs/helpers");
+const arg = hideBin(process.argv);
+//console.log(arg); // recovery-test --help 则为['--help']
+
+const cli = yargs(arg);
+
+cli
+  // 配置第一行的使用提示
+  .usage("Usage: $0 <command> [options]")
+  //配置提示用户使用脚手架时至少接收一个命令
+  .demandCommand(
+    1,
+    "A command is required. Pass --help to see all available commands and options."
+  )
+  // 配置严格模式，最后一行会提示相关错误信息，在不配置demandCommand 的情况下
+  // 输入 recovery-test --aa 则提示：无法识别的选项 aa
+  .strict()
+  // 给命令设置别名，默认存在 --help 和 --version 命令
+  .alias("h", "help")
+  .alias("v", "version")
+  // 设置提示信息的宽度，可以设置数字  这里是终端的宽度
+  .wrap(cli.terminalWidth())
+  // 配置 底部提示信息 dedent 用于去除缩紧
+  .epilogue(dedent `
+    When a command fails, all logs are written to lerna-debug.log in the current working directory.
+
+    For more information, find our manual at https://github.com/lerna/lerna
+  `).argv;
+```
+
