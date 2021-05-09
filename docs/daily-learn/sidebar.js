@@ -44,8 +44,8 @@ const dailyLearnSidebar = [
     children: ["Git/git-des", "Git/git-time-machine"],
   },
   {
-    title: "scaffold",
-    children: ["scaffold/Introduction", "scaffold/Lerna"],
+    title: "Scaffold",
+    children: ["Scaffold/Introduction", "Scaffold/LernaAndYargs"],
   },
 ];
 

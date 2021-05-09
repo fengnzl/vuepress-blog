@@ -10,7 +10,7 @@ module.exports = [
       { text: "CSS", link: "/daily-learn/CSS/make-talkbubble" },
       { text: "PHP", link: "/daily-learn/PHP/tp51-timestamp-autosave" },
       { text: "Git", link: "/daily-learn/Git/git-des" },
-      { text: "scaffold", link: "/daily-learn/scaffold/Introduction" },
+      { text: "Scaffold", link: "/daily-learn/Scaffold/Introduction" },
     ],
   },
   { text: "计算机基础", link: "/cs-basic/" },
