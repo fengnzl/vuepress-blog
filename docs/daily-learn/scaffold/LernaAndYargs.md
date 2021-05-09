@@ -90,15 +90,45 @@ Yargs 用于帮助构建交互式命令行的工具，它会解析命令行参�
 
 const dedent = require("dedent");
 const yargs = require("yargs/yargs");
+const pkg = require('./package.json')
 const {
   hideBin
 } = require("yargs/helpers");
 const arg = hideBin(process.argv);
 //console.log(arg); // recovery-test --help 则为['--help']
 
-const cli = yargs(arg);
+const context = {
+  recoveryTestVersion: pkg.version
+}
 
-cli
+const globalOptions = (yargs) => {
+  const opt = {
+    debug: {
+      type: 'boolean',
+      describe: 'Bootstrap debug mode',
+      alias: 'd'
+    },
+    devtool: {
+      type: 'boolean',
+      describe: 'Devtool mode',
+      alias: 't'
+    }
+  }
+
+  // 将其统一添加到 global options 组下
+  const globalKeys = Object.keys(opt).concat(['help', 'version'])
+
+  return yargs.options(opt).group(globalKeys, 'Global Options')
+}
+
+// 如果调用 yargs 时就传递参数，则最后调用需要增加 .argv
+// const cli = yargs(arg);
+// const cli = yargs(process.argv.slice(2))
+// 如果要增加自定义参数在调用中，则 yargs() 不传递参数，最后链式调用改为.parse(argv, userParam)
+const cli  = yargs()
+
+// 配置 底部提示信息 dedent 用于去除缩紧
+globalOptions(cli)
   // 配置第一行的使用提示
   .usage("Usage: $0 <command> [options]")
   //配置提示用户使用脚手架时至少接收一个命令
@@ -106,19 +136,62 @@ cli
     1,
     "A command is required. Pass --help to see all available commands and options."
   )
-  // 配置严格模式，最后一行会提示相关错误信息，在不配置demandCommand 的情况下
+  // 没有匹配的命令会提供相近的命令提示
+  .recommendCommands()
+  // 配置严格模式，无法识别的命令也将报错，在不配置demandCommand 的情况下
   // 输入 recovery-test --aa 则提示：无法识别的选项 aa
   .strict()
+  .fail((msg, err) => {
+    console.log(msg);
+  })
   // 给命令设置别名，默认存在 --help 和 --version 命令
   .alias("h", "help")
   .alias("v", "version")
   // 设置提示信息的宽度，可以设置数字  这里是终端的宽度
   .wrap(cli.terminalWidth())
-  // 配置 底部提示信息 dedent 用于去除缩紧
-  .epilogue(dedent `
+  // 配置 registory 命令
+  .option("registory", {
+    type: "string",
+    describe: "Define registory url",
+    alias: "r",
+  })
+  .group(["registory"], "Extra Options")
+  // 配置隐藏命令，可以开发的时候使用
+  .option("ci", {
+    type: "boolean",
+    hidden: true,
+  })
+  // 配置命令的两种方法
+  .command(
+    "init [name]",
+    "Do init a project",
+    (yargs) => {
+      yargs.option("name", {
+        type: "string",
+        describe: "name of project",
+        alias: "n",
+      });
+    },
+    (argv) => {
+      console.log(argv);
+    }
+  )
+  .command({
+    command: "list",
+    aliases: ["ls", 'll', 'la'],
+    describe: 'list local package',
+    builder (yargs) { },
+    handler (argv) {
+      console.log(argv)
+    }
+  }).epilogue(dedent`
     When a command fails, all logs are written to lerna-debug.log in the current working directory.
 
     For more information, find our manual at https://github.com/lerna/lerna
-  `).argv;
+  `)
+  // 初始调用不传递参数，最后解析
+  .parse(process.argv.slice(2), context)
+  // 初始调用传递 argv
+  // .argv;
 ```
 
