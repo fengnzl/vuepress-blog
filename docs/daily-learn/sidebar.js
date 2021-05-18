@@ -45,7 +45,11 @@ const dailyLearnSidebar = [
   },
   {
     title: "Scaffold",
-    children: ["Scaffold/Introduction", "Scaffold/LernaAndYargs"],
+    children: [
+      "Scaffold/Introduction",
+      "Scaffold/LernaAndYargs",
+      'Scaffold/Prepare'
+    ],
   },
 ];
 

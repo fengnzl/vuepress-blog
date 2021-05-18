@@ -127,7 +127,7 @@ const globalOptions = (yargs) => {
 // 如果要增加自定义参数在调用中，则 yargs() 不传递参数，最后链式调用改为.parse(argv, userParam)
 const cli  = yargs()
 
-// 配置 底部提示信息 dedent 用于去除缩紧
+// 配置 底部提示信息 dedent 用于去除缩进 换行则保留
 globalOptions(cli)
   // 配置第一行的使用提示
   .usage("Usage: $0 <command> [options]")
