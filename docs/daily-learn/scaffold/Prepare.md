@@ -176,3 +176,31 @@ function checkRoot() {
 }
 ```
 
+### 检查用户主目录
+
+获取用户的主目录，并检测该目录是否存在
+
+```js
+const { homedir } = require('os')
+const fs = require('fs')
+function checkUserHome () {
+  const homeDirName = homedir()
+  if (!homeDirName || !fs.existsSync(homeDirName)) {
+    throw new Error('The current user home directory does not exist')
+  }
+}
+```
+
+### 获取入参及开启 debug 模式
+
+我们可以通过 `minimist` 来将入参转换为对象形式，具体可[查看文档](https://www.npmjs.com/package/minimist)
+
+```js
+function checkInputArgs () {
+  const argv = require("minimist")(process.argv.slice(2));
+  console.log(argv)
+  log.level = argv.debug ? 'verbose' : 'info'
+}
+```
+
+这时我们运行命令的时候，添加 `--debug`  即可开启调试模式。
