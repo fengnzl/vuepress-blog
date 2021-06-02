@@ -204,3 +204,108 @@ function checkInputArgs () {
 ```
 
 这时我们运行命令的时候，添加 `--debug`  即可开启调试模式。
+
+### 检查环境变量
+
+我们可以通过在环境变量中储存用户信息，配置信息等数据。
+
+- 通过 dotenv 库来实现获取配置文件(默认 `path.resolve(process.cwd(), '.env')`)信息
+- 文件中配置信息为 key=value 的形式，获取配置信息后回挂载到 process.env 上
+
+```js
+function checkEnv () {
+  // 读取 .env 文件中的数据，配置到环境变量中
+  const dotenvPath = path.resolve(process.cwd(), '../../.env');
+  console.log(dotenvPath)
+  if (fs.existsSync(dotenvPath)) {
+    require("dotenv").config({ path: dotenvPath });
+  }
+  createDefaultConfig();
+  log.verbose('环境变量缓存文件路径',  process.env.CLI_HOME)
+}
+
+// 创建环境变量缓存环境
+function createDefaultConfig () {
+  const cliConfig = {}
+  const { CLI_HOME } = process.env
+  cliConfig.cliHomePath = CLI_HOME || DEFAULT_CLI_HOME;
+  process.env.CLI_HOME = cliConfig.cliHomePath;
+}
+```
+
+### 检查是否需要更新版本
+
+- 获取当前版本号和版本名
+- 通过 npm API，获取所有版本号
+- 提取所有版本号，对比哪些版本号大于当前版本号
+- 获取最新的版本号，提示用户更新到该版本
+
+```js
+// core/cli/index.js
+async function checkGlobalUpdate () {
+  const { getNpmSemverVersion } = require('@test-cli/get-npm-info')
+  console.log(getNpmSemverVersion)
+  const latestVersion = await getNpmSemverVersion({ npmName: pkg.name, baseVersion: pkg.version })
+  if (latestVersion && semver.gt(latestVersion, pkg.version)) {
+    log.warn('upgrade info',
+      chalk.yellow(
+        `please upgrade ${pkg.name} version，the latest version is ${latestVersion}, use npm i ${pkg.name} -g to upgrade`
+      )
+    );
+  }
+}
+// core/cli/package.json
+"dependencies": {
+    "@test-cli/get-npm-info": "file:../../utils/get-npm-info",
+    "@test-cli/log": "file:../../utils/log",
+   }
+
+// utils/get-npm-info/lib/index.js
+'use strict';
+
+const semver = require('semver')
+const axios = require('axios')
+const urlJoin = require("url-join");
+
+// 优先调用淘宝源
+function getRegistry ({ isOriginal = false } = {}) {
+    return isOriginal ? 'https://registry.npmjs.org/' : 'https://registry.npm.taobao.org/';
+}
+
+async function getNpmInfo ({ npmName, registry } = {}) {
+  if (!npmName) return null
+  const url = registry || urlJoin(getRegistry(), npmName);
+  let res = {}
+  try {
+    res = await axios.get(url)
+  } catch (e) {
+    return e
+  }
+  return res.status === 200 ? res.data : {}
+}
+
+async function getNpmVersions ({ npmName, registry } = {}) {
+  const res = await getNpmInfo({ npmName, registry })
+  return res.versions ? Object.keys(res.versions) : []
+}
+
+function getSemverVersions ({ baseVersion, versions }) {
+  return versions
+    .filter(version => semver.satisfies(version, `>${baseVersion}`))
+    .sort((a, b) => semver.gt(b, a) ? 1 : -1)
+}
+
+async function getNpmSemverVersion ({ baseVersion, npmName, registry }) {
+  const versions = await getNpmVersions({ npmName, registry })
+  const latestVersions = getSemverVersions({ baseVersion, versions })
+  return latestVersions[0]
+}
+
+module.exports = {
+  getNpmInfo,
+  getNpmVersions,
+  getSemverVersions,
+  getNpmSemverVersion,
+};
+```
+
