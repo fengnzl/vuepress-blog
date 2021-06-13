@@ -244,7 +244,6 @@ function createDefaultConfig () {
 // core/cli/index.js
 async function checkGlobalUpdate () {
   const { getNpmSemverVersion } = require('@test-cli/get-npm-info')
-  console.log(getNpmSemverVersion)
   const latestVersion = await getNpmSemverVersion({ npmName: pkg.name, baseVersion: pkg.version })
   if (latestVersion && semver.gt(latestVersion, pkg.version)) {
     log.warn('upgrade info',
@@ -307,5 +306,127 @@ module.exports = {
   getSemverVersions,
   getNpmSemverVersion,
 };
+```
+
+## Commander 实现自定义 option 和 comamnd 功能
+
+```js
+#!/usr/bin/env node
+
+const pkg = require('../package.json')
+const { Command } = require('commander')
+
+
+const program = new Command()
+program
+  .name(Object.keys(pkg.bin)[0])
+  .usage('<command> [options]')
+  .version(pkg.version)
+  .option('-d, --debug', '开启调试模式', false)
+  .option('-e, --env <env>', '获取环境变量名称')
+
+// 使用opts方法来获取选项的值
+// console.log(program.opts())
+// 输出帮助信息
+// program.outputHelp()
+
+// command 注册命令。返回的是命令对象而不是program, <>表示必填参数  []表示可选参数
+const clone = program.command('clone <source> [destination]')
+
+clone
+  .description("clone a repository into a newly created directory")
+  .option("-f, --force", "是否强制克隆", false)
+  .action((source, destination, optObj) => {
+    console.log(source, destination, optObj);
+  });
+
+// addCommand 注册命令
+const service = new Command('service')
+
+service.command('start <port>')
+  .description('service start at some port')
+  .action(port => {
+    console.log('service start at ', port)
+  })
+service.command('stop')
+  .description('stop service')
+  .action(() => console.log('stop service'))
+
+program.addCommand(service)
+
+
+/**
+ * .command()带有描述参数时，就意味着使用独立的可执行文件作为子命令。
+ * Commander 将会执行一个新的命令。新的命令为： 脚手架命令-注册的命令，
+ * 如执行 test-cli install 则相当于执行 test-cli-install
+ * 配置选项 executableFile 可以自定义名字 如 executableFile：'recovery-test', test-cli install => recovery-test
+ * isDefault: true, 则代表默认执行该命令 
+ * hidden  是否在帮助文档中隐藏该命令
+ */
+program.command('install [name]', 'install package', {
+  executableFile: 'recovery-test',
+  // isDefault: true, // test-cli => test-cli-install
+  hidden: true
+}).alias('i')
+
+
+
+/**
+ * arguments 可以为最顶层命令指定命令参数。如下例：表示配置一个必选命令 username 和一个可选命令 password。
+ * arguments 指定的命令参数是泛指，只要不是 command 和 addCommand 注册的命令都会被捕获到。
+ * 如 test-cli aa  则 username 就是 aa
+ * 可以向.description()方法传递第二个参数，从而在帮助中展示命令参数的信息。该参数是一个包含了 “命令参数名称：命令参数描述” 键值对的对象
+ */
+program
+  .arguments('<username> [password]')
+  .description('test command', {
+    username: 'user to login',
+    password: 'password for user, if required'
+  })
+  .action((username, password) => {
+    console.log(username, password)
+  })
+
+// 高级定制，自定义help信息
+/**
+ * 重写 helpInformation，返回值 是啥 help 信息就是啥
+ * helpInformation 返回空字符串，用 on 方法监听 --help， 从而输出信息
+ * 调用 addHelpText 方法
+ */
+// program.helpInformation = () => {
+  // return 'this is help information\n'
+//   return ''
+// }
+
+// program.on('--help', () => {
+//   console.log('custom help information')
+// })
+
+// program.addHelpText(
+//   "after",
+//   `
+// Example call:
+//   $ custom-help --help`
+// );
+
+/**
+ * 可以监听 option 输入
+ * --debug 或者 option:debug
+ */
+program.on('option:debug', () => {
+  console.log('custom debug:', program.opts().debug)
+  process.env.LOG_LEVEL = 'verbose'
+})
+
+// 监听未知命令
+program.on('command:*', obj => {
+  console.log(obj)
+  console.log('未知命令：', obj[0])
+  // 获取所有已知命令
+  const availableCommands = program.commands.map(cmd => cmd.name())
+  console.log('可用命令', availableCommands.join(','))
+})
+
+program.parse()
 ```
 
