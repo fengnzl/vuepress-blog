@@ -221,7 +221,7 @@ MyPromise.resolve(new MyPromise((resolve, reject) => {
 })
 
 ```
-以上代码将在 `3s` 之后输出 `"ok success"`
+以上代码将在 `3s` 之后输出 `ok success`
 ### Promise.reject 实现
 > Promise.reject() 方法返回一个带有拒绝原因的 Promise 对象。
 ```js
@@ -234,3 +234,47 @@ class MyPromise {
   }
 }
 ```
+### Promise.prototype.catch
+> catch() 方法返回一个 Promise ，并且处理拒绝的情况。它的行为与调用Promise.prototype.then(undefined, onRejected) 相同。(事实上，calling obj.catch(onRejected) 内部 calls obj.then(undefined, onRejected)).
+
+```js
+class MyPromise {
+  //...
+  catch (errorCallback) {
+    return this.then(undefined, errorCallback)
+  }
+}
+```
+### Promise.prototype.finally
+> finally() 方法返回一个 Promise。在 promise 结束时，无论结果是 fulfilled 或者是 rejected，都会执行指定的回调函数。这为在 Promise 是否成功完成后都需要执行的代码提供了一种方式。
+ >这避免了同样的语句需要在 then() 和 catch() 中各写一次的情况。
+
+如果返回的是成功的 promise，则会采用上一次的结果，如果是失败的 promise, 则会将这个失败的结果传到 catch 中。
+```js
+class MyPromise {
+  //...
+  finally (callback) {
+    return this.then(value => {
+      return MyPromise.resolve(callback).then(() => value)
+    }, reason => {
+      return MyPromise.resolve(callback).then(() => { throw reason })
+    })
+  }
+}
+```
+简单的测试代码如下：
+```js
+MyPromise.resolve(456).finally(()=>{
+  return new MyPromise((resolve,reject)=>{
+    setTimeout(() => {
+        resolve(123)
+    }, 3000);
+  })
+}).then(data=>{
+  console.log(data,'success')
+}).catch(err=>{
+  console.log(err,'error')
+})
+```
+等待 `3s` 后输出 `456 success`
+
