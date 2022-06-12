@@ -30,7 +30,7 @@ class MyPromise {
       }
     }
 
-    const rejected = (reason) => {
+    const reject = (reason) => {
       if (this.status === PENDING) {
         this.status = REJECTED
         this.reason = reason
@@ -39,9 +39,9 @@ class MyPromise {
     }
 
     try {
-      executor(resolve, rejected)
+      executor(resolve, reject)
     } catch (e) {
-      rejected(e)
+      reject(e)
     }
   }
 
@@ -255,9 +255,9 @@ class MyPromise {
   //...
   finally (callback) {
     return this.then(value => {
-      return MyPromise.resolve(callback).then(() => value)
+      return MyPromise.resolve(callback()).then(() => value)
     }, reason => {
-      return MyPromise.resolve(callback).then(() => { throw reason })
+      return MyPromise.resolve(callback()).then(() => { throw reason })
     })
   }
 }
@@ -277,4 +277,118 @@ MyPromise.resolve(456).finally(()=>{
 })
 ```
 等待 `3s` 后输出 `456 success`
+
+### Promise.all
+> Promise.all() 方法接收一个 promise 的 iterable 类型, 并且只返回一个Promise实例
+
+该方法 resolve 回调只想的是所有输入的 resolve 回调结果，或着当有一个任务失败时，就立刻 reject
+
+```js
+class MyPromise {
+  //...
+  static all(values) {
+    if (!isIterable(values)) {
+      throw new TypeError(`${typeof values} ${values} is not iterable`)
+    }
+    const args = Array.from(values)
+    return new MyPromise((resolve, reject) => {
+      const result = []
+      const indexCount = 0
+      const processResultByIndex = (value, index) => {
+        result[index] = value
+        indexCount++
+        if (indexCount === args.length) {
+          resolve(result)
+        }
+      }
+      for (let i = 0;i < args.length;i++) {
+        const value = args[i]
+        if (isPromise(value)) {
+          value.then((res) => {
+            processResultByIndex(res, index)
+          }, reject)
+        } else {
+          processResultByIndex(value, index)
+        }
+      }
+    })
+  }
+}
+function isIterable(argument) {
+  return !!argument && typeof argument[Symbol.iterator] === 'function'
+}
+function isPromise(argument) {
+  return isObject(argument) && isCallable(argument.then) && isCallable(argument.catch)
+}
+```
+简单的测试代码：
+```js
+const promise1 = MyPromise.resolve(3);
+const promise2 = 42;
+const promise3 = new MyPromise((resolve, reject) => {
+  setTimeout(resolve, 1000, 'foo');
+});
+
+MyPromise.all([promise1, promise2, promise3]).then((values) => {
+  console.log(values);
+});
+```
+最后 `1s` 后输出结果为 `[3, 42, "foo"]`
+
+### Promise.allSettled
+> 该Promise.allSettled()方法返回一个在所有给定的 promise 都已经fulfilled或rejected后的 promise，并带有一个对象数组，每个对象表示对应的 promise 结果。
+
+```js
+class MyPromise {
+  //...
+  static allSettled(values) {
+    if (!isIterable(values)) {
+      throw new TypeError(`${typeof values} ${values} is not iterable`);
+    }
+    const args = Array.from(values);
+    return new MyPromise((resolve, reject) => {
+      const result = [];
+      let indexCount = 0;
+      const processResultByIndex = (value, index, status) => {
+        result[index] = {
+          status,
+          value,
+        };
+        indexCount++;
+        if (indexCount === args.length) {
+          resolve(result);
+        }
+      };
+      for (let i = 0; i < args.length; i++) {
+        const value = args[i];
+        if (isPromise(value)) {
+          value.then((res) => {
+            processResultByIndex(res, i, 'fulfilled');
+          }, reason => {
+            processResultByIndex(reason, i, "rejected");
+          });
+        } else {
+          processResultByIndex(value, i, 'fulfilled');
+        }
+      }
+    });
+  }
+}
+```
+```js
+var promise1 = MyPromise.resolve(3);
+var promise2 = new MyPromise((resolve, reject) =>
+  setTimeout(reject, 1000, "foo")
+);
+var promises = [promise1, promise2];
+
+MyPromise.allSettled(promises).then((results) => console.log(results));
+```
+最后 `1s` 后输出结果为
+```js
+[
+  { status: 'fulfilled', value: 3 },
+  { status: 'rejected', value: 'foo' }
+]
+```
 
