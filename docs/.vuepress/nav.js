@@ -11,6 +11,7 @@ module.exports = [
       { text: "PHP", link: "/daily-learn/PHP/tp51-timestamp-autosave" },
       { text: "Git", link: "/daily-learn/Git/git-des" },
       { text: "Scaffold", link: "/daily-learn/Scaffold/Introduction" },
+      { text: "HandWriting", link: "/daily-learn/HandWriting/Promise" },
     ],
   },
   { text: "计算机基础", link: "/cs-basic/" },
