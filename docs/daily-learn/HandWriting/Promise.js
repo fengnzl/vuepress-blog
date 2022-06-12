@@ -382,3 +382,16 @@ MyPromise.race([promise1, promise2]).then((value) => {
   // Both resolve, but promise2 is faster
 });
 // expected output: "two"
+
+
+MyPromise.defer = MyPromise.deferred = function() {
+  let deferred = {};
+
+  deferred.promise = new MyPromise((resolve, reject) => {
+    deferred.resolve = resolve;
+    deferred.reject = reject;
+  });
+  return deferred;
+};
+
+module.exports = MyPromise;
