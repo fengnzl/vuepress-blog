@@ -55,6 +55,7 @@ const dailyLearnSidebar = [
     title: "HandWriting",
     children: [
       "HandWriting/Promise",
+      "HandWriting/MicroTaskOrder"
     ],
   },
 ];
