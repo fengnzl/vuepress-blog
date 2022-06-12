@@ -160,3 +160,77 @@ npm install -g promises-aplus-tests
 ```js
 promises-aplus-tests [filename].js
 ```
+## Promise API 实现
+除了上述已经实现代码，原生 Promise 还提供了以下方法：
+- Promise.resolve()
+- Promise.reject()
+- Promise.prototype.catch()
+- Promise.prototype.finally()
+- Promise.all()
+- Promise.allSettled()
+- Promise.any()
+- Promise.race()
+
+下面就来对上述的方法进行实现
+### Promise.resolve
+> Promise.resolve(value)方法返回一个以给定值解析后的 Promise 对象。
+> 
+> 返回的 promise 会“跟随”这个 thenable 的对象，采用它的最终状态；
+
+```js
+class MyPromise {
+  // ...
+  static resolve(value) {
+    return new MyPromise((resolve, reject) => {
+      resolve(value)
+    })
+  }
+}
+```
+需要注意的是，如果参数是一个 Promise 那么将会等待这个 Promise 解析完毕，之后才会继续向下执行，因此我们需要在 resolve 函数中做如下处理
+
+```js
+class MyPromise {
+  constructor(executor) {
+    //...
+    const resolve = value => {
+      // 如果 value 是一个promise，则要实现一个递归解析
+      if (value instanceOf MyPromise) {
+        return value.then(resolve, reject)
+      }
+      if (this.status === PENDING) {
+        this.value = value
+        this.status = FULFILLED
+        this.onFulfilledCallbacks.forEach(fn => fn())
+      }
+    }
+    //...
+  }
+}
+```
+简单测试一下
+```js
+MyPromise.resolve(new MyPromise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('ok');
+  }, 3000);
+})).then(data=>{
+  console.log(data,'success')
+}).catch(err=>{
+  console.log(err,'error')
+})
+
+```
+以上代码将在 `3s` 之后输出 `"ok success"`
+### Promise.reject 实现
+> Promise.reject() 方法返回一个带有拒绝原因的 Promise 对象。
+```js
+class MyPromise {
+  //...
+  static reject(reason) {
+    return new MyPromise((resolve, reject) => {
+      reject(reason)
+    })
+  }
+}
+```
