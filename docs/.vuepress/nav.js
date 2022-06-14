@@ -12,6 +12,7 @@ module.exports = [
       { text: "Git", link: "/daily-learn/Git/git-des" },
       { text: "Scaffold", link: "/daily-learn/Scaffold/Introduction" },
       { text: "HandWriting", link: "/daily-learn/HandWriting/Promise" },
+      { text: "Node", link: "/daily-learn/Node/Node-Koa1" },
     ],
   },
   { text: "计算机基础", link: "/cs-basic/" },

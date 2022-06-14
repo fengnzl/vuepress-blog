@@ -9,7 +9,7 @@ Array.prototype.SimulateReduce = function (callback, initialValue) {
     throw new TypeError(`${callback} is not a function`)
   }
   const arr = this
-  const isDefInitial = initialValue !== undefined
+  const isDefInitial = argument.length !== 1
   if (arr.length === 0 && !isDefInitial) {
     throw new TypeError('Reduce of empty array with no initial value')
   }
