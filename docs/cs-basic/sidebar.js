@@ -8,6 +8,8 @@ const CSBasicSidebar = [
         children: [
           "data-structures/two-pointers/duplicate-zeros",
           "data-structures/two-pointers/detect-cycle",
+          "data-structures/two-pointers/four-sum",
+          "data-structures/two-pointers/sort-color",
         ],
       },
     ],
