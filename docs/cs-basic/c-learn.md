@@ -18,7 +18,7 @@
 
 ## 前置知识（Unix 命令）
 
-```
+```bash
 pwd	Displays the current directory	pwd
 ls	List the current directory	ls
 ls -l

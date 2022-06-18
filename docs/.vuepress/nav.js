@@ -15,6 +15,6 @@ module.exports = [
       { text: "Node", link: "/daily-learn/Node/Node-Koa1" },
     ],
   },
-  { text: "计算机基础", link: "/cs-basic/" },
+  { text: "计算机基础", link: "/cs-basic/data-structures/base-structures" },
   { text: "外文翻译", link: "/translation/Arrays-symbols-and-realms" },
 ];

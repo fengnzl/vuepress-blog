@@ -1,15 +1,17 @@
 const CSBasicSidebar = [
   {
-    title: '数据结构与算法',
+    title: "数据结构与算法",
     children: [
-      'datastructures/base-datastructures',
-    ]
+      "data-structures/base-structures",
+      {
+        title: "two-pointers",
+        children: ["data-structures/two-pointers/duplicate-zeros"],
+      },
+    ],
   },
   {
-    title: '计算机基础',
-    children: [
-      'c-learn',
-    ]
+    title: "计算机基础",
+    children: ["c-learn"],
   },
 ];
 
