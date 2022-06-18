@@ -5,7 +5,10 @@ const CSBasicSidebar = [
       "data-structures/base-structures",
       {
         title: "two-pointers",
-        children: ["data-structures/two-pointers/duplicate-zeros"],
+        children: [
+          "data-structures/two-pointers/duplicate-zeros",
+          "data-structures/two-pointers/detect-cycle",
+        ],
       },
     ],
   },
