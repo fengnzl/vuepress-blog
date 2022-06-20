@@ -15,6 +15,12 @@ const CSBasicSidebar = [
     ],
   },
   {
+    title: "设计模式",
+    children: [
+      "design-pattern/event-emitter"
+    ],
+  },
+  {
     title: "计算机基础",
     children: ["c-learn"],
   },
