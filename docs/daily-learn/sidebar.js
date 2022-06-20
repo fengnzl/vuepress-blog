@@ -63,6 +63,7 @@ const dailyLearnSidebar = [
     title: "Node",
     children: [
       "Node/Node-Koa1",
+      "Node/node-koa2",
     ],
   },
 ];
