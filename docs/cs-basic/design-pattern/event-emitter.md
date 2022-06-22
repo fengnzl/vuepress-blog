@@ -10,6 +10,126 @@
 
 观察者模式一种典型的应用场景就是响应式数据，如 Vue 的响应式。
 
+## 代码实现
+
+[相关参考文档](https://www.patterns.dev/posts/observer-pattern/)
+
+```js
+// observes 观察者数组，当特定事件发生将会被通知
+// subscribe() 添加观察者到观察者数组
+// unsubscribe() 从观察者数组中移除观察者
+// notify() 特定事件发声通知观察者
+class Observable {
+  constructor() {
+    this.observes = []
+  }
+
+  subscribe(fn) {
+    this.observes.push(fn)
+  }
+
+  unsubscribe(fn) {
+    this.observes = this.observes.filter(observe => observe != fn)
+  }
+
+  notify() {
+    this.observes.forEach(fn => fn(...arguments))
+  }
+}
+
+const observable = new Observable()
+function logger(data) {
+  console.log(`${Date.now()} ${data}`);
+}
+function logger2(data) {
+  console.log(`${data}`);
+}
+observable.subscribe(logger)
+observable.subscribe(logger2)
+observable.notify('hello world')
+// 1655910645933 hello world
+// hello world
+
+// 类似 vue3 响应式
+let activeEffect
+const targetMap = new WeakMap()
+const track = (target, key) => {
+  if (!activeEffect) return
+  let depsForTarget = targetMap.get(target)
+  if (!depsForTarget) {
+    depsForTarget = new Map()
+    targetMap.set(target, depsForTarget)
+  }
+  let deps = depsForTarget.get(key)
+  if (!deps) {
+    deps = new Set()
+    depsForTarget.set(key, deps)
+  }
+  deps.add(activeEffect)
+}
+
+const trigger = (target, key) => {
+  const depsForTarget = targetMap.get(target)
+  if (!depsForTarget) return
+  const deps = depsForTarget.get(key)
+  if (!deps) return
+  deps.forEach((effect) => effect());
+}
+const watchEffect = (effect) => {
+  activeEffect = effect
+  effect()
+  activeEffect = null
+}
+
+const reactive = (obj) => {
+  const handler = {
+    get(target, key, receiver) {
+      const value = Reflect.get(target, key, receiver)
+      track(target, key)
+      return value
+    },
+    set(target, key, value, receiver) {
+      const oldValue = target[key]
+      const result = Reflect.set(target, key, value, receiver)
+      if (result && oldValue !== value) {
+        trigger(target, key)
+      }
+      return result
+    }
+  }
+  return new Proxy(obj, handler)
+}
+
+const ref = raw => {
+  const r =  {
+    get value() {
+      track(r, 'value')
+      return raw
+    },
+    set value(newVal) {
+      const oldVal = raw
+      raw = newVal
+      if (oldVal !== newVal) {
+        trigger(r, "value");
+      }
+    }
+  }
+  return r
+}
+
+const b = ref(0);
+watchEffect(() => console.log(b.value)); // 0
+b.value = 3 // 3
+b.value = 3
+
+const pet = reactive({
+  name: 'dog'
+})
+watchEffect(() => console.log(pet.name)) // dog
+pet.name = 'cat' // cat
+pet.name = 'cat' 
+```
+
 ## 发布-订阅模式
 
 > 在发布-订阅模式中，发布消息的被称作发布者（publishers）, 并不是直接将消息发送给特定的接收者（subscribers）。
