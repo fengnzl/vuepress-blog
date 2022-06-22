@@ -10,6 +10,7 @@ const CSBasicSidebar = [
           "data-structures/two-pointers/detect-cycle",
           "data-structures/two-pointers/four-sum",
           "data-structures/two-pointers/sort-color",
+          "data-structures/two-pointers/remove-element",
         ],
       },
     ],
