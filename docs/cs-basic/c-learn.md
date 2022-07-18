@@ -7,7 +7,7 @@
 **程序的执行**
 
 - 解释：借助一个程序，那个程序能理解你的程序，然后按照你的要求执行。
-- 编译：借助一个程序，就像一个翻译，把你的程序翻译成计算机真正能懂的语言-机器语言-写的程序，然后这个机器语言写的程序就能执行了
+- 编译：借助一个程序，就像一个翻译，把你的程序翻译成计算机真正能懂的语言-机器语言-写的程序，然后这个机器语言写的程序就能执行了
 
 **解释语言 VS 编译语言**
 
@@ -19,26 +19,32 @@
 ## 前置知识（Unix 命令）
 
 ```bash
-pwd	Displays the current directory	pwd
+pwd	Displays the current directory
 ls	List the current directory	ls
 ls -l
 ls -a
 -l : Include file details, -a : Include hidden files, -F : show directories
-rm	Remove a file	rm filetonuke.c
+touch MyFirstFile setting the time and date of the file to the current time and date, if the file does not exist,it creates an empty one.
+rm	Remove a file	rm filetonuke.c rm -i file.c interactive delete file
 mkdir	Create a new directory	mkdir cse251
 rmdir	Remove a directory	rmdir cse251
 Or rm -r if the directory is not empty.
 cd	Change current directory	cd ~/cse251
-cp	Copy a file	cp souce destination
-mv	Move or rename a file	mv hello.c newname.c
+cp	Copy a file	cp souce destination cp ile.c newFile.c  cp ../file.c ~/programs
+mv	Move or rename a file	mv hello.c newname.c mv hello.c ../path/
 cat	Display the contents of a file	cat hello.c
 less	Display file contents nicely	less hello.c
 man	Manual pages	man ls
 yelp	Nicer help display	yelp &
 top	Displays CPU usage	top
 q to quit
+top display of what processes are using how much CPU and puts the heavies user first
 ps	Lists processes	ps u
 kill	Kills a process	kill 15577
+~: a shortcut for your home directory
+gcc hello.c use GNU C Compiler to compile program,and the default output file is a.out
+./a.out execute file in the current directory
+gcc -o hello hello.c -o indicate the output file is hello instead of a.out
 ```
 
 ## C 语言介绍
@@ -59,7 +65,24 @@ int main() {
 }
 ```
 
+### Escape Characters
+
+- `\n` new line
+- `\t` tab
+- `\'` print a single quote
+- `\\` print a backslash
+- many others
+
+### Variable Declarations
+
+- When declare a variable, must tell the compiler what kind of value the variable may hold(its type)
+- You cannot change the type of the value a variable can hold once declared
+- Everything needs a type in C and it must be declare before use
+
 ![c-basic-types](/cs/c-basic-types.png)
+
+Syntax: <variable_type> <variable_name> [=<initial_value>]
+example: `double width = 10;` `int height;`
 
 ```c
 #include <stdio.h>
