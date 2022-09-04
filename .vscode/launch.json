@@ -1,0 +1,15 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "当前文件", //名称可以随意设置
+      "program": "${file}",//设置为当前所选文件名
+      "runtimeExecutable": "/usr/local/opt/node@14/bin/node"
+    },
+  ]
+}
