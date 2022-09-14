@@ -147,8 +147,12 @@ function createReactive(obj, isShallow = false) {
       track(target, key);
       // 得到原始值结果
       const res = Reflect.get(target, key, receiver);
+      // 浅响应直接返回值
+      if (isShallow) {
+        return res;
+      }
       // 如果是对象且不是浅响应，递归调用函数包装为响应式
-      if (isObject(res) && !isShallow) {
+      if (isObject(res)) {
         return createReactive(res);
       }
       return res;
