@@ -35,32 +35,66 @@ let shouldTrack = true;
     return res;
   };
 });
-// const mutableInstrumentations = {
-//   add(key) {
-//     // this 仍然执行代理对象，通过 this[RAW] 获取原始数据对象
-//     const target = this[RAW];
-//     // 判断是否已经存在该值
-//     const hadKey = target.has(key);
-//     // 只有不存在该键值才做处理
-//     const res = target.add(key);
-//     if (!hadKey) {
-//       trigger(target, key, TriggerType.ADD);
-//     }
-//     return res;
-//   },
-//   delete(key) {
-//     // this 仍然执行代理对象，通过 this[RAW] 获取原始数据对象
-//     const target = this[RAW];
-//     // 判断是否已经存在该值
-//     const hadKey = target.has(key);
-//     const res = target.delete(key);
-//     // 只有存在该键值才触发响应
-//     if (hadKey) {
-//       trigger(target, key, TriggerType.DELETE);
-//     }
-//     return res;
-//   },
-// };
+let mutableInstrumentations = {
+  add(key) {
+    // this 仍然执行代理对象，通过 this[RAW] 获取原始数据对象
+    const target = this[RAW];
+    // 判断是否已经存在该值
+    const hadKey = target.has(key);
+    // 只有不存在该键值才做处理
+    const res = target.add(key);
+    if (!hadKey) {
+      trigger(target, key, TriggerType.ADD);
+    }
+    return res;
+  },
+  delete(key) {
+    // this 仍然执行代理对象，通过 this[RAW] 获取原始数据对象
+    const target = this[RAW];
+    // 判断是否已经存在该值
+    const hadKey = target.has(key);
+    const res = target.delete(key);
+    // 只有存在该键值才触发响应
+    if (hadKey) {
+      trigger(target, key, TriggerType.DELETE);
+    }
+    return res;
+  },
+  get(key) {
+    // 获取原始数据对象
+    const target = this[RAW];
+    // 判断读取的 key 是否存在
+    const hadKey = target.has(key);
+    // 追踪依赖
+    track(target, key);
+    const res = target.get(key);
+    if (this.__isShallow__) {
+      return res;
+    }
+    if (hadKey && isObject(res)) {
+      // 如果存在属性
+      return this.__isReadonly__ ? readyonly(res) : reactive(res);
+    }
+    return res;
+  },
+  set(key, newVal) {
+    // 获取原始数据对象
+    const target = this[RAW];
+    const hadKey = target.has(key);
+    const oldValue = target.get(key);
+    // 设置新值
+    target.set(key, newVal[RAW] || newVal);
+    // 不存在则说明是新增数据
+    if (!hadKey) {
+      trigger(target, key, TriggerType.ADD);
+    } else if (
+      oldValue !== newVal &&
+      (newVal === newVal || oldValue === oldValue)
+    ) {
+      trigger(target, key, TriggerType.SET);
+    }
+  },
+};
 function getType(argument) {
   return Object.prototype.toString
     .call(argument)
@@ -93,9 +127,15 @@ function shallowReadonly(obj) {
 function createReactive(obj, isShallow = false, isReadonly = false) {
   return new Proxy(obj, {
     // 拦截读取操作
-    get(target, key) {
+    get(target, key, receiver) {
       if (key === RAW) {
         return target;
+      }
+      if (key === "__isShallow__") {
+        return isShallow;
+      }
+      if (key === "__isReadonly__") {
+        return isReadonly;
       }
       // 如果是数组，且 key 存在于 arrayInstrumentations 上
       if (Array.isArray(target) && arrayInstrumentations.hasOwnProperty(key)) {
@@ -110,12 +150,14 @@ function createReactive(obj, isShallow = false, isReadonly = false) {
             track(target, ITERATE_KEY);
             return Reflect.get(target, key, target);
           }
-          // 返回定义在 mutableInstrumentations 下的方法
+          // 返回定义在 mutableInstrumentations 下的方法,
+          this.__isShallow__ = isShallow;
+          this.__isReadonly__ = isReadonly;
           return mutableInstrumentations[key];
         }
         track(target, key);
       }
-
+      const res = Reflect.get(target, key, receiver);
       if (isShallow) {
         return res;
       }
@@ -141,8 +183,8 @@ function createReactive(obj, isShallow = false, isReadonly = false) {
         : hasOwnProperty(target, key)
         ? TriggerType.SET
         : TriggerType.ADD;
-      // 设置属性值
       const rawValue = newVal?.[RAW] || newVal;
+      // 设置属性值
       const res = Reflect.set(target, key, rawValue, receiver);
       if (target === receiver[RAW]) {
         if (oldVal !== newVal && (oldVal === oldVal || newVal === newVal)) {
@@ -238,7 +280,12 @@ function trigger(target, key, type, newVal) {
     }
   }
 
-  if (type === TriggerType.ADD || type === TriggerType.DELETE) {
+  if (
+    type === TriggerType.ADD ||
+    type === TriggerType.DELETE ||
+    // 操作类型为 type 且目标对象是 Map 类型的数据对象
+    (type === TriggerType.SET && getType(target) === "map")
+  ) {
     const iterateEffects = depsMap.get(ITERATE_KEY);
     iterateEffects &&
       iterateEffects.forEach((effectFn) => {
@@ -296,114 +343,49 @@ function cleanup(effectFn) {
 }
 
 /**
- * Map 数据拥有 set 和 get 方法，这里我们与 Set 的 add 和 delete 方法类似进行处理
+ * forEach 循环会接受一个回调参数和指定的 this 值，任何对键值修改的操作，都应该触发副作用执行，因此我们可以如下处理
  */
-const mutableInstrumentations = {
-  get(key) {
+Object.assign(mutableInstrumentations, {
+  forEach(cb, thisArg) {
+    // wrap 函数，将可代理的值转换为响应式数据
+    const wrap = (val) =>
+      isObject(val)
+        ? this.__isReadonly__
+          ? readyonly(val)
+          : reactive(val)
+        : val;
     // 获取原始数据对象
     const target = this[RAW];
-    // 判断读取的 key 是否存在
-    const hadKey = target.has(key);
-    // 追踪依赖
-    track(target, key);
-    const res = target.get(key);
-    if (this.__isShallow__) {
-      return res;
-    }
-    if (hadKey && isObject(res)) {
-      // 如果存在属性
-      return this.__isReadonly__ ? readyonly(res) : reactive(res);
-    }
-    return res;
+    // 与 ITERATE_KEY 建立响应式联系
+    track(target, ITERATE_KEY);
+    // 调用原始 forEach 方法进行遍历
+    target.forEach((value, key) => {
+      // 通过 .call 调用 callback 并传递 thisArg
+      cb.call(thisArg, wrap(value), wrap(key), this);
+    });
   },
-  set(key, newVal) {
-    // 获取原始数据对象
-    const target = this[RAW];
-    const hadKey = target.has(key);
-    const oldValue = target.get(key);
-    // 设置新值
-    target.set(key, newVal[RAW] || newVal);
-    // 不存在则说明是新增数据
-    if (!hadKey) {
-      trigger(target, key, TriggerType.ADD);
-    } else if (
-      oldValue !== newVal &&
-      (newVal === newVal || oldValue === oldValue)
-    ) {
-      trigger(target, key, TriggerType.SET);
-    }
-  },
-};
+});
 
-// 增加第三个参数 isReadonly，代表是否只读，默认 false
-function createReactive(obj, isShallow = false, isReadonly = false) {
-  return new Proxy(obj, {
-    // 拦截读取操作
-    get(target, key) {
-      if (key === RAW) {
-        return target;
-      }
-      if (key === "__isShallow__") {
-        return isShallow;
-      }
-      if (key === "__isReadonly__") {
-        return isReadonly;
-      }
-      // 如果是数组，且 key 存在于 arrayInstrumentations 上
-      if (Array.isArray(target) && arrayInstrumentations.hasOwnProperty(key)) {
-        return Reflect.get(arrayInstrumentations, key, receiver);
-      }
-      const targetType = getType(target);
-      // 不是只读属性 或者键值不是 symbol 类型
-      if (!isReadonly || typeof key !== "symbol") {
-        // taget 如果是 Map 或者 Set
-        if (targetType === "set" || targetType === "map") {
-          if (key === "size") {
-            track(target, ITERATE_KEY);
-            return Reflect.get(target, key, target);
-          }
-          // 返回定义在 mutableInstrumentations 下的方法,
-          this.__isShallow__ = isShallow;
-          this.__isReadonly__ = isReadonly;
-          return mutableInstrumentations[key];
-        }
-        track(target, key);
-      }
+const key = { key: 1 };
+const value = new Set([1, 2, 3]);
+const p = reactive(new Map([[key, value]]));
 
-      if (isShallow) {
-        return res;
-      }
-      if (isObject(res)) {
-        return isReadonly ? reactive(res) : readyonly(res);
-      }
-      return res;
-    },
+effect(() => {
+  p.forEach(function(value, key) {
+    console.log(value.size); // 3
   });
-}
-const p = reactive(new Map([["key", 1]]));
-effect(() => console.log(p.get("key"))); // 1
-p.set("key", 2); // 2
+});
 
+p.get(key).delete(1); // 触发响应 2
+
+const p2 = reactive(new Map([["key", 1]]));
+effect(() => {
+  p2.forEach((value, key) => {
+    // forEach 不仅关心集合的键 还关心集合的值
+    console.log(value); // 1
+  });
+});
+p2.set("key", 5); // 未修改 trigger 函数时不会触发
 /**
- * 上述存在问题，如以下所示
- */
-// 原始对象
-const m = new Map();
-// 代理对象
-const p1 = reactive(m);
-// p2 为另一个代理对象
-const p2 = reactive(new Map());
-// 将 p2 设置为 p1 的一个键值对
-p1.set("p2", p2);
-// 这里我们通过原始对象访问 p2
-effect(() => console.log(m.get("p2").size)); // 0
-// 这里通过原始对象赋值，本应该不会触发副作用函数，但实际上未处理前会触发，
-m.get("p2").set("foo", 1); // 1
-/**
- *  这是因为在 mutableInstrumentations set 方法中，我们将新值原封不动的设置到原始数据上
- *  // 设置新值
-    target.set(key, newVal);
- * 上述将响应式数据设置到原始数据上我们称为数据污染， 因此我们需要将其改为如下所示
-    target.set(key, newVal[RAW] || newVal);
-    Set 类型的 add 方法，普通对象的写值操作和数组添加元素方法都需要做类似的处理
+ * 应该在 trigger 函数中加入相应的判断，当 Set 类型的操作，且数据类型是 Map 的时候，也需要将 ITERATE_KEY 相关的副作用函数取出来进行执行
  */
