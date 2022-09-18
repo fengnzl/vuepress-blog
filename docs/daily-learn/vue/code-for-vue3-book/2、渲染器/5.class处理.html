@@ -1,0 +1,147 @@
+<div id="app"></div>
+<script>
+  function createRenderer(options = {}) {
+    const { createElement, insert, setElementText, patchProps } = options;
+    function render(vnode, container) {
+      if (vnode) {
+        // 存在 vnode, 说明是打补丁
+        patch(container._vnode, vnode, container);
+      } else {
+        if (container._vnode) {
+          // 旧 vnode 存在，新 vnode 不存在，说明是卸载操作，只需要将 container 中的 DOM 清空即可
+          container.innerHTML = "";
+        }
+      }
+      // 设置旧的 vnode
+      container._vnode = vnode;
+    }
+    /**
+     * n1 旧 vnode
+     * n2 新 vnode
+     * container 容器
+     */
+    function patch(n1, n2, container) {
+      if (!n1) {
+        // 说明是挂载
+        mountElement(n2, container);
+      } else {
+        // TODO: 说明是打补丁 暂时不处理
+      }
+    }
+    function mountElement(vnode, container) {
+      const { type, children, props } = vnode;
+      // 生成元素
+      const el = createElement(type);
+      //处理 children
+      if (typeof children === "string") {
+        // 字符串说明是文本节点
+        setElementText(el, children);
+      } else if (Array.isArray(children)) {
+        // 是子节点，则递归调用, 由于是挂载，所以 patch 函数的 n1 为 null
+        children.forEach((childNode) => patch(null, childNode, el));
+      }
+      // 处理元素
+      if (props) {
+        for (const key in props) {
+          // 调用 patchProps 设置属性
+          patchProps(el, key, null, props[key]);
+        }
+      }
+      insert(el, container);
+    }
+    return {
+      render,
+    };
+  }
+  // vue 中使用 class 的三种形式
+  const vnode1 = {
+    type: "p",
+    props: {
+      class: "foo bar",
+    },
+    children: "p1",
+  };
+  const vnode2 = {
+    type: "p",
+    props: {
+      class: { foo: true, bar: false },
+    },
+    children: "p2",
+  };
+  const vnode3 = {
+    type: "p",
+    props: {
+      class: ["foo bar", { baz: true }],
+    },
+    children: "p3",
+  };
+  function shouldSetAsprops(el, key) {
+    // 特殊处理
+    if (key === "form" && el.tagName === "INPUT") {
+      return false;
+    }
+    // 兜底处理
+    return key in el;
+  }
+  const vnode = {
+    type: "div",
+    children: [vnode1, vnode2, vnode3],
+  };
+  /**
+   * 设置 class 的有三种方式， el.className/el.classList/el.setAttribute('class', value)
+   * 其中通过测试可知 el.className 性能最高，因此我们需要特殊处理
+   */
+  function getType(argument) {
+    return Object.prototype.toString
+      .call(argument)
+      .slice("[object ".length, -1)
+      .toLowerCase();
+  }
+  function normalizeClass(value) {
+    const normalizeObjectClass = (value) => {
+      let str = "";
+      Object.entries(value).forEach(([key, value]) => {
+        if (value) {
+          str += ` ${key}`;
+        }
+      });
+      return str.slice(1);
+    };
+    const type = getType(value);
+    if (type === "string") {
+      return value;
+    } else if (type === "object") {
+      return normalizeObjectClass(value);
+    } else {
+      return value
+        .reduce((prev, cur) => `${prev} ${normalizeClass(cur)}`, "")
+        .slice(1);
+    }
+  }
+  const renderer = createRenderer({
+    createElement(tag) {
+      return document.createElement(tag);
+    },
+    setElementText(el, text) {
+      el.textContent = text;
+    },
+    insert(el, parent, anchor = null) {
+      parent.insertBefore(el, anchor);
+    },
+    patchProps(el, key, prevValue, nextValue) {
+      // 如果是 class 属性 单独处理
+      if (key === "class") {
+        el.className = normalizeClass(nextValue);
+      } else if (shouldSetAsprops(el, key)) {
+        const type = typeof el[key];
+        if (type === "boolean" && nextValue === "") {
+          el[key] = true;
+        }
+        el[key] = nextValue;
+      } else {
+        el.setAttribute(key, nextValue);
+      }
+    },
+  });
+  renderer.render(vnode, document.getElementById("app"));
+</script>
