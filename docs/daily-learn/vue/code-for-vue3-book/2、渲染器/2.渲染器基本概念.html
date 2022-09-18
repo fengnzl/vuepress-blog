@@ -1,0 +1,42 @@
+<!-- 
+  渲染器：renderer 将虚拟 DOM 渲染为特定平台上的真实元素，还可以用来激活已有的 DOM 元素，这个过程发生在同构渲染的过程
+  渲染： render
+  挂载： mount 经虚拟 DOM 节点渲染为真实 DOM 节点的过程
+  容器: 真实 DOM 元素的挂载位置
+  打补丁（更新）： patch 将 newVnode 与上一次渲染的 oldVnode 进行比较，找到并更新变更点
+-->
+<div id="app"></div>
+<script>
+  function createRenderer() {
+    /**
+     * n1 旧 vnode
+     * n2 新 vnode
+     * container: 容器
+     */
+    function patch(n1, n2, container) {}
+    function render(vnode, container) {
+      if (vnode) {
+        // 新 vnode 存在，将其与旧 vnode 一起传给 patch 函数，进行补丁
+        patch(container._vnode, vnode, container);
+      } else {
+        if (container._vnode) {
+          // 旧 vnode 存在，新 vnode 不存在，说明是卸载操作，只需要将 container 中 DOM 清空即可
+          container.innerHTML = "";
+        }
+      }
+      // 把 vnode 存储到 container._vnode 下，即后续渲染中的旧 vnode
+      container._vnode = vnode;
+    }
+    return {
+      render,
+    };
+  }
+
+  const renderer = createRenderer();
+  // 首次渲染
+  renderer.render(vnode1, document.querySelector("#app"));
+  // 第二次渲染
+  renderer.render(vnode2, document.querySelector("#app"));
+  // 第三次次渲染
+  renderer.render(null, document.querySelector("#app"));
+</script>
