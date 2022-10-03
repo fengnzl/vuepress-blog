@@ -136,8 +136,9 @@
         const type = typeof el[key];
         if (type === "boolean" && nextValue === "") {
           el[key] = true;
+        } else {
+          el[key] = nextValue;
         }
-        el[key] = nextValue;
       } else {
         el.setAttribute(key, nextValue);
       }
