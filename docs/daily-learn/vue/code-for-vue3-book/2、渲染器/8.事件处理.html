@@ -1,0 +1,209 @@
+<div id="app"></div>
+<script>
+  function createRender(options = {}) {
+    const { setElementText, patchProps, insert, createElement } = options
+
+    function render(vnode, container) {
+      // mount
+      if (vnode) {
+        // vnode exist patch
+        patch(container._vnode, vnode, container)
+      } else {
+        if (container._vnode) {
+          unmount(container._vnode)
+        }
+      }
+    }
+    /**
+     * n1 old vnode
+     * n2 new vnode
+     */
+    function patch(n1, n2, container) {
+      // 如果 n1 存在，则对比 n1 和 n2 的类型
+      if (n1 && n1.type !== n2.type) {
+        // 如果新旧 node 类型不同，则直接卸载旧 node
+        unmount(n1, container)
+        n1 = null
+      }
+      // 证明 n1 和 n2 的类型相同
+      const { type } = n2
+      // 如果是普通元素标签
+      if (typeof type === 'string') {
+        if (!n1) {
+          // old vnode doesn't exist infers mount element
+          mountElement(n2, container)
+        } else {
+          // 更新操作
+          patchElement(n1, n2)
+        }
+      } else if (typeof type === 'object') {
+        // n2 的类型是对象，则说明描述的是组件
+      } else if (type === 'xxx') {
+        // 处理其他类型的 vnode
+      }
+    }
+
+    function patchElement(n1, n2) {}
+
+    function mountElement(vnode, container) {
+      const { type, props, children } = vnode
+      const el = (vnode.el = createElement(type))
+      if (typeof children === 'string') {
+        setElementText(el, children)
+      } else if (Array.isArray(children)) {
+        children.forEach((childNode) => patch(null, childNode, el))
+      }
+      // 处理 props
+      if (props) {
+        for (const key in props) {
+          // 调用 patchProps 设置属性
+          patchProps(el, key, null, props[key])
+        }
+      }
+      insert(el, container)
+    }
+
+    function unmount(vnode) {
+      const parent = vnode.el.parentNode
+      if (parent) {
+        parent.removeChild(vnode.el)
+      }
+    }
+    return {
+      render,
+    }
+  }
+
+  function patchProps(el, key, prevValue, nextValue) {
+    if (key === 'class') {
+      el.className = normalizeClass(nextValue)
+    } else if (shouldSetAsProps(el, key)) {
+      const type = typeof el[key]
+      if (type === 'boolean' && nextValue === '') {
+        el[key] = true
+      } else {
+        el[key] = nextValue
+      }
+    } else {
+      el.setAttribute(key, nextValue)
+    }
+  }
+  function shouldSetAsProps(el, key) {
+    // 特殊处理
+    if (el.tagName === 'INPUT' && key === 'form') {
+      return false
+    }
+    return key in el
+  }
+  /**
+   * 设置 class 的有三种方式， el.className/el.classList/el.setAttribute('class', value)
+   * 其中通过测试可知 el.className 性能最高，因此我们需要特殊处理
+   * vue 中设置 class 的方式有 普通、对象和数组三种形式
+   */
+  function normalizeClass(value) {
+    const normalizeObjectClass = (value) => {
+      let str = ''
+      Object.entries(value).forEach(([key, value]) => {
+        if (value) {
+          str += ` ${key}`
+        }
+      })
+      return str.slice(1)
+    }
+    const type = getType(value)
+    if (type === 'string') {
+      return value
+    } else if (type === 'object') {
+      return normalizeObjectClass(value)
+    } else {
+      return value
+        .reduce((prev, cur) => `${prev} ${normalizeClass(cur)}`, '')
+        .slice(1)
+    }
+  }
+  function getType(argument) {
+    return Object.prototype.toString
+      .call(argument)
+      .slice('[object '.length, -1)
+      .toLowerCase()
+  }
+
+  /**
+   * 约定 props 中以 on 开头的属性都视为事件
+   * 因此我们在 patchProps 进行对应的处理即可
+   */
+  // 基本处理方法
+  function moackPatchProps(el, key, prevValue, nextValue) {
+    if (/^on/.test(key)) {
+      const name = key.slice(2).toLowerCase()
+      // 移除上一次绑定的事件处理函数
+      prevValue && el.removeEventListener(name, prevValue)
+      // 绑定新的事件处理函数
+      el.addEventListener(name, nextValue)
+    }
+  }
+
+  // 优化，在绑定事件时，绑定一个伪造的处理函数 invoker, 将真正的处理函数设置为 invoker.value 的属性值，这样就不用移除上一次绑定的事件，只需更新即可
+  function patchProps(el, key, prevValue, nextValue) {
+    // 事件处理
+    if (/^on/.test(key)) {
+      // 定义一个 el._vei 为一个对象，保存事件名称到事件处理函数的映射，因为触发事件可能有多种
+      // evi 是 vue event invoker
+      const invokers = el._vei || (el._vei = {})
+      let invoker = invokers[key]
+      const name = key.slice(2).toLowerCase()
+      if (nextValue) {
+        // 如果不存在 invoker
+        if (!invoker) {
+          // 将事件缓存到 el._vei[key]下 避免覆盖
+          invoker = el._vei[key] = (e) => {
+            // 如果 invoker.value 是一个数组，则逐个调用
+            if (Array.isArray(invoker.value)) {
+              invoker.value.forEach((fn) => fn(e))
+            } else {
+              invoker.value(e)
+            }
+          }
+          // 将真正的事件处理函数赋值给 invoker.value
+          invoker.value = nextValue
+          // 监听事件函数的处理
+          el.addEventListener(name, invoker)
+        } else {
+          // 更新事件函数的值
+          invoker.value = nextValue
+        }
+      } else if (invoker) {
+        // 新的事件绑定函数不存在，且之前绑定的 invoker 存在，则移除
+        el.removeEventListener(name, invoker)
+      }
+      // 省略 class 及其他属性的处理
+    }
+  }
+
+  // =========== test ============
+
+  const vnode = {
+    type: 'div',
+    props: {
+      onClick: [
+        () => console.log('clicked'),
+        () => console.log('clicked triggered twice'),
+      ],
+      onContextmenu: () => console.log('contextmenu'),
+    },
+    children: 'clickme',
+  }
+  const renderer = createRender({
+    createElement(tag) {
+      return document.createElement(tag)
+    },
+    setElementText(el, text) {
+      el.textContent = text
+    },
+    insert(el, parent, anchor = null) {
+      parent.insertBefore(el, anchor)
+    },
+    patchProps,
+  })
+  renderer.render(vnode, document.getElementById('app'))
+</script>
