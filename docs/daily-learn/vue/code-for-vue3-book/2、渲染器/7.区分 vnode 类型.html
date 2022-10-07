@@ -1,0 +1,130 @@
+<div id="app"></div>
+<script>
+  function createRender(options = {}) {
+    const { setElementText, patchProps, insert, createElement } = options
+
+    function render(vnode, container) {
+      // mount
+      if (vnode) {
+        // vnode exist patch
+        patch(container._vnode, vnode, container)
+      } else {
+        if (container._vnode) {
+          unmount(container._vnode)
+        }
+      }
+    }
+    /**
+     * n1 old vnode
+     * n2 new vnode
+     */
+    function patch(n1, n2, container) {
+      // 如果 n1 存在，则对比 n1 和 n2 的类型
+      if (n1 && n1.type !== n2.type) {
+        // 如果新旧 node 类型不同，则直接卸载旧 node
+        unmount(n1, container)
+        n1 = null
+      }
+      // 证明 n1 和 n2 的类型相同
+      const { type } = n2
+      // 如果是普通元素标签
+      if (typeof type === 'string') {
+        if (!n1) {
+          // old vnode doesn't exist infers mount element
+          mountElement(n2, container)
+        } else {
+          // 更新操作
+          patchElement(n1, n2)
+        }
+      } else if (typeof type === 'object') {
+        // n2 的类型是对象，则说明描述的是组件
+      } else if (type === 'xxx') {
+        // 处理其他类型的 vnode
+      }
+    }
+
+    function patchElement(n1, n2) {}
+
+    function mountElement(vnode, container) {
+      const { type, props, children } = vnode
+      const el = (vnode.el = createElement(type))
+      if (typeof children === 'string') {
+        setElementText(el, children)
+      } else if (Array.isArray(children)) {
+        children.forEach((childNode) => patch(null, childNode, el))
+      }
+      // 处理 props
+      if (props) {
+        for (const key in props) {
+          // 调用 patchProps 设置属性
+          patchProps(el, key, null, props[key])
+        }
+      }
+      insert(el, container)
+    }
+
+    function unmount(vnode) {
+      const parent = vnode.el.parentNode
+      if (parent) {
+        parent.removeChild(vnode.el)
+      }
+    }
+    return {
+      render,
+    }
+  }
+
+  function patchProps(el, key, prevValue, nextValue) {
+    if (key === 'class') {
+      el.className = normalizeClass(nextValue)
+    } else if (shouldSetAsProps(el, key)) {
+      const type = typeof el[key]
+      if (type === 'boolean' && nextValue === '') {
+        el[key] = true
+      } else {
+        el[key] = nextValue
+      }
+    } else {
+      el.setAttribute(key, nextValue)
+    }
+  }
+  function shouldSetAsProps(el, key) {
+    // 特殊处理
+    if (el.tagName === 'INPUT' && key === 'form') {
+      return false
+    }
+    return key in el
+  }
+  /**
+   * 设置 class 的有三种方式， el.className/el.classList/el.setAttribute('class', value)
+   * 其中通过测试可知 el.className 性能最高，因此我们需要特殊处理
+   * vue 中设置 class 的方式有 普通、对象和数组三种形式
+   */
+  function normalizeClass(value) {
+    const normalizeObjectClass = (value) => {
+      let str = ''
+      Object.entries(value).forEach(([key, value]) => {
+        if (value) {
+          str += ` ${key}`
+        }
+      })
+      return str.slice(1)
+    }
+    const type = getType(value)
+    if (type === 'string') {
+      return value
+    } else if (type === 'object') {
+      return normalizeObjectClass(value)
+    } else {
+      return value
+        .reduce((prev, cur) => `${prev} ${normalizeClass(cur)}`, '')
+        .slice(1)
+    }
+  }
+  function getType(argument) {
+    return Object.prototype.toString
+      .call(argument)
+      .slice('[object '.length, -1)
+      .toLowerCase()
+  }
+</script>
