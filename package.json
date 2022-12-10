@@ -4,13 +4,13 @@
   "description": "A blog created by VuePress, Just for learning and recording",
   "author": "城南花已开",
   "license": "MIT",
-  "homepage": "https://recoverymonster.github.io/",
+  "homepage": "https://fengnzl.github.io/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/recoveryMonster/vuepress-blog.git"
+    "url": "git+https://github.com/fengnzl/vuepress-blog.git"
   },
   "bugs": {
-    "url": "https://github.com/recoveryMonster/vuepress-blog/issues"
+    "url": "https://github.com/fengnzl/vuepress-blog/issues"
   },
   "scripts": {
     "dev": "vuepress dev docs --temp .temp",

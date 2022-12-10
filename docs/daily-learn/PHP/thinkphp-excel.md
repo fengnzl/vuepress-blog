@@ -19,17 +19,17 @@ isTop: false
 
 我们可以在[官网](https://getcomposer.org/download/)下载最新的安装文件。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224181400.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224181400.png)
 
 运行下载好的composer-setup.exe，勾选Developer mode（勾选此选项，可自定义安装目录），然后一路 next 即可，其中不要勾选 proxy 选项即可。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224181700.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224181700.png)
 
 如果安装过程中提示缺少 xx.dll 的错误信息，说明 PHP 相关环境没有正确配置。
 
 安装完成之后我们打开命令行，输入 composer，出现以下提示，说明安装成功。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224182033.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224182033.png)
 
 然后我们执行如下命令进行[国内镜像安装](https://pkg.phpcomposer.com/)：
 
@@ -51,11 +51,11 @@ composer require phpoffice/phpexcel
 
 执行完返回如下成功提示。（这里之前安装过，所以提示可能有些不同）
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224183501.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224183501.png)
 
 此时在项目的 vendor 中可以看到 phpexcel 已经安装成功。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224200456.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224200456.png)
 
 ## 使用PHPExcel
 
@@ -70,7 +70,7 @@ use PHPExcel_IOFactory;
 
 首先将一个测试 excel 表放进 public 文件夹中，表中内容如下：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224205319.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224205319.png)
 
 编写的读取 excel 表的方法为：
 
@@ -121,7 +121,7 @@ public function read(){
 
 访问该方法，可以得到结果如下：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224205527.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224205527.png)
 
 有时候我们需要将 excel 表中的数据读取，并保存到数据库中，于是需要我们编写如下方法：
 
@@ -216,7 +216,7 @@ public function download(){
 
 访问该方法，下载文件内容如下所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191224211648.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191224211648.png)
 
 **注意：**
 

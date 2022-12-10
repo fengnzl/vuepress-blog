@@ -75,7 +75,7 @@ class ForbiddenException extends BaseException
 
 这里我们手动将缓存中的权限改为15，进行接口测试可以得到抛出的错误信息：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191211144159.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191211144159.png)
 
 ## 下单与支付的业务流程
 
@@ -92,7 +92,7 @@ class ForbiddenException extends BaseException
 
 流程分析图如下所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191211151111.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191211151111.png)
 
 ## 重构权限控制前置方法
 
@@ -432,7 +432,7 @@ class OrderException extends BaseException
 
 因此我们需要对订单信息（所有商品和商品图片以及地址）做快照，这样避免了动态查询，并减轻了数据库的压力。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191216202441.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191216202441.png)
 
 这里 order_product是为了扩展而使用的，如果需要动态查询则可以使用此表。
 
@@ -589,7 +589,7 @@ public function placeOrder(){
 
 这是用微信小程序进行下单接口测试，可以看到返回的订单创建时间为当前时间。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191217195347.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191217195347.png)
 
 **TP5 中使用事务**
 
@@ -633,6 +633,6 @@ public function placeOrder(){
 
 这里我们写一段伪代码来模拟断电：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191217200809.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191217200809.png)
 
 这时通过下单接口请求之后，数据库中的订单表没有更新。如果将事务操作的代码注释掉，我们再一次进行接口访问，就可以看到 order 表中新增了一条记录，而 order_product 表中没有记录产生，这就导致了数据的不完整性。 

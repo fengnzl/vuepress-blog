@@ -109,7 +109,7 @@ fun();
 
 <font style="color:red">4、函数内部没有用var声明的变量也是全局变量，会影响到函数外部的全局变量的值</font>
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190607135937.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190607135937.png)
 
 **用var和不用var声明变量的区别？**
 
@@ -200,7 +200,7 @@ m(); //3
 
 #### 2、闭包函数可以读取局部变量
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190607152913.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190607152913.png)
 
 ### 闭包的两种用途
 
@@ -232,7 +232,7 @@ console.log(obj.getName()); //luff
 
 如使用定时器执行回调。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190607161058.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190607161058.png)
 
 参考：
 

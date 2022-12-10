@@ -6,7 +6,7 @@
 
 在git基础里面我们已经成功添加并提交了`readme.txt`文件,现在我们对文件进行修改：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707105112.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707105112.png)
 
 现在使用`git status`查看结果
 
@@ -129,7 +129,7 @@ Date:   Sun Jul 7 01:44:27 2019 +0800
 
 也可以使用<font color="red">**git log --pretty=oneline**</font>而使一条记录显示一行
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707151132.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707151132.png)
 
 这里黄色的部分是`commit id`（版本号）是一个SHA1计算出来的一个非常大的数字，用十六进制表示。
 
@@ -160,7 +160,7 @@ git is free software
 
 我们可以看到已经还原到了上一个版本，这时我们使用`git log`查看版本库的状态
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707162122.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707162122.png)
 
 最新版本的`append GPL`已经不见了，如果想要回到这个版本，则需要以下方法
 
@@ -168,7 +168,7 @@ git is free software
 
 想要恢复到`append GPL`的版本，则需要首先找到其<font color="red">**commit id**</font>（版本号），这时就需要<font color="red">**git reflog**</font>来查看git记录每一次的命令。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707162626.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707162626.png)
 
 这时我们可以看到，`appened GPL`的版本号为`af61833`，然后我们使用<font color="red">**git reset --hard  （commit id）**</font>就可回到未来的某个版本号。
 
@@ -221,7 +221,7 @@ Git与SVN等其他版本库的一个不同之处就是存在一个暂存区的�
 
 即电脑里能够看到的目录，如之前建立的`learngit`文件夹就是一个工作区。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707165214.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707165214.png)
 
 ### 版本库（Repository）
 
@@ -281,7 +281,7 @@ Changes to be committed:
 
 这时，暂存区变为如图所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707192738.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707192738.png)
 
 所以<font color="red">**git add**</font>相当于将要提交的修改添加到暂存区（stage）,然后通过<font color="red">**git commit**</font>将暂存区的所有修改提交到分支。
 
@@ -302,7 +302,7 @@ nothing to commit, working tree clean
 
 这时暂存区中则没有任何内容：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707193211.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707193211.png)
 
 ## 管理修改
 
@@ -320,7 +320,7 @@ git tracks change
 
 然后添加：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707194524.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707194524.png)
 
 然后再次修改`readme.txt`文件
 
@@ -364,7 +364,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 提交后，可以使用<font color="red">git diff HEAD -- readme.txt</font>查看工作区和版本库里面最新版本的区别。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707195915.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707195915.png)
 
 可见第二次修改并没有被提交。
 
@@ -424,7 +424,7 @@ git tracks change
 
 如果添加了错误内容，并`git add`将其添加到暂存区域了，这是我们在使用`git status`查看状态
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707210952.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707210952.png)
 
 Git告诉我们使用<font color="red">**git reset HEAD file**</font>可以把暂存区的修改撤销掉（unstage），重新放回到工作区
 
@@ -452,7 +452,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 这时我们可以使用<font color="red">**git checkout -- file**</font>丢弃工作区的修改
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707211819.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707211819.png)
 
 如果已经提交到了版本库中，则需要使用<a href="#reset">版本回退</a>来撤销修改。前提是还没推送到远程库
 
@@ -460,11 +460,11 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 在Git中，删除也是一种操作，我们先添加一个`test.txt`文件并提交：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707214525.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707214525.png)
 
 一般我们会在工作区中删除文件，或者在命令行使用`rm`命令删除文件
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707214641.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707214641.png)
 
 这个时候Git知道删除了文件，所以工作区和版本库中文件不一致，可以使用`git status`来查看那些文件被删除了
 
@@ -482,9 +482,9 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 1. 如果确实要删除此文件，根据提示可以使用`git add/rm  file`删除，并使用`git commit`进行提交
 
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707215246.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707215246.png)
 
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707215549.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707215549.png)
 
 这时，文件就从版本库中删除了。
 

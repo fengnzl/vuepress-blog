@@ -1,10 +1,10 @@
 <h1 align="center">Welcome to vuepress-blog 👋</h1>
 <p>
   <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="https://github.com/recoveryMonster/vuepress-blog#readme" target="_blank">
+  <a href="https://github.com/fengnzl/vuepress-blog#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
-  <a href="https://github.com/recoveryMonster/vuepress-blog/graphs/commit-activity" target="_blank">
+  <a href="https://github.com/fengnzl/vuepress-blog/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
 </p>
@@ -12,7 +12,7 @@
 
 > A blog created by VuePress, Just for learning and recording
 
-### 🏠 [Homepage](https://recoverymonster.github.io/)
+### 🏠 [Homepage](https://fengnzl.github.io/)
 
 ## Install
 
@@ -25,11 +25,11 @@ yarn install
 👤 **城南花已开**
 
 * Twitter: [@ learnTech10](https://twitter.com/learnTech10)
-* Github: [@recoveryMonster](https://github.com/recoveryMonster)
+* Github: [@fengnzl](https://github.com/fengnzl)
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/recoveryMonster/vuepress-blog/issues).
+Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/fengnzl/vuepress-blog/issues).
 
 ## Show your support
 

@@ -495,4 +495,4 @@ MyPromise.race([promise1, promise2]).then((value) => {
 // expected output: "two"
 ```
 
-点击查看[完整代码](https://github.com/recoveryMonster/vuepress-blog/blob/master/docs/daily-learn/HandWriting/Promise.js)
+点击查看[完整代码](https://github.com/fengnzl/vuepress-blog/blob/master/docs/daily-learn/HandWriting/Promise.js)

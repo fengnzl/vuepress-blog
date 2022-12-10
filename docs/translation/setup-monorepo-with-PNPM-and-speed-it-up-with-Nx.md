@@ -6,7 +6,7 @@
 
 \* 作者：[Juri Strumpflohner](https://medium.com/@juristr)
 
-\* 翻译：[城南花已开](https://recoverymonster.github.io/)
+\* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 我们将学习如何使用PNPM运行命令,如何并行运行它们,最后我们将添加Nx以实现更复杂的任务调度
@@ -126,7 +126,7 @@ packages:
 ❯ pnpm --filter my-remix-app dev
 ```
 
-![remix-serve](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20221003181628.png)
+![remix-serve](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20221003181628.png)
 
 ## 创建一个共享 UI 库
 
@@ -317,7 +317,7 @@ Error: Cannot find module '/Users/juri/nrwl/content/pnpm-demos/pnpm-mono/apps/my
 
 为什么？这是因为引用和解析本地依赖 PNPM 创建的符号连接。通过在 Remix 应用的 `package.json` 文件中 添加 `shared-ui: "workspace:*"`，你指示 PNPM 将软连接添加到 Remix 的 `node_modules` 文件夹中。
 
-![symlink](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20221003200445.png)
+![symlink](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20221003200445.png)
 
 ## 通过 PNPM 运行命令
 
@@ -622,7 +622,7 @@ Error: Cannot find module '/Users/juri/nrwl/content/pnpm-demos/pnpm-mono/apps/my
 
 如果我们现在运行 `npx nx build my-remix-app`,我们可以看到 Nx 首先运行依赖项目上的任务,然后才运行我们调用的命令。
 
-![dependsOn](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20221003233123.png)
+![dependsOn](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20221003233123.png)
 
 ## 只有变化才运行
 
@@ -641,7 +641,7 @@ Error: Cannot find module '/Users/juri/nrwl/content/pnpm-demos/pnpm-mono/apps/my
 
 **这是如何运作的？** Nx 基于 monorepo 工作区中包之间的结构和依赖关系构建了一个项目图，让我们假设是下面的图：
 
-![project-graph](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20221003234925.png)
+![project-graph](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20221003234925.png)
 
 当我们在某个分支运行 affected 命令，Nx 将所有的提交即相应的更改于基准分支进行比较。默认基准分支是 `main`，但是你可以在 `nx.json` 文件中进行设置：
 
@@ -655,7 +655,7 @@ Error: Cannot find module '/Users/juri/nrwl/content/pnpm-demos/pnpm-mono/apps/my
 
 如果 `lib2` 在特性分支上发生了变化，在工作区运行测试命令 `affected:test`，那么只会运行 `lib2` 和 `appB` 上面的测试。
 
-![affected-test](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20221003235400.png)
+![affected-test](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20221003235400.png)
 
 但是要注意，如果我们运行 `affected:build` 命令，并且在 `nx.json` 中定义了一个依赖的项目需要首先构建(参见 “定义任务依赖” 部分)，那么 `affected:build` 命令将会构建：
 
@@ -697,7 +697,7 @@ packages/shared-ui build: Done
 
 这加载了工作区的项目图的可视化交互，具有一些高级过滤，调试工作区结构等高级功能
 
-![project-graph](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20221004001155.png)
+![project-graph](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20221004001155.png)
 
 > 作为旁注：你可以在任意的 PNPM 工作区运行项目图表，即使你没有安装 Nx，运行 `npx nx graph` 应该会起作用。
 

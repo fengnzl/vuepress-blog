@@ -4,7 +4,7 @@
 
 * 原文：[Writing JavaScript With Only Six Characters](https://javascript.christmas/2019/17)
 * 作者：[Erik Wendel](https://javascript.christmas/2019/twitter.com/ewndl)
-* 翻译：[城南花已开](https://recoverymonster.github.io/)
+* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 

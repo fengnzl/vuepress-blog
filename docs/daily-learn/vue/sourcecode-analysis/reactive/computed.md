@@ -262,7 +262,7 @@ class Watcher {
 }
 ```
 
-由于我们传递的 `lazy` 为 `true`，因此在执行构造函数时，并不会执行 `this.get` 函数来获取计算属性的值。回到之前的 `createComputedGetter` 函数中，当组件渲染获取计算属性时，`watcher.dirty` 条件判断为真，这时会执行 `watcher.evaluate()` 方法，之后会判断 `Dep.target` 如果存在，就进行依赖收集。之前的[文章](https://recoverymonster.github.io/daily-learn/vue/sourcecode-analysis/reactive/getters.html#watcher)提到过 `Dep.target` 实际上就是一个 `watcher` 实例，在组件渲染时，它是一个**渲染 `watcher`**，之后会执行 `watcher.depend`，也就是将渲染 `watcher` 收集到当前计算属性 `watcher` 的依赖中，从而后面计算属性发生变化时，页面可以重新渲染。之后 `createComputedGetter` 会返回 `watcher.value` 值。下面我们来看 `watcher.evaluate()`方法的实现
+由于我们传递的 `lazy` 为 `true`，因此在执行构造函数时，并不会执行 `this.get` 函数来获取计算属性的值。回到之前的 `createComputedGetter` 函数中，当组件渲染获取计算属性时，`watcher.dirty` 条件判断为真，这时会执行 `watcher.evaluate()` 方法，之后会判断 `Dep.target` 如果存在，就进行依赖收集。之前的[文章](https://fengnzl.github.io/daily-learn/vue/sourcecode-analysis/reactive/getters.html#watcher)提到过 `Dep.target` 实际上就是一个 `watcher` 实例，在组件渲染时，它是一个**渲染 `watcher`**，之后会执行 `watcher.depend`，也就是将渲染 `watcher` 收集到当前计算属性 `watcher` 的依赖中，从而后面计算属性发生变化时，页面可以重新渲染。之后 `createComputedGetter` 会返回 `watcher.value` 值。下面我们来看 `watcher.evaluate()`方法的实现
 
 ```js
  /**
@@ -281,7 +281,7 @@ class Watcher {
 
 ## 更新 computed
 
-我们下面来看计算属性的更新过程，仍然以上面的 `fullName` 为例，当我们改变 `firstName`的值时，会触发 `firstName` 的 `setter`，从而会派发更新 `dep.notify`， 根据之前的[派发更新章节](https://recoverymonster.github.io/daily-learn/vue/sourcecode-analysis/reactive/setters.html#%E6%B4%BE%E5%8F%91%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B)可知其内部会依次调用收集到的 `watcher` 实例的 `update` 方法，首先是 `computed watcher`
+我们下面来看计算属性的更新过程，仍然以上面的 `fullName` 为例，当我们改变 `firstName`的值时，会触发 `firstName` 的 `setter`，从而会派发更新 `dep.notify`， 根据之前的[派发更新章节](https://fengnzl.github.io/daily-learn/vue/sourcecode-analysis/reactive/setters.html#%E6%B4%BE%E5%8F%91%E6%9B%B4%E6%96%B0%E8%BF%87%E7%A8%8B)可知其内部会依次调用收集到的 `watcher` 实例的 `update` 方法，首先是 `computed watcher`
 
 ![computed-watcher](/vue/computed-watcher.png)
 

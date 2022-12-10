@@ -6,7 +6,7 @@ This is my first blog that written by English without Chinese, thus if there has
 
 There is a requirement to make talk bubble by CSS in object，just like this:
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190801185104.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190801185104.png)
 
 To achieve that goal, you first must know `pseudo-element` such as `:before` and `:after` , and  how to use it.
 
@@ -52,11 +52,11 @@ One  simple demo for using `pseudo-element` , the purpose for this demo is  show
 
 The result presented by the page like this :
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190801202854.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190801202854.png)
 
 From that image  we can see the result by the `:before` is a square in the left , the side length of the square is `30px` ，if we don't set the property of `border-bottom` , we can see the page under the below:
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190801203519.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190801203519.png)
 
 so we know the effect of the width of each side. Let's go back to the original question, we can achieve the goal through  these code. 
 

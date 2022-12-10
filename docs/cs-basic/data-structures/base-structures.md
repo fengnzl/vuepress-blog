@@ -1,6 +1,6 @@
 # 基本数据结构与算法
 
-众所周知，Node.js 遵循的是 CommonJS 规范进行模块化开发，因为 ES6 在 JavaScript 标准中引入了官方的模块功能。因此，在这里都是用的是 ES6 模块导出。点击查看[相关差别及使用方法](https://recoverymonster.github.io/post/exportexport-default-he-exportsmoduleexports-de-qu-bie-yu-lian-xi/)。
+众所周知，Node.js 遵循的是 CommonJS 规范进行模块化开发，因为 ES6 在 JavaScript 标准中引入了官方的模块功能。因此，在这里都是用的是 ES6 模块导出。点击查看[相关差别及使用方法](https://fengnzl.github.io/post/exportexport-default-he-exportsmoduleexports-de-qu-bie-yu-lian-xi/)。
 
 由于 Node 中，ES6 导入还是一个实验功能，因此我们需要将文件扩展名由 js 修改为 mjs，并在 node 命令后添加 `--experimental-modules` 来执行代码。
 
@@ -85,8 +85,8 @@ class Stack {
 在创建别的开发这也可以使用的数据结构或者对象时，我们希望保护内部的元素，只有暴露出来的方法才能修改内部结构。但是 ES6 中的类时基于原型的，这就代表无法声明私有变量或者方法。因此只能使用以下方法来实现：
 
 - 下划线命名约定，来标价一个属性为私有属性（实际上并不能保护数据）。
-- 使用 Symbol 实现类，但这实际上仍然会被破坏，详见 [stackSymbol](https://github.com/recoveryMonster/vuepress-blog/datastructure-algorithms/Stack/stackSymbol.mjs) 文件。
-- 使用 ES6 的 WeakMap 实现类，WeakMap 可以存储键值对，其中键是对象，值可以是任意数据，但采用这种方法，代码的可读性不强，且扩展该类时无法继承私有属性。详见 [stackWeakMap](https://github.com/recoveryMonster/vuepress-blog/datastructure-algorithms/Stack/stackWeakMap.mjs) 文件。
+- 使用 Symbol 实现类，但这实际上仍然会被破坏，详见 [stackSymbol](https://github.com/fengnzl/vuepress-blog/datastructure-algorithms/Stack/stackSymbol.mjs) 文件。
+- 使用 ES6 的 WeakMap 实现类，WeakMap 可以存储键值对，其中键是对象，值可以是任意数据，但采用这种方法，代码的可读性不强，且扩展该类时无法继承私有属性。详见 [stackWeakMap](https://github.com/fengnzl/vuepress-blog/datastructure-algorithms/Stack/stackWeakMap.mjs) 文件。
 
 ### 相关问题
 
@@ -289,13 +289,13 @@ class Deque {
 
 在队列实际应用过程中，我们会使用一些修改版本，其中就有**循环队列**，其中的典型的例子就是击鼓传花游戏。一群人围成一圈，把花尽快的传递到旁边的人，停止的时候花在谁手上就淘汰谁，直至剩下最后一人。
 
-[循环队列-击鼓传花游戏](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Queue/hotPotato.mjs)
+[循环队列-击鼓传花游戏](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/Queue/hotPotato.mjs)
 
 #### 回文检查器
 
 **回文**是正反都能读通的单词、词组、数或一系列字符的序列，例如 madam 或 racecar。
 
-[双端队列-回文检查器](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Queue/palindromeChecker.mjs)
+[双端队列-回文检查器](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/Queue/palindromeChecker.mjs)
 
 ## 链表
 
@@ -303,7 +303,7 @@ class Deque {
 
 链表存储有序的元素集合，但不同于数组，链表中的每个元素由一个存储元素本身的节点和一个指向下一个元素的引用（ 也称指针或链接 ）组成。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20200117090006.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20200117090006.png)
 
 链表的好处在于，添加或移除元素的时候不需要移动其他元素，然而链表需要使用指针，因此想要访问链表中间的一个元素，则需要从起点（ **表头** ）开始迭代链表直到找到所需的元素。就像寻宝元素一样，你只能从第一条线索顺着往下找。
 
@@ -367,7 +367,7 @@ export class Node {
 
   承自 JavaScript 对象默认的 toString 方法，让其只输出元素的值。
 
-点击查看[链表数据结构代码实现](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/LinkedList.mjs)
+点击查看[链表数据结构代码实现](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/LinkedList.mjs)
 
 ### 双向链表
 
@@ -474,7 +474,7 @@ insert(element, index) {
   }
 ```
 
-其内部还增加了 `getTail` 和 `inverseToString` 方法，具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/DoublyLinkedList.mjs)。
+其内部还增加了 `getTail` 和 `inverseToString` 方法，具体可以[查看代码](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/DoublyLinkedList.mjs)。
 
 ### 循环链表
 
@@ -551,7 +551,7 @@ insert(element, index) {
   }
 ```
 
-其内部还重写了 `push` 方法，具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/CircularLinkedList.mjs)。
+其内部还重写了 `push` 方法，具体可以[查看代码](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/CircularLinkedList.mjs)。
 
 ### 有序链表
 
@@ -612,7 +612,7 @@ insert(element) {
 
 由于我们需要保持元素具有一定的顺序，因此我们指将元素插入到指定位置，同理 `push` 方法与 `insert` 方法其实是相同的。
 
-具体可以[查看代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/SortedLinkedList.mjs)。
+具体可以[查看代码](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/LinkedList/SortedLinkedList.mjs)。
 
 ## 集合
 
@@ -728,7 +728,7 @@ isSubsetOf(otherSet) {
   }
 ```
 
-以上就是我们模拟的 `Set` 集合，具体[详见代码](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Set/Set.mjs)。 ES2015 已经有原生的 `Set` 类供我们使用，具体[查看文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)。
+以上就是我们模拟的 `Set` 集合，具体[详见代码](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/Set/Set.mjs)。 ES2015 已经有原生的 `Set` 类供我们使用，具体[查看文档](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Set)。
 
 ## 字典和散列表
 
@@ -882,4 +882,4 @@ export class Dictinoary {
 }
 ```
 
-验证相关详见[代码文件](https://github.com/recoveryMonster/vuepress-blog/tree/master/datastructure-algorithms/Dictionary/Dictionary.mjs)。
+验证相关详见[代码文件](https://github.com/fengnzl/vuepress-blog/tree/master/datastructure-algorithms/Dictionary/Dictionary.mjs)。

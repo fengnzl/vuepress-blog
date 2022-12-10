@@ -29,7 +29,7 @@ console.log(b); // 40
 
 所以我们如何使其保持他们之间同步变化，除了类似上面的每次都进行手动更新，实际上我们希望他们的关系是声明式的。类似一个 Excel 表中，我们可以使用函数来表明两个单元格的联系，单元格 B 永远是单元格 A 的十倍，但是在项目中我们应该怎么办呢？
 
-![image-20200313000231011](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200313000234.png)
+![image-20200313000231011](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200313000234.png)
 
 如果我们有一个 `onAChanged` 函数，它接收一个内部函数，并且每当 a 变化的时候，函数都会执行一次，这样我们的问题就解决了。所以这个函数应该如何实现呢？
 
@@ -93,13 +93,13 @@ setState({ a: 5 });
 
 这就是 React 内部工作机制的简单概括，但是在 Angular 和 Vue 中我们不通过调用 setState 函数来操作 state。
 
-![image-20200313003651072](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200313003652.png)
+![image-20200313003651072](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200313003652.png)
 
 所以它是如何实现的呢？Angular 和 Vue 的实现方法有所不同，因为 angular 使用的是 `dirty checking`（脏数据检查机制），它在某种程度上会拦截你的事件，例如点击执行摘要循环。 然后它会检查所有事物，是否已更改。而 vue 则是做的更加细致，它将对象的状态变成响应式的。
 
 vue 通过 ES5 的`Object.defineProperty` API，将所有的属性变成了 `getter` 和 `setter`。因此在上面的 state.a ，我们实际上将 a 转换成了 getter 和 setter。在其他情景中，我们将会做一些有趣的事情，例如我们将 `onStateChanged` 函数重名为 `autorun` 函数，这本上是一种基本的依赖追踪形式。
 
-![image-20200313004844742](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200313004846.png)
+![image-20200313004844742](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200313004846.png)
 
 我们会实现一个小型数据观察者，它类似于在 vue 中的工作方式。
 

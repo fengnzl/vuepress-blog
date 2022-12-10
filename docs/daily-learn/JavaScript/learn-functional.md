@@ -77,7 +77,7 @@ function shippingRate(size, weight, speed) {
 
 同时在 JavaScript 重要的是函数调用时的直接输入。因此如果可能的话我们在函数调用的时候应该避免副作用。
 
-![image-20200205012939457](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317233839.png)
+![image-20200205012939457](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317233839.png)
 
 其中任何运行的程序都会通过CPU产生热量，这是一个副作用，可以观察到系统状态的变化。事实上，不仅仅是CPU的热量，一个程序不能运行的时间延迟是因为另一个程序正在运行，这是一个副作用。
 
@@ -755,11 +755,11 @@ totalCost = basePrice + minus2(tmp);
 
 上述过程就像一个生产糖果的工厂，由原材料到最后的糖果需要三道工艺。
 
-![image-20200207195830333](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234113.png)
+![image-20200207195830333](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234113.png)
 
 突然有一天，老板说其他糖果工厂生产速度非常快，我们这样速度太慢了，你必须要一个方法拉力提高生产速度，否则就要被淘汰了，于是你苦思冥想想到了一个方法，就是将中间传送带砍掉，传送的时间太长了，使得原材料一出来就降落到切割器中，切割之后降落到包装器中，从而及其占用的面积小了，相同的面积，又可以有更多的工艺装置了。
 
-![image-20200207200230493](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234124.png)
+![image-20200207200230493](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234124.png)
 
 在上面的函数中就是将中间变量去除：
 
@@ -783,7 +783,7 @@ totalCost =
 
 就这样过了一阵，你的老板又找到你说工人开始抱怨装置太多，中间的操作按钮太多了，很容易搞混。于是你又开始思考，如何将其整合一个整体，从而工人们只需要操作输入和输出就行。
 
-![image-20200207200744763](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234136.png)
+![image-20200207200744763](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234136.png)
 
 在上面的函数就是将中间步骤整合到同一个函数，从而代码更具声明性：
 
@@ -797,7 +797,7 @@ totalCost = basePrice + shippingRate(4);
 ``` 
 这样相安无事一阵之后，你的老板急匆匆的找上你说，别的糖果厂今天可以生产这种口味的糖果，明天可以生产其他口味的糖果，并且不停产，你也要搞一个这种可以改变口味的机器出来，于是你设计了一个装置，能够接收单个小装置，从而产出一个大装置。
 
-![image-20200207201421353](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234149.png)
+![image-20200207201421353](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234149.png)
 
 用上面的代码改造如下所示：
 
@@ -822,7 +822,7 @@ totalCost = basePrice + shippingRate(4);
 
 **compose 函数的执行是从右到左，实际上指由内到外，而 pipe 函数执行是由左到右的**
 
-![image-20200207202159381](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234211.png)
+![image-20200207202159381](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234211.png)
 
 **结合律**
 
@@ -1579,13 +1579,13 @@ list.reduce(mapWithReducer(add1), [])
 
 这里我们通过引用的方式来修改数组，但这从广义的角度来说是一个坏的方法。我们更希望通过参数的形式在 reducer 函数内部调用 combiner 函数。这里我们通过 curry 函数来实现：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234723.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234723.png)
 
 **分解 trnasduction：单个 reduce（Deriving Transduction: Single Reduce）**
 
 但是到这里我们仍然使用了三个 reduce 函数，我们可以考虑将传递的 listCombination 函数抽象出来，就如同当初的 listCombination 函数一样。因此我们可以使用 compose 函数，并传递两个中间函数，这里并不是指 combination 函数。
 
-![image-20200210221403821](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234805.png)
+![image-20200210221403821](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234805.png)
 
 这里 mapReducer(add1) 生成了一个参数是 reducer 的函数，同样 filterReducer(isOdd) 也生成了这样的函数。当提供一个 reducer 函数时，他们就会生成一个 reducer 函数。如果讲一个 reducer 函数传递给高阶 reducer 函数 transducer，那么你会得到一个 reducer 函数。所以我们不在考虑在 composition 的过程中传递值，而是将 reducer 函数作为值在 composition 中传递，因此他们可以通过 compose 生成一个 transducer 函数。
 
@@ -1593,7 +1593,7 @@ listCombination 接收一个值和一个正在运行的累加器，它恰好是�
 
 sum 函数的同样接收一个值和一个累加器，把它们累加在一起的方法是做数字加法。sum 和 listCombination 实际上是相同的功能，因此上述两者同样可以结合：
 
-![image-20200210221345627](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234838.png)
+![image-20200210221345627](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234838.png)
 
 以上就是函数库中 transuder、transduce 和 into 函数后台所完成的功能，因此我们如果想用 transduction 可以直接使用函数库提供的方法。
 
@@ -1783,7 +1783,7 @@ function Just(val) {
 
 但是不同的 monad 具有更多不同的方法。但这三个核心方法是每个 monad 都必须有的。同时，chain 方法经常与其他名称一起被提及。所以我们来简单的编写这三个方法吧。
 
-![image-20200211131618168](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234853.png)
+![image-20200211131618168](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234853.png)
 
 这里的 map 函数，可以看到第7行我们在函数调用的外面加上了 Just，就像一个数组调用 map 函数之后返回的同样是一个数组，就像这里 monad 调用 map 函数之后，同样返回同样类型的 monad。
 
@@ -1793,13 +1793,13 @@ function Just(val) {
 
 下面主要展示了 Just Monad 的使用，以及另一种更加常见的 Maybe Monad。
 
-![image-20200211140057934](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234920.png)
+![image-20200211140057934](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234920.png)
 
-![image-20200211140115198](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317234928.png)
+![image-20200211140115198](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317234928.png)
 
-![image-20200211140131624](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317235012.png)
+![image-20200211140131624](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317235012.png)
 
-![image-20200211140159382](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317235025.png)
+![image-20200211140159382](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317235025.png)
 
 ## 异步（Async）
 
@@ -1859,4 +1859,4 @@ a.forEach(function onValue(v) {
 
 常用的 observable 的函数库是 Rx.js，它使我们异步函数式编程更加方便。
 
-![image-20200211155049476](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200317235155.png)
+![image-20200211155049476](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200317235155.png)

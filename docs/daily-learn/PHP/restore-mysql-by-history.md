@@ -9,13 +9,13 @@
 
 **首先找到卸载mysql目录下的data文件夹：**
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526003715.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526003715.png)
 
 里面有很多的历史文件，其他都不要管，1 是ibdata1  该文件是InnoDB的共有表空间，必须要拷贝过去的，2 是我要恢复的数据库名称。
 
 关闭mysql服务，将这两个文件拷贝到新安装的mysql 的data文件目录（D:\phpEnv\server\mysql\mysql-57\data）下，重新启动服务，你会发现OJBK了。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526004051.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526004051.png)
 
 此时打开navicat你会发现数据库又恢复了。
 

@@ -51,11 +51,11 @@ public function getBanner($id)
 
 平时我们不用框架进行数据库访问的话，一般都是直白的sql语句或者pdo的方式进行访问。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201201901.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201201901.png)
 
 而TP5框架则使用的是面向对象的思想（类与类之间相互关联完成一系列功能）。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201202021.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201202021.png)
 
 其中Db是数据库操作的入口对象，即数据库的链接和增删改查操作都是通过Db对象完成的。Db链接数据库时首先实例化Collection连接器对象，通过此对象来链接，Collection内部是通过PHP的PDO来链接，平时处于待命状态（惰性），只有在执行sql语句时，才会真正的链接数据库，从而节约服务器数据库的资源。如果使用原生语句查询，则不会使用到Query和Builder两个对象。
 
@@ -126,7 +126,7 @@ $result = Db::table('banner_item')
 
 此时重新请求即可在日志文件中看到相关记录
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201215143.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201215143.png)
 
 但是这样直接在配置文件中修改，相当于再次开启了默认的全局的日志记录功能，因此我们需要向全局异常日志处理中一样在一个地方开启日志处理功能即可，这里选择在项目的入口文件进行开启。
 
@@ -160,7 +160,7 @@ throw new BannerMissException('参数错误');
 return $banner;
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201220404.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201220404.png)
 
 **一般模型和数据表名是一一对应的，但是也可以在模型中指定对应的表。**
 
@@ -183,9 +183,9 @@ Model类获取数据的方法有get()【一条】和all()【多条】由于Model
 
  数据表关系分析，这里以banner和banner_item表为例。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201224010.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201224010.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201223955.png)  
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201223955.png)  
 
 我们可以看出banner表和banner_item表是一对多的关系，从banner_item表来看，是一对一的关系，因此综合来看是一对多的关系，如果从banner_item表中来看，以为是一对多的关系，则两张表就是多对多的关系。
 
@@ -228,7 +228,7 @@ class BannerItem extends Model
 
 返回的结果如下图所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201230036.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201230036.png)
 
 **我们需要在那个模型里面调用关联或者获取另一个模型的数据，就在那个模型里面定义关联方法**
 
@@ -249,7 +249,7 @@ protected $hidden = ['id','from','delete_time','update_time'];
 
 这是查询结果如图：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201231033.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201231033.png)
 
 **隐藏模型字段的原因主要有两个：**
 
@@ -260,7 +260,7 @@ protected $hidden = ['id','from','delete_time','update_time'];
 
 image数据表中的url是一个相对路径，不是一个绝对路径  , 这是因为如果把url写完整的话，即包括域名和目录等，那数据表的数据就容易写死，以后如果域名和名录出现变更就不好修改了，如果我们写相对路径的话，图片路径也可以根据相应域名和目录来写出适合的完整url路径。  
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191201232141.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191201232141.png)
 
 **如何设置图片url的完整路径呢？**
 
@@ -295,9 +295,9 @@ public function getUrlAttr($value,$data){
 
    返回的结果
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191202005827.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191202005827.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191202005850.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191202005850.png)
 
    其实这个获取器也是AOP思想的应用，所有的value通过我们的`getUrlAttr`这个获取器变成了另外一种形式返回。获取器只有在我们对模型的属性进行访问的时候才会调用，而我们返回的banner模型对象后，就已经包含了对image模型的url属性访问，所以自动就调用了获取器。  
 
@@ -365,7 +365,7 @@ public function getUrlAttr($value, $data){
 
 首先theme表中的`top_img_id`表示主页专题模块的图片，而`head_img_id`则表示专题详情页面时的头部图片。所有的图片都是与image表有关联。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191203093606.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191203093606.png)
 
 而主题表theme和产品表product是多对多的关系，因为一个主题可以包含多个产品，一个产品同时也可以属于多个主题。对于这种多对多关系，我们一般多使用一张表，否则会很繁琐。例如在主表中设置多一个字段来描述该theme下的所有product，这是通过新增和修改字段来设置；如果我们使用第三章表就可以直接插入一条记录，这样就会变得比较简单。
 
@@ -401,7 +401,7 @@ class Theme extends BaseModel
 
 这里我们选择传递到接口的参数为ids=id1,id2...的形式，因此我们需要将验证正整数的公用函数`isPositiveInteger`方法提取到验证基类中。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191203113032.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191203113032.png)
 
 然后编写相关验证器和获取theme列表的接口。
 
@@ -482,17 +482,17 @@ Route::get('api/:version/theme/:id','api/:version.Theme/getComplexOne');
 
 这时我们请求接口`zerg.io/api/v1/theme/1`会出现如下错误
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191203184602.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191203184602.png)
 
 这是因为TP5的路由匹配的完整匹配模式，在读取路由匹配时，会按照顺序，如果有第一个路由成功匹配，后续如果有相似的路由则不会进行匹配。
 
 所以需要我们将配置文件进行如下修改：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191203184750.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191203184750.png)
 
 这是我们就可以正常请求接口。并返回如下结果：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191203185017.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191203185017.png)
 
 这里的pivot代码的是中间表，包含了两个外键。这是TP5自动带上的，在多对多的关系表里，它是建立模型之间的关联关系而产生的数据。
 
@@ -571,13 +571,13 @@ class ProductMissException extends BaseException
 
 这时我们可以看接口返回的结果隐藏了`summary`这个字段。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191206134814.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191206134814.png)
 
 如果上面以数组的形式来处理可能会比较复杂，因为没有一些内置的方法。而数据集对象给我们提供了很多方法来处理业务。一组product模型对象可以理解为就是数据集对象，最好就是用对象自带的方法来处理，而不是用公共的方法或者使用类外面的方法来处理，以此提高类的内聚性。
 
 **我们可以修改数据库配置文件让其默认返回的是collection数据集对象。**
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191206135403.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191206135403.png)
 
 注意数据集的判断为空的方法是`isEmpty`，因此代码我们可以修改如下
 

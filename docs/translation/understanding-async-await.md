@@ -4,7 +4,7 @@
 
 * 原文：[Understanding Async Await](https://css-tricks.com/understanding-async-await/)
 * 作者：[Sarah Drasner](https://css-tricks.com/author/sdrasner/)
-* 翻译：[城南花已开](https://recoverymonster.github.io/)
+* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 

@@ -4,7 +4,7 @@
 
 * 原文：[Arrays, symbols, and realms](https://jakearchibald.com/2017/arrays-symbols-realms/)
 * 作者：[Jake](https://twitter.com/jaffathecake)
-* 翻译：[城南花已开](https://recoverymonster.github.io/)
+* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 

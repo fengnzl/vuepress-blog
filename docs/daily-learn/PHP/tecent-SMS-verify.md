@@ -6,7 +6,7 @@
 
 产品需要实现用户只能使用手机验证码登陆，并且其服务器为腾讯云，因此我们使用的是腾讯短信接口，首先我们在产品中搜索短信，然后进入以下界面：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526013102.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526013102.png)
 
 点击接入指南，我们进入到官方文档，https://cloud.tencent.com/document/product/382/9557  ，然后按照文档所说，获取**SDKAppID 和 AppKey**。
 
@@ -14,23 +14,23 @@
 
 进入短信控制台，进行应用添加，添加完应用后，点击应用即可看到SDKAppID 和 AppKey。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526013512.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526013512.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526013840.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526013840.png)
 
 ## 申请签名和模版
 
 一个完整的短信由短信**签名**和**短信正文内容**两部分组成，两者均需申请和审核，但只有申请完签名才能申请短信正文。
 
-!![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/a07ee2001ef100dc64159b0b3f202df.png)
+!![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/a07ee2001ef100dc64159b0b3f202df.png)
 
 若产品只针对国内用户则按以下顺序进行申请即可。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526014239.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526014239.png)
 
 申请完签名后即可申请短信正文，
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190526014541.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190526014541.png)
 
 其中{1}，{2}这些可以在项目文件中进行配置，但数字必须按顺序来。
 

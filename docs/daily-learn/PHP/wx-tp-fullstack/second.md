@@ -104,7 +104,7 @@ public function getBanner()
 
 请求之后会提示验证出错
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191127234709.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191127234709.png)
 
 **验证器验证：**他对独立验证进行了很好的封装，也是推荐的一种方式。
 
@@ -135,9 +135,9 @@ $result = $validate->batch()->check($data);
 
 通过以下结构图来理清思路，一般中小型项目都满足该架构，如果要使用分布式解决高并发问题，先按以下架构部署后再升级。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191128001920.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191128001920.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191128002009.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191128002009.png)
 
 # 构建接口参数校验层
 
@@ -226,7 +226,7 @@ class IDMustBePositiveInt extends BaseValidate
 (new IDMustBePositiveInt())->goCheck();
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128135157.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128135157.png)
 
 **注：**此时还不能进行批量验证，当使用全局异常处理时再完善此部分内容。
 
@@ -300,7 +300,7 @@ URL语义要明确，最好可以“望文知意”
 
 最好是有一份比较标准的文档（中大型企业要有）
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128142045.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128142045.png)
 
 **学习RESTFul API**
 

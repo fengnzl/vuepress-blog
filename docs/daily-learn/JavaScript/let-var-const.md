@@ -117,7 +117,7 @@ let a = 234 // SyntaxError: Identifier 'a' has already been declared
 
 这意味这你不能再通过 `window.变量名` 的方式进行变量的访问，他们只存在于一个不可见的块作用域中，这个块理论上是Web页面中运行的所有JS代码的外层块。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190809141530.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190809141530.png)
 
 ## let不能重定义变量
 

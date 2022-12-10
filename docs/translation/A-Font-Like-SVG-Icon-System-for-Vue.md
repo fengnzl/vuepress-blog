@@ -4,7 +4,7 @@
 
 * 原文：[A Font-Like SVG Icon System for Vue](https://css-tricks.com/a-font-like-svg-icon-system-for-vue/)
 * 作者：[Kevin Lee Drum](https://twitter.com/kevinleedrum)
-* 翻译：[城南花已开](https://recoverymonster.github.io/)
+* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 

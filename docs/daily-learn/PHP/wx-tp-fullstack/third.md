@@ -8,7 +8,7 @@
 
 **异常处理流程：**
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128151235.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128151235.png)
 
 存在问题：逐级进行抛异常处理之类的；有些异常没有捕获。
 因此需要有一个全局异常处理来管理这些异常并作出统一的处理，必须要做两件事：1.需要记录日志；2.统一错误状态码和错误信息
@@ -51,11 +51,11 @@ class Banner extends Model
 
 然后在`postman`中请求接口，在打开应用调试模式下，报如下错误：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128151825.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128151825.png)
 
 当关闭应用调试模式时，请求出现以下页面
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128152003.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128152003.png)
 
 开发网页的时候返回`html`页面来显示错误信息没有问题，但如果是开发`api`是不行的。
 
@@ -76,7 +76,7 @@ try{
 return json($banner);
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128152547.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128152547.png)
 
 这里200表示请求拿到了想要的结果，但实际上是个异常，不应该为200，因此我们返回的是应该加上code码。
 
@@ -160,7 +160,7 @@ class BaseException extends Exception
 
 建立自定义异常处理类`ExceptionHandler`，重写`render()`方法对父类进行覆盖，代码如下：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128162536.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128162536.png)
 
 ``` php
 namespace app\lib\exception;
@@ -213,7 +213,7 @@ class ExceptionHandler extends Handle
 
 配置`exception_handle`:
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128162736.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128162736.png)
 
 做完上一步就可以说封装好了，当我们需要抛出了非自定义特定的异常时，返回的信息如下所示：
 
@@ -240,7 +240,7 @@ public static function getBannerById($id){
 
 此时抛出的是系统异常，因此接口请求得到如下信息：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128164627.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128164627.png)
 
  如果是客户端（自定义的异常）操作有误导致则按照自定义的异常返回结果：
 这个是任何条件服务器都返回null 
@@ -286,7 +286,7 @@ public function getBanner($id){
 
 TP5的日志文件所在目录`runtime/log`
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128171358.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128171358.png)
 
 因为很多信息如果都作为日志去记录，则会出现很多无意义的记录信息，不仅耗费了很大的硬盘内存资源，同时也影响了错误的排查。TP5默认会记录全部，需要手动关闭，然后有选择的来记录日志。 
 
@@ -294,13 +294,13 @@ TP5的日志文件所在目录`runtime/log`
 
 针对TP5.1，在`/config/log.php `中进行修改 （建议与TP5一样在入口文件定义LOG_PATH常量）
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128171755.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128171755.png)
 
 针对TP5，则需要在`config.php`这个文件，找到日志存放的位置，我们顺着找到，可能会出现在`REANTIME`那个目录下面。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128171946.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128171946.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128172045.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128172045.png)
 
 而我们只需要在`index.php`入口文件中重新定义`LOG_PATH`这个常量即可
 
@@ -315,7 +315,7 @@ define('LOG_PATH', __DIR__ . '/../logs/');
 
 `tp5.1`关闭日志功能，需在`/thinkphp/convention.php`中将日志的`type`改为`test`,通过`ctrl+shift+r`进行全局查找（注意如果直接在`/config/log.php`下修改`type`并不管用，若将`close`设置为`true`的话，则全局关闭日志写入，在进行日志初始化操作也无法进行写入 ）
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128173638.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128173638.png)
 
 `tp5.0`关闭日志功能，则在`/app/config.php`直接将日志下的`type`改为`test`即可。
 
@@ -339,11 +339,11 @@ private function recordErrorLog(Exception $e){
 
 注若日志里只想显示错误级别的日志，`tp5.0`直接初始化时候配置level即可，而`tp5.1`还需在`config/log.php`中将level级别改为error。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128184738.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128184738.png)
 
 在当前类中需要将异常保存到日志的地方进行调用即可
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128180352.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128180352.png)
 
 然后抛出系统异常，即可在将日志记录。
 
@@ -351,7 +351,7 @@ private function recordErrorLog(Exception $e){
 
  在验证参数是否合法时，比如这里的id，调试环境我们可以看到具体的服务器报错信息，但是在生产环境中却报出了服务器内部错误的相关信息，这让客户端无法知道准确的错误点在哪里。如何解决呢？在验证的`goCheck`方法里集成了整个验证层的验证工作，所以我们需要定义一个参数错误的异常类。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128182632.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128182632.png)
 
 这是因为在基类验证器中我们直接抛出了系统错误而不是自定义的异常
 
@@ -418,7 +418,7 @@ public function goCheck(){
 }
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128184616.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128184616.png)
 
  如果使用外部通过给对象赋值成员变量也未尝不可，但是我们建议有更好的一种写法，我们在初始化对象的成员变量赋值最好的方式是通过构造函数来初始化赋值操作，更加符合面向对象的基本特性。则实例化的时候即可传入参数，相应的构造函数（父类中创建即可）会进行处理。 
 
@@ -464,9 +464,9 @@ $result = $this->batch()->check($params);
 
 然后添加验证规则，请求即可
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128190538.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128190538.png)
 
 当进行错误的请求之后
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191128193851.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128193851.png)
 

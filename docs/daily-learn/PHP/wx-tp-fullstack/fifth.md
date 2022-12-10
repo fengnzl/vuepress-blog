@@ -10,7 +10,7 @@
 
 大致流程如图：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191205230623.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191205230623.png)
 
 首先通过`getToken`接口获取令牌，然后再调用接口是携带获取的令牌，**注意令牌可能在技术上是合法的，但可能身份权限不够，也无法正常调用接口。**
 
@@ -22,11 +22,11 @@
 
 由于本项目是微信小程序后台接口，因此我们不需要在单独设置用户账号密码，可以延用微信的身份验证体系，否则需要给用户生成一个唯一的用户表示。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191205231447.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191205231447.png)
 
 其中`session_key`可以解密微信小程序返回的加密信息，用来获取用户的`userid`,其与`openid`的区别是， 同一个用户在不同的小程序，公众号和服务号拥有同一个`userid`，而`openid`却是不同的。`openid`除了用作身份标识，还可以用于支付等功能。由于`openid`没有失效期因此不能传到客户端中，必须存储在服务器中，因此需要我们生成一个时效性令牌，用来验证身份。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191205232455.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191205232455.png)
 
 ### 实现身份权限体系
 
@@ -79,7 +79,7 @@ protected function isNotEmpty($value , $rule='' ,$data='' ,$field='' ){
 
 根据获取`token`的流程图可知，我们将小程序向微信服务器请求获得的`code`之后调用服务器接口来获取`openid`
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191206001919.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191206001919.png)
 
 首先在extra文件夹中编写微信相关的配置文件,这里在appid, secret和js_code三个地方用了占位符。当使用login_url时动态填入数据。
 
@@ -228,11 +228,11 @@ class Token
 
 这里先暂时模拟微信获取登陆凭证`code`
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191206151653.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191206151653.png)
 
 通过获取的`code`调用接口（code只能使用一次），注意这里使用的是`post raw`原生方式，且参数使用使用`JSON`格式传递，这里我们成功获取了`openid`和`session_key`。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191206160409.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191206160409.png)
 
 **注意：`RESTFUL`接口使用的都是原生方式传参。**
 
@@ -453,11 +453,11 @@ class Token
 
 这里我们编写了小程序测试页面，然后点击申请令牌，就可以看到令牌存储到了缓存中。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191208222423.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191208222423.png)
 
 在php项目中我们可以看到缓存已经写入到了文件中
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209093535.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209093535.png)
 
 ## 商品接口初步编写
 
@@ -469,11 +469,11 @@ Route::get('api/:version/product/:id', 'api/:version.Product/getOne');
 
 我们在`product`模型中编写商品查询方法，首先商品查询分为商品的基础信息，商品详情和产品参数。编写该方法时应注意考虑模型关联。通过业务分析我们可以知道商品基础信息的图片是存在`image`表中。而商品详情有很多关于商品的图片，这些图片是存储在`product_img`表中，他们之间是一对多的关系。`product_img`表中并没有直接存储图片的地址，而是存储了`img_id`，从而间接的获取图片。同理`product`商品表和`product_property产品参数表也是一对多的关系。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209100500.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209100500.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209100524.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209100524.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209100543.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209100543.png)
 
 创建`ProductImage`模型和`ProductProperty`模型，`ProductImage`和`Image`模型是一对一的关系，所以我们需要在`ProductImage`模型中编写与`Image`模型的关联
 
@@ -529,7 +529,7 @@ public function getOne($id){
 
 上面接口返回的结果如图：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209185018.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209185018.png)
 
 这里并没有返回图片地址，我们只是调用了和`ProductImage`模型的关联，并没有具体关联到`Image`模型，因此需要在`Product`模型中进行嵌套查询。
 
@@ -540,7 +540,7 @@ public function getOne($id){
  }
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209185410.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209185410.png)
 
 这里可以看到服务器没有返回正确的顺序，需要在服务端进行排序之后再返回给服务端，这里的排序是对`Product`模型下的关联属性来排序，因此需要闭包函数构建查询器，修改结果如图：
 
@@ -567,9 +567,9 @@ Route::get('api/:version/product/:id', 'api/:version.Product/getOne');
 
 通过前几节知识，我们知道以上路由都可以正常访问，但是当我们把第一条路由放置到最后，在重新访问，会出现以下报错：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209174631.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209174631.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191209173038.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191209173038.png)
 
 因为这里匹配到了第二条路由，所以会报`ID`必须是正整数的错误。`TP5`的路由是按顺序匹配的，所以匹配到这里的第二条路由之后就不会再继续匹配后面的路由了。
 
@@ -597,11 +597,11 @@ Route::group('api/:version/product',function (){
 
 **注意：**这里修改用户的相关信息，我们并不是通过前端直接传递`uid`进行修改，而是通过传递`Token`，后端再通过`Token`信息再缓存中获取用户的`uid`，避免用户传递错误的`uid`而修改了他人的信息。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191210100315.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191210100315.png)
 
 地址数据表中的字段如下图所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191210103217.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191210103217.png)
 
 首先新建`Address`控制器，然后定义地址更新方法，
 

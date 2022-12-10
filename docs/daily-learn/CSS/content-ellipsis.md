@@ -18,7 +18,7 @@
  }
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190724103250.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190724103250.png)
 
 实现多行文本超出部分以省略号表示，可以用以下方法
 
@@ -39,7 +39,7 @@
 </style>
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190724112635.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190724112635.png)
 
 ## jQuery限制字符字数的方法
 
@@ -54,4 +54,4 @@
  });
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190724112718.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190724112718.png)

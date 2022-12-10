@@ -301,7 +301,7 @@ exports.foo = function() {
 
 在 `aa.js` 文件中执行会报如下错误
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190901233838.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190901233838.png)
 
 所以要导出函数必须使用 `module.exports`
 

@@ -7,7 +7,7 @@
 
 微信支付代码编写本身并不难，主要是将工作流程理清，下图是一个简单的流程图，相关支付的具体详情见[官方文档](https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_1)。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191217202254.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191217202254.png)
 
 ## 下单相关参数检测
 
@@ -163,7 +163,7 @@ class OrderStatusEnum
 
 将下载 SDK 中`lib`文件下的类库复制到项目文件夹下的`/extend/WxPay`目录中。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191218172223.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191218172223.png)
 
 因为微信的 SDK 文件不属于 TP5 框架的文件，没有命名空间，因此不能像平常文件通过`use`来引入该文件，因此这里使用手动加载相关文件。我们可以使用 TP5 框架的 Loader 类中的`import`方法进行引入外部文件。
 
@@ -325,7 +325,7 @@ curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);//严格校验
 
 在微信小程序上调用支付方法，调试可以发现报如下错误：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191218224905.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191218224905.png)
 
 这是因为我们之前没有编写获取回调地址的方法，于是将此值设置为了空，我们这里随便填写一个地址继续测试：
 
@@ -333,7 +333,7 @@ curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,false);//严格校验
 $wxOrderData->SetNotify_url("https://www.baidu.com");
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191218230854.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191218230854.png)
 
 返回结果如上所示，就说明我们的预下单已经成功。其中`prepay_id`可以用来向用户推送相关模板消息。
 
@@ -354,7 +354,7 @@ private function recordPrepayID($wxOrder){
 
 然后我们需要返回一系列参数至客户端，由客户端去吊起微信支付，相关详细信息见[文档](https://developers.weixin.qq.com/miniprogram/dev/api/open-api/payment/wx.requestPayment.html)。其中需要我们返回一个签名字段。其抽象如下，因为相关订单参数在传递的过程种可能会被篡改，因此需要使用签名。但没有完全保证参数不被篡改地方法。签名是通过参数加 APPkey 通过一定的算法生成，当客户端将算法和参数一起传递到微信服务端时，微信服务端同样通过算法生成签名，与客户端的签名进行对比，进行判断。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191218232914.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191218232914.png)
 
 这里我们编写获取吊起微信支付参数的方法并返回至客户端。
 
@@ -425,7 +425,7 @@ Route::post('api/:version/pay/notify','api/:version.Pay/receiveNotify');
 
 这里需要我们覆盖入口方法，支付回到成功返回的参数见[官方文档](https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_7)。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191219001947.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191219001947.png)
 
 然后我们新建一个类并重写该方法：
 
@@ -540,7 +540,7 @@ require_once(EXTEND_PATH.'WxPay'.DS.'WxPay.Config.php');
 
 这里没有直接调用`WxNotify`中的重写的`NotifyProcess`方法，是因为其需要接收三个参数，而这三个参数是在父类`Handle`处理方法中获取并自行调用`NotifyProcess`方法，并且`Handle`方法会将微信返回的`xml`格式信息转换为数组格式进行处理。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191221160412.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191221160412.png)
 
 此时我们还要设置微信支付的回调地址，使微信服务器能正确调用我们的回调方法：
 
@@ -568,7 +568,7 @@ public function makeWxPreOrder{
 
 这里我们首先使用 Postman 对回调接口进行测试，会出现以下报错。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191221165303.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191221165303.png)
 
 这里是我们直接在`service/WxNotify.php`中引入了`WxPay.Notify.php`文件，实际上必须通过`WxPay.Api.php`文件进行间接引用，因此需要进行如下修改
 
@@ -585,7 +585,7 @@ require_once "WxPay.Notify.php";
 
 再次请求，如果报如下错误就说明已经可以正常进行微信回到了，因此我们可以通过微信进行完整的下单测试了。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191221165909.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191221165909.png)
 
 如果只针对回调进行 Debug 调试的话，需要我们进行转发接口的编写，因为微信服务器会自动忽略路由传递的参数。将微信预下单返回的参数获取，然后再通过转发接口访问即可进行回调调试。
 
@@ -649,7 +649,7 @@ function curl_post_raw($url, $rawData)
 
 页面如下所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191221225150.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191221225150.png)
 
 然后在`v1/Order.php`控制器中编写获取用户的历史订单信息方法：
 
@@ -735,7 +735,7 @@ public function getDetail($id){
 Route::get('api/:version/order/:id','api/:version.Order/getDetail',[],['id'=>'\d+'])
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191221231421.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191221231421.png)
 
 根据返回的结果我们可以看到 snap_items 和 snap_address 是 JSON 字符串，这个是不符合接口要求的，因为正常接口应该返回 JSON  对象，所以我们需要在模型中编写相关读取器的方法，使其返回正确的格式。
 
@@ -760,4 +760,4 @@ public function getSnapAddressAttr($value)
 
 这时返回的结果如下图所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191221231829.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191221231829.png)

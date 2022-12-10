@@ -6,7 +6,7 @@
 
 遇到需要设置中文两端对齐的需求，如下所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190725204325.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190725204325.png)
 
 当设置 `text-align:justify` 确并没有实现实现两端对齐的效果，查阅过程中看到[鑫大](https://www.zhangxinxu.com/wordpress/2015/08/chinese-english-same-padding-text-justify/)的说明如下：
 
@@ -72,4 +72,4 @@ text-align: justify;
 
 效果如图：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190726112837.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190726112837.png)

@@ -94,7 +94,7 @@ array (size=4)
 
 当post数组中的非数据表字段数据时，create()方法只将数据表中的字段进行添加，但返回的结果中包含非数据表中的字段值（这里使用了）：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/modelcreate.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/modelcreate.png)
 
 ### save()方法
 

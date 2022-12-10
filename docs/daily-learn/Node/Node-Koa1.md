@@ -55,7 +55,7 @@ app.use(test);
 
 这是开启koa，并访问本地端口`http://localhost:3000/`，则会打印出test
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190804234004.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190804234004.png)
 
 ``` js
 app.use((ctx, next) => {
@@ -72,7 +72,7 @@ app.use((ctx, next) => {
 
 此时重新请求，开启koa，输出结果如下
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190804234428.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190804234428.png)
 
 如果不使用next调用下一个中间件，则不会打印8yue。
 
@@ -98,7 +98,7 @@ app.use((ctx, next) => {
 
 则输出结果为1,3,4,2.这里就是一个洋葱模型，使用`next`将一个函数分隔成上下两部分，简单的图示如下
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190804235505.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190804235505.png)
 
 关于洋葱模型的具体图片，可查看此[文档](https://segmentfault.com/a/1190000013981513)
 
@@ -145,7 +145,7 @@ js是单线程的，有宏任务和微任务的区别。单线程是不可能让
    });
    ```
 
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190805014742.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190805014742.png)
 
 这是由于使用`await`会阻塞线程，等待异步调用的结果返回后，才能执行后面的代码。
 
@@ -160,7 +160,7 @@ async function fun() {
 console.log(fun());
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190805015443.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190805015443.png)
 
 **中间件函数前面为什么要加上`async`**
 
@@ -172,7 +172,7 @@ console.log(fun());
 
 如果不加上`async`和`await`，koa的中间件就不一定会按照洋葱模型的顺序执行，如下图所示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190805123346.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190805123346.png)
 
 虽然node是单线程，但是其可以快速切换执行代码片段，看起来像并行执行，因此node是可以处理并发的。
 
@@ -235,7 +235,7 @@ app.use(async (ctx, next) => {
 app.listen(3000) // 3000是未被暂用的端口号
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190805202655.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190805202655.png)
 
 注意这里必须要将返回的值赋值到`ctx.body`中，否则客户端无法接收，如果要返回`json`格式的数据，则将数据以JavaScript对象的形式赋值给`ctx.body`，koa内部会自动将其转换为json数据格式
 
@@ -320,7 +320,7 @@ app.use(classic.routes())
 app.listen(3000) // 3000是未被暂用的端口号
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190806211849.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190806211849.png)
 
 ### nodemon自动重启Server                      
 
@@ -339,17 +339,17 @@ npm i nodemon -g
 
 此时我们只要修改文件后进行保存，`nodemon`就会自动重启node服务
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190806213355.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190806213355.png)
 
 ### vscode+nodemon调试配置
 
 首先我们需要生成配置文件，如下图所示我们即可在项目文件中看到生成的配置文件`.vscode/launch.json`
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190806213611.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190806213611.png)
 
 在配置文件中默认的启动文件是`app.js`文件，我们可以进行添加，使其拥有多种启动方式，其中点击添加配置选择`nodemon`可以自动帮我们配置`nodemon`的调试配置，同时，由于默认进入的是入口文件，我们还需配置在当前文件即可断点调试的配置
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190806214442.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190806214442.png)
 
 ```js
 {
@@ -396,7 +396,7 @@ npm i require-directory
 
 然后在入口文件引入即可，然后通过调用，填入相关参数（module(固定)，模块路径）即可将路径下所有的模块添加到modules变量里
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20190806220426.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20190806220426.png)
 
 其还可以接收第三个参数，这是一个函数，相当于一个回调函数，否则就需要我们进行循环判断导出的是否为路由模块。
 
@@ -720,7 +720,7 @@ router.get("/v1/classic/latest", (ctx, next) => {
 
 此时我们在浏览器请求接口时，就会获得返回的错误信息
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190809005019.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190809005019.png)
 
 这里用的是aop编程的思想即**这种在运行时，动态地将代码切入到类的指定方法、指定位置上的编程思想就是面向切面的编程。**
 
@@ -784,7 +784,7 @@ module.exports = catchError;
 
 在postman模拟请求可以接收到如下信息
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190811112614.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190811112614.png)
 
 但是这样的写法非常麻烦，因此我们使用面向对象的思想来进行处理错误
 
@@ -962,7 +962,7 @@ module.exports = catchError;
 
 则在相应的接口发生未知错误时，就会出现提示：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190811171440.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190811171440.png)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190811171500.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190811171500.png)
 

@@ -18,10 +18,10 @@ module.exports = {
   themeConfig: {
     nav,
     sidebar,
-    repo: "recoveryMonster",
+    repo: "fengnzl",
     editLinks: true,
     docsDir: "docs",
-    docsRepo: "recoveryMonster/vuepress-blog",
+    docsRepo: "fengnzl/vuepress-blog",
     editLinkText: "在 GitHub 上编辑此页",
     logo: "/assets/logo.png",
     lastUpdated: "上次更新",

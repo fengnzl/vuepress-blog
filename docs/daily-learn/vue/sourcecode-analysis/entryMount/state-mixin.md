@@ -1,6 +1,6 @@
 # stateMixin 流程
 
-在  `instance/index.js` 文件中执行完 `initMixin` 流程之后，就开始执行 `stateMixin` 流程。后续不在声明上述过程，具体顺序可看 [initMixin](https://recoverymonster.github.io/daily-learn/vue/sourcecode-analysis/entryMount/init-mixin.html#vue-%E5%AE%9E%E4%BE%8B%E5%85%A5%E5%8F%A3)  里面的描述。
+在  `instance/index.js` 文件中执行完 `initMixin` 流程之后，就开始执行 `stateMixin` 流程。后续不在声明上述过程，具体顺序可看 [initMixin](https://fengnzl.github.io/daily-learn/vue/sourcecode-analysis/entryMount/init-mixin.html#vue-%E5%AE%9E%E4%BE%8B%E5%85%A5%E5%8F%A3)  里面的描述。
 
 `stateMixin` 里面主要在 `Vue.prototype` 中定义了一些实例上的属性和方法，其文件所在地址为 `src/core/instance/state.js` ，精简过后的代码如下所示：
 

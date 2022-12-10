@@ -74,7 +74,7 @@ $ git init
 Initialized empty Git repository in C:/Users/lf/Desktop/learngit/.git/
 ```
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707005503.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707005503.png)
 
 这个目录默认是隐藏的，可以通过 `ls -ah` 来查看
 
@@ -112,7 +112,7 @@ $ git add readme.txt
 
 在windows下操作，可能会出现以下警告信息：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707012043.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707012043.png)
 
 **原因：**这是因为在 `windows` 下使用 `CRLF` 标识一行的结束，而在 `Linux/UNIX` 系统中只使用 `LF` 标识一行的结束。这里的CRLF指的是 `Carriage-Return` (回车) ` Line-Feed` （换行）。
 
@@ -134,7 +134,7 @@ $ git add readme.txt
    $  git config --get core.autocrlf
    ```
 
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707013533.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707013533.png)
 
 2. 设置core.autocrlf属性
 
@@ -146,13 +146,13 @@ $ git add readme.txt
    $ git config core.autocrlf false
    ```
 
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707013711.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707013711.png)
 
 此时在 `git add` 则不会出现警告信息
 
 如果直接执行 `git add` 而不指定添加的文件，会出现以下信息：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/img/20190707143808.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/img/20190707143808.png)
 
 上面的信息说没有指定添加的文件，你或许想要使用的命令是 `git add .` 。
 

@@ -6,7 +6,7 @@
 
 * 原文：[JSON Parser with JavaScript](https://lihautan.com/json-parser-with-javascript)
 * 作者：[cassidoo](https://twitter.com/cassidoo)
-* 翻译：[城南花已开](https://recoverymonster.github.io/)
+* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 
@@ -44,7 +44,7 @@ const fakeParseJSON = JSON.parse
 
 - 左边的语法图（轨道图）
 
-  ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191214180353.png)
+  ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191214180353.png)
 
   图片来源：[https://www.json.org/img/object.png](https://www.json.org/img/object.png)
 
@@ -74,7 +74,7 @@ const fakeParseJSON = JSON.parse
 
 在这篇文章，我们只专注于轨道图。因为它是可视化的，利于我们理解。
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191214180353.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191214180353.png)
 
 图片来源：[https://www.json.org/img/object.png](https://www.json.org/img/object.png)
 
@@ -238,7 +238,7 @@ function fakeParseJSON(str) {
 
 到目前为止，我们已经实现了”object”语法，现在是时候尝试"array"语法了：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191214191821.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191214191821.png)
 
 图片来源： [https://www.json.org/img/array.png](https://www.json.org/img/array.png)
 
@@ -270,7 +270,7 @@ function fakeParseJSON(str) {
 
 现在，关注于更加有趣的语法，“value":
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191214201126.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191214201126.png)
 
 图片来源：[https://www.json.org/img/value.png](https://www.json.org/img/value.png)
 

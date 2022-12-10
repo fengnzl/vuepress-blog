@@ -6,7 +6,7 @@
 
 \* 作者：[David Katz](https://medium.com/@dtkatz)
 
-\* 翻译：[城南花已开](https://recoverymonster.github.io/)
+\* 翻译：[城南花已开](https://fengnzl.github.io/)
 
 :::
 

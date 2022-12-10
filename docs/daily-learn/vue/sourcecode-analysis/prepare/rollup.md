@@ -52,8 +52,8 @@ export default {
     {
       file: resolve('dist/index.js'),
       format: 'iife', // 生成包的格式
-      banner: '// welcome to recoveryMonster.github.io', // 文件头部添加的内容
-      footer: '// powered by recoveryMonster' // 文件末尾添加的内容
+      banner: '// welcome to fengnzl.github.io', // 文件头部添加的内容
+      footer: '// powered by fengnzl' // 文件末尾添加的内容
     }
   ],
   plugins: [
@@ -88,7 +88,7 @@ console.log(arr);
 然后执行 `npm run build` 即可在 dist 文件夹中看到编译的文件，内容如下：
 
 ```javascript
-// welcome to recoveryMonster.github.io
+// welcome to fengnzl.github.io
 (function () {
 	'use strict';
 
@@ -100,7 +100,7 @@ console.log(arr);
 	console.log(arr);
 
 }());
-// powered by recoveryMonster
+// powered by fengnzl
 ```
 
 ## JavaScript API 打包

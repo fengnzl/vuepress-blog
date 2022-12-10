@@ -10,7 +10,7 @@ sidebarDepth: 2
 
 vue 模版在后台是通过渲染函数（render function）来编译的。首先我们来了解一些基础知识。
 
-![image-20200315003510055](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200315003512.png)
+![image-20200315003510055](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200315003512.png)
 
 在 Vue 中，我们首次进行 Vue APP 的渲染时，我们首先通过渲染函数来编译。如果你使用完整的构建，并且直接在DOM模板中使用，那么这个编译过程是动态的。就像直接在DOM中编写模板一样，或者在 vue 实例中使用模板字符串。
 
@@ -20,7 +20,7 @@ vue 模版在后台是通过渲染函数（render function）来编译的。首�
 
 但是，如果扔掉编译器，则在运行时的版本仅为 20 KB。 这就相当于第三次进行大小的优化，因此使用预编译是非常有用的。渲染函数的本质是返回一个虚拟 DOM（Virtual DOM），然后 Vue 根据虚拟 DOM 来生成实际 DOM。后面我们将会详细介绍虚拟 DOM，在这之前，如果要进行后续更新，根据我们之前编写的 `autorun` 函数可以知道会发生初始渲染。
 
-![image-20200315010118890](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200315010120.png)
+![image-20200315010118890](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200315010120.png)
 
 这就是 `autorun` 函数所实现的功能。在这个过程中我们通过渲染函数来生成虚拟 DOM。因为渲染函数依赖于 vue 实例中的所有数据属性。这些数据属性是响应式的，所有的数据属性都被用作这个组件渲染函数的依赖。
 
@@ -83,7 +83,7 @@ Template -> [ Compiler ] -> Render Function
 
 这里将渲染函数和响应式部分综合来阐述。每一个组件都有一个渲染函数，每当执行这个渲染函数时，就相当于执行 `autorun` 中的 `wrappedUpdate` 函数。因此当进行渲染时，我们通过调用数据属性上的 `getter` 来收集相关依赖。
 
-![image-20200315120856188](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20200315121153.png)
+![image-20200315120856188](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20200315121153.png)
 
 每个组件都有一个 `watcher` 用来收集依赖，清理依赖，并将所有事情 `notify`。然后组件的渲染函数返回一个虚拟 DOM。从上面的图上的循环可知，我们在 `autorun` 函数中进行渲染，从而每当渲染函数所依赖的属性发生改变时，渲染函数将会连续被调用。
 

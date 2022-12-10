@@ -80,7 +80,7 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 
 - 如果 `key` 已经存在该对象上，说明已经被侦测，那么直接进行赋值修改数据即可。
 
-- 然后根据[文档](https://cn.vuejs.org/v2/api/#Vue-set)，“对象不能是 Vue 实例，或者 Vue 实例的根数据对象”的情况，我们需要通过 `target._isVue` 来判断不是 `Vue` 实例，通过 `target.ob.vmCount` 来判断不是根数据对象（具体可看之前响应式对象中的 [Observe 相关分析](https://recoverymonster.github.io/daily-learn/vue/sourcecode-analysis/reactive/prepare.html#observe-%E5%92%8C-observe)）。
+- 然后根据[文档](https://cn.vuejs.org/v2/api/#Vue-set)，“对象不能是 Vue 实例，或者 Vue 实例的根数据对象”的情况，我们需要通过 `target._isVue` 来判断不是 `Vue` 实例，通过 `target.ob.vmCount` 来判断不是根数据对象（具体可看之前响应式对象中的 [Observe 相关分析](https://fengnzl.github.io/daily-learn/vue/sourcecode-analysis/reactive/prepare.html#observe-%E5%92%8C-observe)）。
 
 - 通过判断 `target` 对象如果不存在 `__ob__` 属性，那么说明其不是响应式的，因此只需直接设置对象上该属性的值即可。
 
@@ -325,7 +325,7 @@ Vue.prototype.$watch = function (
 
 - 之后将 `options.user` 设置为 true，代表是用户自定义 watcher，从而与渲染 watcher 等进行区分。
 
-- 随后创建 `Watcher` 实例，实例化过程在[依赖收集](https://recoverymonster.github.io/daily-learn/vue/sourcecode-analysis/reactive/getters.html#watcher)中有详细介绍，这里指简单介绍调用构造函数时的属性设置。
+- 随后创建 `Watcher` 实例，实例化过程在[依赖收集](https://fengnzl.github.io/daily-learn/vue/sourcecode-analysis/reactive/getters.html#watcher)中有详细介绍，这里指简单介绍调用构造函数时的属性设置。
 
   ```js
   // 精简代码

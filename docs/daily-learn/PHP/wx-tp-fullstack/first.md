@@ -13,7 +13,7 @@ Web框架：ThinkPHP5.024
 
 ## TP5层次结构
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127191255.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127191255.png)
 
 TP5自带的Web Server：
 
@@ -69,25 +69,25 @@ public目录下输入`php -v localhost:8080 router.php`即可
 
 2.首先点击phpstorm右上角的小三角图标
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127191938.jpg)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127191938.jpg)
 
 点击Edit Configurations,出现下图
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127192015.jpg)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127192015.jpg)
 
 点击左上角的+号，之后点击PHP Web Page
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127192109.jpg)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127192109.jpg)
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127192233.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127192233.png)
 
 点击Server旁边的..，进入配置项
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127192319.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127192319.png)
 
 在此界面设置服务器的名称和主机地址，设置完成后点击apply和ok,之后进入如下界面：
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127192343.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127192343.png)
 
 在这里我们可以设置显示的名称和开始的url地址，如之前设置的主机为localhost,此处则要设置项目所在地址 ，如果项目文件为`htdocs/tp`，则url需要设置为`tp/public/index.php`。
 
@@ -101,7 +101,7 @@ php think build --module sample
 
 也可以设置自动创建命名空间
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127202006.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127202006.png)
 
 **TP5的URL路径格式**
 PATH_INFO模式
@@ -124,7 +124,7 @@ URl不区分大小写（可配置，应用目录下的config.php）
 
 我们可以在`config.php`文件中进行设置
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127212156.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127212156.png)
 
 **路由模式**： 动态配置路由（其他访问模式会失效，在 `route.php`配置 
 
@@ -139,11 +139,11 @@ public function hello()
 
 我们可以通过正常路由模式进行访问
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127202729.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127202729.png)
 
 当在应用目录下的`route.php`文件中进行以下配置，则无法通过正常路由模式进行访问、
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127202840.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127202840.png)
 
 **动态注册路由**
 
@@ -153,7 +153,7 @@ Route::rule('路由表达式','路由地址','请求类型','路由参数（数�
 
 请求类型: PUT , GET, POST, DELETE以及*
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127203248.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127203248.png)
 
 ### 请求参数的获取
 
@@ -175,10 +175,10 @@ TP5中获取请求的参数有以下几种方法
        }
    ```
 
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127204048.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127204048.png)
 
 2. 当继承了基类控制器
-   ![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/Gridea/20191127224605.png)
+   ![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191127224605.png)
 
    继承了系统的基类控制器的话，系统已经自动完成了请求对象的构造方法注入了，可以直接使用`$this->request`调用当前的请求对象。
 
@@ -213,8 +213,8 @@ TP5中获取请求的参数有以下几种方法
 
 **隐藏入口文件：** 在应用入口文件同级目录`.htaccess`文件 进行如下修改即可
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127211138.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127211138.png)
 
 ## 业务需求
 
-![](https://raw.githubusercontent.com/recoveryMonster/HexoImages/master/blog/20191127211403.png)
+![](https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191127211403.png)
