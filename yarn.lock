@@ -2232,14 +2232,6 @@ cli-table3@^0.5.0, cli-table3@^0.5.1:
   optionalDependencies:
     colors "^1.1.2"
 
-clipboard@^2.0.0:
-  version "2.0.8"
-  resolved "https://registry.npm.taobao.org/clipboard/download/clipboard-2.0.8.tgz"
-  dependencies:
-    good-listener "^1.2.2"
-    select "^1.1.2"
-    tiny-emitter "^2.0.0"
-
 cliui@^3.0.3:
   version "3.2.0"
   resolved "https://registry.npm.taobao.org/cliui/download/cliui-3.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcliui%2Fdownload%2Fcliui-3.2.0.tgz"
@@ -2910,10 +2902,6 @@ del@^4.1.1:
 delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/delayed-stream/download/delayed-stream-1.0.0.tgz"
-
-delegate@^3.1.2:
-  version "3.2.0"
-  resolved "https://registry.npm.taobao.org/delegate/download/delegate-3.2.0.tgz"
 
 delegates@^1.0.0:
   version "1.0.0"
@@ -3865,12 +3853,6 @@ globby@^9.2.0:
     ignore "^4.0.3"
     pify "^4.0.1"
     slash "^2.0.0"
-
-good-listener@^1.2.2:
-  version "1.2.2"
-  resolved "https://registry.npm.taobao.org/good-listener/download/good-listener-1.2.2.tgz"
-  dependencies:
-    delegate "^3.1.2"
 
 got@^6.7.1:
   version "6.7.1"
@@ -6693,10 +6675,8 @@ pretty-time@^1.1.0:
   resolved "https://registry.npm.taobao.org/pretty-time/download/pretty-time-1.1.0.tgz"
 
 prismjs@^1.13.0:
-  version "1.23.0"
-  resolved "https://registry.npm.taobao.org/prismjs/download/prismjs-1.23.0.tgz"
-  optionalDependencies:
-    clipboard "^2.0.0"
+  version "1.29.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.29.0.tgz#f113555a8fa9b57c35e637bba27509dcf802dd12"
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -7291,10 +7271,6 @@ section-matter@^1.0.0:
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.taobao.org/select-hose/download/select-hose-2.0.0.tgz"
-
-select@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.npm.taobao.org/select/download/select-1.1.2.tgz"
 
 selfsigned@^1.10.8:
   version "1.10.11"
@@ -8047,10 +8023,6 @@ timers-browserify@^2.0.4:
 timsort@^0.3.0:
   version "0.3.0"
   resolved "https://registry.npm.taobao.org/timsort/download/timsort-0.3.0.tgz"
-
-tiny-emitter@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.npm.taobao.org/tiny-emitter/download/tiny-emitter-2.1.0.tgz"
 
 tiny-relative-date@^1.3.0:
   version "1.3.0"
