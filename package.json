@@ -14,7 +14,8 @@
   },
   "scripts": {
     "dev": "vuepress dev docs --temp .temp",
-    "build": "vuepress build docs"
+    "build": "vuepress build docs",
+    "deploy": "bash build.sh"
   },
   "devDependencies": {
     "@vue/babel-preset-app": "4.5.18",

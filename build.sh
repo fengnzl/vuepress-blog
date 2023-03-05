@@ -17,6 +17,6 @@ git add -A
 git commit -m 'deploy'
 
 
-git push -f git@github.com:fengnzl/fengnzl.github.io.git master
+git push -f git@github.com:fengnzl/blog.git master:gh-pages
 
 cd -
