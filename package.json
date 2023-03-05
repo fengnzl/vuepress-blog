@@ -21,11 +21,11 @@
     "@vuepress/plugin-back-to-top": "^1.9.9",
     "@vuepress/plugin-nprogress": "^1.9.9",
     "flow-bin": "^0.129.0",
-    "vuepress": "^1.9.9",
     "watchpack": "^1.7.5"
   },
   "dependencies": {
     "markdown-it-footnote": "^3.0.3",
+    "vuepress": "1.8",
     "vuepress-plugin-comment": "^0.7.3"
   }
 }
