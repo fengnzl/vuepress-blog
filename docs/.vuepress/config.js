@@ -5,7 +5,7 @@ const plugins = require("./plugin");
 module.exports = {
   title: "城南花已开",
   description: "所爱隔山海，城南花已开",
-  base: "/",
+  base: "/blog/",
   dest: "dist",
   head: [["link", { rel: "icon", href: `/assets/logo.ico` }]],
   markdown: {

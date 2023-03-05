@@ -15,7 +15,7 @@ jobs:
         with:
           version: 7.18.2
       - name: build
-        run: rm -rf node_modules && pnpm install && pnpm build
+        run: rm -rf node_modules && pnpm install  && pnpm build COMMENT_APP_ID=${{ secrets.COMMENT_APP_ID }} COMMENT_APP_KEY=${{ secrets.COMMENT_APP_KEY }
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
