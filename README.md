@@ -12,7 +12,7 @@
 
 > A blog created by VuePress, Just for learning and recording
 
-### 🏠 [Homepage](https://fengnzl.github.io/)
+### 🏠 [Homepage](https://fengnzl.github.io/blog/)
 
 ## Install
 
