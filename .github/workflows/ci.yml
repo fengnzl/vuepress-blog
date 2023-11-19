@@ -10,23 +10,18 @@ jobs:
       # get source code
       - name: checkout
         uses: actions/checkout@v3
-      - name: pnpm 
-        uses: pnpm/action-setup@v2
-        with:
-          version: 7.18.2
       - name: Use Node.js 16.14.2
         uses: actions/setup-node@v3
         with:
           node-version: 16.14.2
-          cache: 'pnpm'
       - name: build
         env:
           COMMENT_APP_ID: ${{ secrets.COMMENT_APP_ID }}
           COMMENT_APP_KEY: ${{ secrets.COMMENT_APP_KEY }}
         run: |
           rm -rf node_modules
-          pnpm install --frozen-lockfile
-          pnpm build COMMENT_APP_ID=$COMMENT_APP_ID COMMENT_APP_KEY=$COMMENT_APP_KEY
+          npm install --frozen-lockfile
+          npm build COMMENT_APP_ID=$COMMENT_APP_ID COMMENT_APP_KEY=$COMMENT_APP_KEY
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
