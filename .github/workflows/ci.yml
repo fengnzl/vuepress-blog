@@ -21,7 +21,7 @@ jobs:
         run: |
           rm -rf node_modules
           npm install --frozen-lockfile
-          npm build COMMENT_APP_ID=$COMMENT_APP_ID COMMENT_APP_KEY=$COMMENT_APP_KEY
+          npm run build COMMENT_APP_ID=$COMMENT_APP_ID COMMENT_APP_KEY=$COMMENT_APP_KEY
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
