@@ -15,8 +15,4 @@ features:
 footer: MIT Licensed | Copyright © 2019-present 城南花已开
 ---
 
-::: tip 提示
-本博客于 2020.07.18 从原先的 Gridea 静态博客迁移完成，后续将会持续更新。:tada:
-:::
-
 

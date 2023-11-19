@@ -55,13 +55,21 @@ gcc -o hello hello.c -o indicate the output file is hello instead of a.out
 
 ```c
 #include <stdio.h>
+/*
+	上面是必要的格式
+	.h 表示头文件，因为这些文件是放在文件的头部
+	#include 告诉预处理器将指定的头文件内容插入到预处理器命令的相应位置，导入头文件的预编译指令
+	<> 表示系统自带的库
+	如果写成 “” 则表明是用户自定义的库，如果没有找到则会去系统自带的库寻找，如果还找不到则报错
+*/
 
 /*
  * comment: this is my first program
  */
-// main 函数是 C 语言执行的入口
+// main 函数是 C 语言执行的入口 有且只有一个
 int main() {
 	printf("hello world\n");
+  return 0;
 }
 ```
 
@@ -139,3 +147,6 @@ int main() {
 }
 ```
 
+常量定义使用 const 如定义 100，`const int AMOUNT = 100;`，const 表明这个变量值无法修改
+
+`a=b=6;` => `a=(b=6);`
