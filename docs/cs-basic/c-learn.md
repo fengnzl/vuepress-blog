@@ -75,6 +75,8 @@ int main() {
 }
 ```
 
+![c-basic](/cs/c-basic.png)
+
 ### Escape Characters
 
 - `\n` new line
@@ -405,6 +407,88 @@ int main() {
     tax = 26687.50 + (taxableIncome - 137300) * 0.28;
   }
   printf("%.2f\n", tax);
+  return 0;
+}
+```
+
+## 循环相关习题
+
+循环 for、while、do while 其语法与 JavaScript 类似。
+
+输出 sin 函数曲线：
+
+```c
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+  double angle;
+  int numSteps = 20;
+  double maxAngle = M_PI * 2;
+  int i = 0;
+  double sinValue;
+  int numSpaces;
+  for (i = 0; i <= numSteps; i++)
+  {
+    angle = (double)i / numSteps * maxAngle;
+    sinValue = sin(angle);
+    numSpaces = ceil(30 + sinValue * 30);
+    printf("%3d: %5.2f %*c\n", i, angle, numSpaces, '*');
+  }
+
+  return 0;
+}
+```
+
+![image-20231120161526767](./images/image-20231120161526767.png)
+
+修改上面代码使其具有以下功能：
+
+a) 获取用户输入 step 数，如果输入的数值小于 2，则再次获取用户输入数值，通过 do/while 实现该循环。
+
+b) 通过用户输入的数值来绘画 sin 函数曲线
+
+c) 不在使用 * 进行绘制，如果波形下降使用 /，如果波形上升使用 \，如果绝对值小于 0.1 则使用 *，输出的波形如下所示
+
+![image-20231120162304534](./images/image-20231120162304534.png)
+
+```c
+#include <stdio.h>
+#include <math.h>
+#include <stdbool.h>
+
+
+int main() {
+  int numSteps = 0;
+  do
+  {
+    printf("Input the number of steps: ");
+    scanf("%d", &numSteps);
+  } while (numSteps < 2);
+  double angle;
+  double maxAngle = M_PI * 2;
+  int i = 0;
+  double sinValue;
+  int numSpaces;
+  bool isRising = true;
+  char wave = '*';
+  for (i = 0; i <= numSteps; i++)
+  {
+    angle = (double)i / numSteps * maxAngle;
+    sinValue = sin(angle);
+    if (isRising) {
+      wave = '\\';
+    } else {
+      wave = '/';
+    }
+    if ((int)fabs(sinValue) == 1) {
+      wave = '*';
+      isRising = !isRising;
+    }
+    numSpaces = ceil(30 + sinValue * 30);
+    printf("%3d: %5.2f %*c\n", i, angle, numSpaces, wave);
+  }
+
   return 0;
 }
 ```
