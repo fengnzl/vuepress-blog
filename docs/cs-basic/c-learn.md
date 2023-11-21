@@ -4,7 +4,7 @@ typora-copy-images-to: ./images
 
 # C语言基础
 
-为了夯实 CS 基本功，于网上找到一份硬核[学习计划](https://www.yuque.com/ob26eq/cv94p5/xi9hwb)，首先学习的是 C 语言先导课程。
+为了夯实 CS 基本功，于网上找到一份硬核[学习计划](https://www.yuque.com/ob26eq/cv94p5/xi9hwb)，首先学习的是 [C 语言先导课程](https://www.cse.msu.edu/~cse251/index.html)。
 
 **程序**是用特殊的编程语言用来表达如何解决问题的。不是用编程与计算机交谈，而是描述要求其如何做事情的过程和方法。
 
@@ -152,6 +152,8 @@ int main() {
 常量定义使用 const 如定义 100，`const int AMOUNT = 100;`，const 表明这个变量值无法修改
 
 `a=b=6;` => `a=(b=6);`
+
+**`%x` 输出的是无符号 16 进制**
 
 ## 输入输出练习题
 
@@ -490,6 +492,336 @@ int main() {
   }
 
   return 0;
+}
+```
+
+## 斐波那契数列
+
+```c
+#include <stdio.h>
+
+int main() {
+  int fib1 = 0;
+  int fib2 = 1;
+  int i = 0;
+  int temp = 0;
+  for (i = 0; i < 12; i++)
+  {
+    printf("F(%d) = %d\n", i, fib1);
+    temp = fib1;
+    fib1 = fib2;
+    fib2 = temp + fib1;
+  }
+    return 0;
+}
+/**
+  F(0) = 0
+  F(1) = 1
+  F(2) = 1
+  F(3) = 2
+  F(4) = 3
+  F(5) = 5
+  F(6) = 8
+  F(7) = 13
+  F(8) = 21
+  F(9) = 34
+  F(10) = 55
+  F(11) = 89
+*/
+```
+
+## 函数
+
+```c
+return_type function_name(parameter_list)
+{
+   ...
+   function body
+   ...
+}
+```
+
+如果一个函数没有返回值，则返回类型为 `void`
+
+![image-20231120223052675](./images/image-20231120223052675.png) 
+
+### 随机数
+
+**`void srand(unsigned seed);`**
+
+计算机并不能产生真正的随机数，而是已经编写好的一些无规则排列的数字存储在电脑里，把这些数字划分为若干相等的N份，并为每份加上一个编号用srand()函数获取这个编号，然后rand()就按顺序获取这些数字，当srand()的参数值固定的时候，rand()获得的数也是固定的，所以一般srand的参数用time(NULL)，因为系统的时间一直在变，所以rand()获得的数，也就一直在变，相当于是随机数了。因此只需在主程序开始处调用 `srand((unsigned)time(NULL))`; 
+
+如果上述生成随机数报如下错误 call to undeclared function 'time'; ISO C99 and later do not support implicit function declarations。那么我们需要声明调用 time 的函数来源，此时我们需要这样使用才能正常产生随机数。`#include <time.h>`
+
+### [Step 6作业](https://www.cse.msu.edu/~cse251/step6.html)
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <math.h>
+
+// Function declaration
+void PrintCard(int card, int suit);
+void PrintResult(int card1, int suit1, int card2, int suit2);
+void PrintPlayerInfo(int card, int suit, char player[]);
+
+/*
+ * Name : <Peter Liu>
+ * Program to draw playing cards
+ */
+
+int main()
+{
+  int suit1 = 0;
+  int card1 = 0;
+  int suit2 = 0;
+  int card2 = 0;
+
+  /*
+   . This seeds the random number
+   . generator with the current time
+   */
+  srand(time(NULL));
+  while (suit1 == suit2 && card1 == card2)
+  {
+    /* Create a random card and suit */
+    /* This will compute a random number from 0 to 3 */
+    suit1 = rand() % 4;
+    suit2 = rand() % 4;
+
+    /* This will compute a random number from 1 to 13 */
+    card1 = rand() % 13 + 1;
+    card2 = rand() % 13 + 1;
+  }
+  
+  PrintPlayerInfo(card1, suit1, "The player 1");
+  PrintPlayerInfo(card2, suit2, "The player 2");
+  PrintResult(card1, suit1, card2, suit2);
+  printf("\n");
+}
+
+void PrintResult(int card1, int suit1, int card2, int suit2)
+{
+  if (card1 == 1)
+  {
+    card1 += 13;
+  }
+  if (card2 == 1)
+  {
+    card2 += 13;
+  }
+  if (card1 > card2)
+  {
+    printf("Player 1 wins");
+  }
+  else if (card1 < card2)
+  {
+    printf("Player 2 wins");
+  }
+  else
+  {
+    if (suit1 < suit2)
+    {
+      printf("Player 1 wins");
+    }
+    else if (suit1 > suit2)
+    {
+      printf("Player 2 wins");
+    }
+    else
+    {
+      printf("There is a tie");
+    }
+  }
+}
+
+void PrintPlayerInfo(int card, int suit, char player[])
+{
+  printf("%s:", player);
+  PrintCard(card, suit);
+  printf("\n");
+}
+
+void PrintCard(int card, int suit)
+{
+  switch (card)
+  {
+  case 1:
+    printf("Ace");
+    break;
+
+  case 11:
+    printf("Jack");
+    break;
+
+  case 12:
+    printf("Queen");
+    break;
+
+  case 13:
+    printf("King");
+    break;
+
+  default:
+    printf("%d", card);
+    break;
+  }
+
+  printf(" of ");
+
+  switch (suit)
+  {
+  case 0:
+    printf("Hearts");
+    break;
+
+  case 1:
+    printf("Diamonds");
+    break;
+
+  case 2:
+    printf("Spades");
+    break;
+
+  case 3:
+    printf("Clubs");
+    break;
+  }
+}
+```
+
+## 指针和引用参数
+
+**指针**是用来存储内存地址的变量
+
+![image-20231121212850997](./images/image-20231121212850997.png)
+
+内存就是一长串一个接一个的数字。每个数字是8位(BYTE)。内存地址通常为 32 位或 64 位。我们通常用二进制或者 16 进制来表示。在 C 语言中 0x 开头表示 16 进制。
+
+![image-20231121214109332](./images/image-20231121214109332.png)
+
+![image-20231121214334800](./images/image-20231121214334800.png)
+
+![image-20231121221421898](./images/image-20231121221421898.png)
+
+### 指针
+
+指针是包含地址的变量，如 `type *var_name;` 方式进行声明，**type** 是指针的基类型，它必须是一个有效的 C 数据类型
+
+```c
+#include <stdio.h>
+
+int main()
+{
+  int var = 20; /* 实际变量的声明 */
+  int *ip;      /* 指针变量的声明 */
+
+  ip = &var; /* 在指针变量中存储 var 的地址 */
+
+  printf("var 变量的地址: %p\n", &var);
+
+  /* 在指针变量中存储的地址 */
+  printf("ip 变量存储的地址: %p\n", ip);
+
+  /* 使用指针访问值 */
+  printf("*ip 变量的值: %d\n", *ip);
+
+  int *ptr = NULL; /* 定义一个空指针 0x0 */
+  printf("ptr 的地址是 %p\n", ptr);
+  if (!ptr)
+  {
+    printf("ptr 是一个空指针");
+  }
+  return 0;
+}
+/*
+  var 变量的地址: 0x7ff7bdd232d8
+  ip 变量存储的地址: 0x7ff7bdd232d8
+  *ip 变量的值: 20
+  ptr 的地址是 0x0
+*/
+```
+
+`printf("%x\n", (int)&a);`我们可以通过上述方法输出变量的内存地址。但是你也可能会看到以下警告信息：
+
+<span style="color:red">warning: cast from pointer to integer of different size</span> 这是由于当前电脑为 64 位电脑，上述代码将 64 位内存地址转换为 32 位整数。因此在 64 位电脑，需要修改成以下代码 `printf("%lx\n", (long int)&a);`
+
+### 引用参数
+
+指针的一个作用就是：向函数传递参数的地址
+
+![image-20231121223423041](./images/image-20231121223423041.png)
+
+![image-20231121224035176](./images/image-20231121224035176.png)
+
+### Step7 作业
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+void InputQuadraticEquation(double *a, double *b, double *c);
+void QuadraticEquation(double a, double b, double c, double *pZ1r, double *pZ1i, double *pZ2r, double *pZ2i);
+
+/*
+ * Name : <Insert name here>
+ * Program to compute the zeros of a
+ * quadratic equation
+ */
+
+int main()
+{
+  /* Values for the quadratic formula */
+  double a, b, c;
+  double z1r, z1i; /* First zero */
+  double z2r, z2i; /* Second zero */
+
+  InputQuadraticEquation(&a, &b, &c);
+  QuadraticEquation(a, b, c, &z1r, &z1i, &z2r, &z2i);
+  /* Display the results */
+  printf("Zero 1: %f + %fj\n", z1r, z1i);
+  printf("Zero 2: %f + %fj\n", z2r, z2i);
+}
+/*
+ * Input a quadratic equation as a, b, and c
+ */
+void InputQuadraticEquation(double *a, double *b, double *c)
+{
+  printf("Input a: ");
+  scanf("%lf", a);
+  printf("Input b: ");
+  scanf("%lf", b);
+  printf("Input c: ");
+  scanf("%lf", c);
+}
+/*
+ * This code computes the quadratic equation
+ * for both real and complex zeros
+ */
+void QuadraticEquation(double a, double b, double c, double *pZ1r, double *pZ1i, double *pZ2r, double *pZ2i)
+{
+  /* Compute the discriminant */
+  double discriminant = b * b - 4 * a * c;
+  if (discriminant >= 0)
+  {
+    /* If the discriminant is greater than or
+       equal to zero, the zeros are real */
+    *pZ1r = (-b + sqrt(discriminant)) / (2 * a);
+    *pZ2r = (-b - sqrt(discriminant)) / (2 * a);
+    *pZ1i = 0;
+    *pZ2i = 0;
+  }
+  else
+  {
+    /* If the discriminant is less than zero
+       the zeros are complex  */
+    *pZ1r = -b / (2 * a);
+    *pZ2r = *pZ1r;
+    *pZ1i = sqrt(-discriminant) / (2 * a);
+    *pZ2i = -sqrt(-discriminant) / (2 * a);
+  }
 }
 ```
 
