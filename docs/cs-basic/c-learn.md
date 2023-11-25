@@ -94,6 +94,8 @@ int main() {
 Syntax: <variable_type> <variable_name> [=<initial_value>]
 example: `double width = 10;` `int height;`
 
+变量由字母、数字和下划线组成，且以字母或下划线开头。
+
 ```c
 #include <stdio.h>
 #include <limits.h>
@@ -415,9 +417,9 @@ int main() {
 
 ## 循环相关习题
 
-循环 for、while、do while 其语法与 JavaScript 类似。
+循环 for、while、do while 其语法与 JavaScript 类似。跳出多层最里面的循环，可以使用 goto 但是不推荐使用，这破坏了程序的基础结构。
 
-输出 sin 函数曲线：
+### 输出 sin 函数曲线：
 
 ```c
 #include <stdio.h>
@@ -495,6 +497,39 @@ int main() {
 }
 ```
 
+### 求最大公约数
+
+```c
+/**
+ * 辗转相除法
+ * 如果 b = 0, 则计算结束，a 就是最大公约数
+ * 否则计算 a 除以 b 的余数，让 a 等于 b，b 等于那个余数
+ * 回到第一步
+ * a    b    t
+ * 12   18   12
+ * 18   12   6
+ * 12   6    0
+ * 6    0
+*/
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+  int a;
+  int b;
+  int t;
+  scanf("%d %d", &a, &b);
+  while (b != 0)
+  {
+    t = a % b;
+    a = b;
+    b = t;
+  }
+  printf("gcd=%d\n", a);
+}
+```
+
 ## 斐波那契数列
 
 ```c
@@ -544,6 +579,10 @@ return_type function_name(parameter_list)
 如果一个函数没有返回值，则返回类型为 `void`
 
 ![image-20231120223052675](./images/image-20231120223052675.png) 
+
+![image-20231123223313365](./images/image-20231123223313365.png)
+
+可以通过 `man func_name` 来查看函数库中的函数如何使用
 
 ### 随机数
 
@@ -822,6 +861,189 @@ void QuadraticEquation(double a, double b, double c, double *pZ1r, double *pZ1i,
     *pZ1i = sqrt(-discriminant) / (2 * a);
     *pZ2i = -sqrt(-discriminant) / (2 * a);
   }
+}
+```
+
+## 数组
+
+![image-20231123212945594](./images/image-20231123212945594.png)
+
+数组作为函数的参数传递时是引用传递 `passed by reference`
+
+`void SortArray( double array[], int size)`。
+
+数组初始化赋值。
+
+![image-20231123220207111](./images/image-20231123220207111.png)
+
+![image-20231123223439968](./images/image-20231123223439968.png)
+
+![image-20231123223553515](./images/image-20231123223553515.png)
+
+### 数组的大小
+
+- `sizeof` 给出整个数组所占内容的大小，单位是字节， `sizeof(a)/sizeof(a[0])`
+- `sizeof(a[0])` 得到数组中国单个元素的大小，因此相除可以得到数组的个数
+- 数组作为参数时，必须传递另外一个参数来表示数组的代销，不能使用 `sizeof` 来计算数组的元素个数
+
+### 数组例子：素数
+
+可以通过是否能被已知的且 `<x` 的素数整除来判断
+
+```c
+#include <stdio.h>
+
+int isPrime(int i, int prime[], int primeCount);
+int main()
+{
+  const int CAPACITY = 100;
+  int prime[CAPACITY] = {2};
+  int i = 3;
+  int count = 1;
+  while (count < CAPACITY) {
+    if (isPrime(i, prime, count)) {
+      prime[count++] = i;
+    }
+    i++;
+  }
+  for (int j = 0; j < count; j++) {
+    printf("%d", prime[j]);
+    if ((j + 1) % 5)
+      printf("\t");
+    else
+      printf("\n");
+  }
+  return 0;
+}
+
+int isPrime(int i, int prime[], int primeCount)
+{
+  int ret = 1;
+  for (int j = 0; j < primeCount; j++) {
+    if (i % prime[j] == 0) {
+      ret = 0;
+      break;
+    }
+  }
+  return ret;
+}
+```
+
+### 搜索例子
+
+获取相应的英文名称。
+
+```c
+#include <stdio.h>
+
+int Search(int key, int a[], int len);
+int main()
+{
+  int amount[] = {1, 5, 10, 25, 50};
+  char *name[] = {"penny", "nickel", "dime", "quarter", "half-dollar"};
+  int k = 10;
+  int r = Search(k, amount, sizeof(amount) / sizeof(amount[0]));
+  if (r > -1) {
+    printf("%s\n", name[r]);
+  }
+}
+
+int Search(int key, int a[], int len)
+{
+  int ret = -1;
+  for (int i = 0; i < len; i++)
+  {
+    if (a[i] == key)
+    {
+      ret = i;
+      break;
+    }
+  }
+  return ret;
+}
+```
+
+也可以定义一下数组来实现上述功能
+
+```c
+#include <stdio.h>
+
+int main()
+{
+  struct
+  {
+    int amount;
+    char *name;
+  } coins[] = {
+      {1, "penny"},
+      {5, "nickel"},
+      {10, "dime"},
+      {25, "quarter"},
+      {50, "half-dollar"}};
+
+  int k = 10;
+  // int r = Search(k, amount, sizeof(amount) / sizeof(amount[0]));
+  for (int i = 0; i < sizeof(coins) / sizeof(coins[0]); i++)
+    if (k == coins[i].amount)
+    {
+      printf("%s\n", coins[i].name);
+      break;
+    }
+}
+```
+
+Step 8 作业
+
+```c
+#include <stdio.h>
+
+/*
+ * Program to experiment with character arrays
+ * test case: The comfort of a knowledge of a rise above the sky   but could never parallel the challenge of an   acquisition   in the   here and now.
+ */
+
+#define MaxWord 20
+
+int main()
+{
+  char c;
+  char str[MaxWord + 1];
+  int len = 0;
+  int maxLen = 0;
+  int sumLen = 0;
+  int strCount = 0;
+  puts("Enter text. Include a dot ('.') to end a sentence to exit:");
+  do
+  {
+    c = getchar();
+    if (c != ' ' && c != '.')
+    {
+      /* This is a character of a word */
+      if (len < MaxWord) {
+        str[len] = c;
+        len++;
+      }
+       
+    }
+    else
+    {
+      if (len == 0) {
+        continue;
+      }
+      /* The word is done */
+      str[len] = 0;
+      printf("%s\n", str);
+      strCount++;
+      sumLen += len;
+      if (len > maxLen)
+      {
+        maxLen = len;
+      }
+      len = 0;
+    }
+  } while (c != '.');
+  printf("The average word length is %.2lf\n", (double)sumLen / strCount);
+  printf("The longest word length is %d\n", maxLen);
 }
 ```
 
