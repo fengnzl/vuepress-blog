@@ -139,7 +139,7 @@ int main() {
 }
 ```
 
-`%p` 输出变量地址
+`%02d`，和`%2d`差不多，只不过左边补0。`%p` 输出变量地址
 
 ```c
 #include <stdio.h>
@@ -794,6 +794,73 @@ int main()
 
 ![image-20231121224035176](./images/image-20231121224035176.png)
 
+![image-20231128125221345](./images/image-20231128125221345.png)
+
+### 指针应用
+
+- 交换变量 swap 函数
+
+- 指针函数用于返回多个值，如同一个函数中找到数组中最小及最大值
+
+- 用于函数返回状态
+
+  ```c
+  #include <stdio.h>
+  
+  /*
+   * 如果除法成功，返回1，否则返回0
+  */
+  int divide(int a, int b, int *res);
+  
+  int main()
+  {
+    int a = 5;
+    int b = 2;
+    int c;
+    if (divide(a, b, &c)) {
+      printf("%d/%d=%d", a, b, c);
+    }
+    return 0;
+  }
+  
+  int divide(int a, int b, int *res)
+  {
+    int ret = 1;
+    if (b == 0) {
+      ret = 1;
+    } else {
+      *res = a / b;
+    }
+    return ret;
+  }
+  ```
+
+### 指针与 const
+
+```c
+int i;
+const int *p1 = &i;
+int const *p1 = &i;
+int *cont p1 = &i;
+```
+
+判断哪个被 const 了的标志是 const 在 * 前面还是后面，因此前两个作用是一样的，指针指向的变量不能修改，最后一个是指针不能修改。
+
+![image-20231129225704722](./images/image-20231129225704722.png)
+
+```c
+/*
+ * 传递的数组参数在函数中不会被改变
+*/
+int test(const int arr[]);
+
+int main()
+{
+  const int a[] = {1, 2, 3, 4, 5}; // 确保数组声明后无法改变
+  return 0;
+}
+```
+
 ### Step7 作业
 
 ```c
@@ -885,6 +952,21 @@ void QuadraticEquation(double a, double b, double c, double *pZ1r, double *pZ1i,
 - `sizeof` 给出整个数组所占内容的大小，单位是字节， `sizeof(a)/sizeof(a[0])`
 - `sizeof(a[0])` 得到数组中国单个元素的大小，因此相除可以得到数组的个数
 - 数组作为参数时，必须传递另外一个参数来表示数组的代销，不能使用 `sizeof` 来计算数组的元素个数
+
+```c
+#include <stdio.h>
+
+int main() {
+  int arr[] = {0,1,2,3,4,5,6,7};
+  int *p = &arr[5];
+  printf("%d\n", *p); // 5
+  printf("%d\n", p[0]); // 5
+  printf("%d\n", p[2]); // 7
+  printf("%d\n", p[3]); // 越界，随机数
+  printf("%d", p[-2]); // 3
+
+}
+```
 
 ### 数组例子：素数
 
@@ -1047,3 +1129,610 @@ int main()
 }
 ```
 
+### 多项式加法
+
+**题目内容：**
+
+一个多项式可以表达为x的各次幂与系数乘积的和，比如：
+
+2x6+3x5+12x3+6x+20
+
+现在，你的程序要读入两个多项式，然后输出这两个多项式的和，也就是把对应的幂上的系数相加然后输出。
+
+程序要处理的幂最大为100。
+
+**输入格式:**
+
+总共要输入两个多项式，每个多项式的输入格式如下：
+
+每行输入两个数字，第一个表示幂次，第二个表示该幂次的系数，所有的系数都是整数。第一行一定是最高幂，最后一行一定是0次幂。
+
+注意第一行和最后一行之间不一定按照幂次降低顺序排列；如果某个幂次的系数为0，就不出现在输入数据中了；0次幂的系数为0时还是会出现在输入数据中。
+
+**输出格式：**
+
+从最高幂开始依次降到0幂，如：
+
+2x6+3x5+12x3-6x+20
+
+注意其中的x是小写字母x，而且所有的符号之间都没有空格，如果某个幂的系数为0则不需要有那项。
+
+**输入样例：**
+
+6 2
+
+5 3
+
+3 12
+
+1 6
+
+0 20
+
+6 2
+
+5 3
+
+2 12
+
+1 6
+
+0 20
+
+**输出样例：**
+
+4x6+6x5+12x3+12x2+12x+40
+
+```c
+#include <stdio.h>
+
+#define MaxMin 101
+void ScanfMinValue(int arr[]);
+int main()
+{
+  // 数组 索引是幂次 值对应的是系数，因为系数为 0 不用输出，所以默认初始值为0
+  int arr[MaxMin] = {0};
+  ScanfMinValue(arr);
+  ScanfMinValue(arr);
+  // 用于判断是否已经输出，如果已经输出则需要输出 +
+  int hasPrint = 0;
+  // 幂次从高到低输出
+  for (int i = MaxMin - 1; i >= 0; i--)
+  {
+    if (arr[i] == 0 && i != 0)
+    {
+      // 说明不存在该幂次
+      continue;
+    }
+    if (hasPrint)
+    {
+      // 系数为正
+      if (arr[i] > 0)
+      {
+        printf("+");
+      }
+    }
+    if (i == 0)
+    {
+      // 幂次为0 直接输出
+      printf("%d", arr[i]);
+    }
+    else if (i == 1 && arr[i] == 1)
+    {
+      // 如果幂次和系数都为1
+      printf("x");
+    }
+    else if (i == 1)
+    {
+      // 如果幂次为 1
+      printf("%dx", arr[i]);
+    }
+    else if (arr[i] == 1)
+    {
+      // 如果系数为 1
+      printf("x%d", i);
+    }
+    else
+    {
+      printf("%dx%d", arr[i], i);
+    }
+    hasPrint = 1;
+  }
+  printf("\n");
+  return 0;
+}
+
+void ScanfMinValue(int arr[])
+{
+  int x = -1;
+  int y;
+  int i = 0;
+  while (x != 0)
+  {
+    scanf("%d %d", &x, &y);
+    arr[x] += y;
+  }
+}
+```
+
+### 鞍点
+
+**题目内容：**
+
+ 给定一个n*n矩阵A。矩阵A的鞍点是一个位置（i，j），在该位置上的元素是第i行上的最大数，第j列上的最小数。一个矩阵A也可能没有鞍点。 你的任务是找出A的鞍点。 输入格式: 输入的第1行是一个正整数n, （1<=n<=100），然后有n行，每一行有n个整数，同一行上两个整数之间有一个或多个空格。 
+
+**输出格式：** 
+
+对输入的矩阵，如果找到鞍点，就输出其下标。下标为两个数字，第一个数字是行号，第二个数字是列号，均从0开始计数。 如果找不到，就输出 NO 题目所给的数据保证了不会出现多个鞍点。
+
+ **输入样例：**
+
+ 4 
+
+1 7 4 1
+
+ 4 8 3 6
+
+ 1 6 1 2
+
+ 0 7 8 9
+
+ **输出样例：**
+
+ 2 1
+
+```c
+#include <stdio.h>
+int main()
+{
+  int n;
+  scanf("%d", &n);
+  int arr[n][n + 1];
+  int i = 0;
+  int j = 0;
+  // 用于保存每列的最小值
+  int minCol[n];
+  for (int m = 0; m < n; m++)
+  {
+    minCol[m] = 32767;
+  }
+  while (i < n)
+  {
+    int a = -32768;
+    for (j = 0; j < n; j++)
+    {
+      scanf("%d", &arr[i][j]);
+      // 获取每行数据的同时，计算出该行的最大数
+      if (arr[i][j] > a)
+      {
+        a = arr[i][j];
+      }
+      // 计算当前每列最小值
+      if (arr[i][j] < minCol[j])
+      {
+        minCol[j] = arr[i][j];
+      }
+    }
+    arr[i][n] = a;
+    i++;
+  }
+  int found = 0;
+  for (i = 0; i < n; i++)
+  {
+    for (j = 0; j < n;j++) {
+      if (arr[i][j] == arr[i][n] && arr[i][j] == minCol[j]) {
+        found = 1;
+        printf("%d %d\n", i, j);
+        break;
+      }
+    }
+  }
+  if (found == 0) {
+    printf("NO\n");
+  }
+  return 0;
+}
+```
+
+## 字符串和文件 I/O
+
+### 字符类型
+
+char 是一种整数，也是一种特殊类型：字符，这是因为：
+
+- 用单引号表示的字符字面量： 'a'，'1'
+- ''也是一个字符
+- printf 和 scanf 用 %c 来输入输出字符
+
+```c
+#include <stdio.h>
+
+int main() {
+  char c;
+  char d;
+  c = 1;
+  d = '1';
+  printf("c = %d\n", c); // c = 1
+  printf("d = %d\n", d); // d = 49
+  printf("d = '%c'", d); // d = '1'
+  return 0;
+}
+
+#include <stdio.h>
+#include <ctype.h>
+
+int main()
+{
+  char c = 'c';
+  char d = 'D';
+  char e = 'E';
+  printf("the upper case of c:%c\n", toupper(c));
+  printf("the lower case of D:%c\n", tolower(d));
+  printf("the upper case of E:%c\n", toupper(e));
+}
+```
+
+如何输入 '1' 字符给 char c?
+
+- `scanf("%c", &c);`   —> 1
+- `scanf("%d", &i); c=i;`  —> 49
+- '1' 的 ASCII 表码是 49，所以当 c == 49 时，它代表 '1'，即 49 == '1'
+
+```c
+#include <stdio.h>
+
+int main() {
+  char c = 'c';
+  char d = 'D';
+  printf("%c\n", c - 'a' + 'A'); // C
+  printf("%c\n", d - 'A' + 'a'); // d
+}
+```
+
+![image-20231128214509491](./images/image-20231128214509491.png)
+
+### 字符串
+
+字符串是数组，声明方式如下：
+
+```c
+#include <stdio.h>
+
+int main() {
+  char *str = "hello";
+  char word[] = "hello";
+  char line[10] = "hello";
+}
+```
+
+![image-20231128214730585](./images/image-20231128214730585.png)
+
+字符串常量 "hello"
+
+- "hello" 会被编译器变成一个字符串数组放在某处，这个数组的长度是6，结尾还有表示结束的 0
+- 两个相邻的字符串常量会被自动连接起来
+
+```c
+#include <stdio.h>
+
+int main() {
+  char *str = "hello"
+  "world";
+  printf("%s", str); // helloworld
+}
+```
+
+C 语言的字符串是以字符数组的形态存在的
+
+- 不能用运算符对字符串做运算
+- 通过数组的方式可以遍历字符串
+- 唯一特殊的地方是字符串字面量可以用来初始化字符数组
+
+### 字符串变量
+
+ ```c
+ #include <stdio.h>
+ 
+ int main() {
+   char *s = "hello world";
+   char *s2 = "hello";
+   int a = 1;
+   char b[] = "hello";
+   printf("s =%p\n", s);
+   printf("s2=%p\n", s2);
+   printf("a =%p\n", &a);
+   printf("b =%p\n", b);
+ }
+ /**
+   s =0x1070abf6f
+   s2=0x1070abf7b
+   a =0x7ff7b8e572cc
+   b =0x7ff7b8e572c6
+ */
+ ```
+
+`char *s="hello world";`
+
+- s 是一个指针，初始化指向一个字符串常量
+- 由于是这个常量所在的地方，所以实际 s 是 `const char *s`，由于历史原因，编译器接受不带 const 的写法
+- 但是试图对 s 所指字符串做写入会导致严重的后果
+
+如果需要修改字符串，应该用数组声明，`char b[] = "hello";`
+
+![image-20231128221900018](./images/image-20231128221900018.png)
+
+使用指针还是数组声明字符串？
+
+- 数组：这个字符串在这里，作为本地变量空间会被自动回收， 构造一个字符串
+- 指针：这个字符串不知道在哪里，处理参数，动态分配空间，处理一个字符串
+
+**`char *` 和字符串的区别**
+
+- 字符串可以用 `char*`的形式表达
+- `char *`不一定是字符串，本意是指向字符的指针，可能指向的是字符的数组（类似 int* 一样）
+- 只有它所指的字符串数组有结尾 0,才能说它所指的是字符串
+
+### 字符串输入输出
+
+使用 `%s`， `scanf("%s", str);` 读入一个单词，遇到空格、tab或回车为止，但是不安全，因为不知道要读取的内容的长度。
+
+**`sacnf("%7f", str);` 表明最多允许读入 7 个字符。**
+
+```c
+#include <stdio.h>
+
+int main() {
+  char str[8];
+  char str2[8];
+  scanf("%7s", str);
+  scanf("%7s", str2);
+  printf("##%s##%s\n", str, str2);
+}
+/**
+  12345678
+  ##1234567##8
+*/
+```
+
+**`getchar()` 将每次只能读取一个字符**
+
+![image-20231129233614236](./images/image-20231129233614236.png)
+
+### 单词长度
+
+**题目内容:** 
+
+你的程序要读入一行文本,其中以空格分隔为若干个单词,以 . 结束 你要输出这行文本中每个单词的长度 这里的单词与语言无关,可以包括各种符号,比如 it's 算一个单词,长度为4 注意,行中可能出现连续的空格
+
+ **输入格式:** 
+
+输入在一行中给出一行文本,以 . 结束,结尾的句号不能计算在最后一个单词的长度内 
+
+**输出格式:**
+
+ 在一行中输出这行文本对应的单词的长度,每个长度之间以空格隔开,行末没有最后的空格 
+
+**输入样例:** 
+
+It's great to see you here. 
+
+**输出样例:** 
+
+4 5 2 3 3 4
+
+```c
+#include <stdio.h>
+int main() {
+  char c;
+  int i = 0;
+  char prev = ' ';
+  int hasPrint = 0;
+  while (c != '.')
+  {
+    c = getchar();
+    if (c == ' ') {
+      if (prev != ' ') {
+        if (hasPrint) {
+          printf(" ");
+        }
+        printf("%d", i);
+        hasPrint = 1;
+      }
+      i = 0;
+    }
+    else
+    {
+      if (c == '.') {
+        if (hasPrint)
+        {
+          printf(" ");
+        }
+        if (i != 0) {
+          printf("%d\n", i);
+        }
+        break;
+      } else {
+        i++;
+      }
+    }
+    prev = c;
+  }
+  return 0;
+}
+```
+
+### GPS数据处理
+
+**题目内容：** 
+
+NMEA-0183协议是为了在不同的GPS（全球定位系统）导航设备中建立统一的BTCM（海事无线电技术委员会）标准，由美国国家海洋电子协会（NMEA-The National Marine Electronics Associa-tion）制定的一套通讯协议。GPS接收机根据NMEA-0183协议的标准规范，将位置、速度等信息通过串口传送到PC机、PDA等设备。
+
+NMEA-0183协议是GPS接收机应当遵守的标准协议，也是目前GPS接收机上使用最广泛的协议，大多数常见的GPS接收机、GPS数据处理软件、导航软件都遵守或者至少兼容这个协议。
+
+NMEA-0183协议定义的语句非常多，但是常用的或者说兼容性最广的语句只有$GPGGA、$GPGSA、$GPGSV、$GPRMC、$GPVTG、$GPGLL等。 
+
+其中$GPRMC语句的格式如下： $GPRMC,024813.640,A,3158.4608,N,11848.3737,E,10.05,324.27,150706,,,A*50 
+
+这里整条语句是一个文本行，行中以逗号“,”隔开各个字段，每个字段的大小（长度）不一，这里的示例只是一种可能，并不能认为字段的大小就如上述例句一样。 
+
+字段0：$GPRMC，语句ID，表明该语句为Recommended Minimum Specific GPS/TRANSIT Data（RMC）推荐最小定位信息 
+
+字段1：UTC时间，hhmmss.sss格式 
+
+字段2：状态，A=定位，V=未定位 
+
+字段3：纬度ddmm.mmmm，度分格式（前导位数不足则补0） 
+
+字段4：纬度N（北纬）或S（南纬）
+
+字段5：经度dddmm.mmmm，度分格式（前导位数不足则补0）
+
+字段6：经度E（东经）或W（西经） 
+
+字段7：速度，节，Knots 
+
+字段8：方位角，度 
+
+字段9：UTC日期，DDMMYY格式 
+
+字段10：磁偏角，（000 - 180）度（前导位数不足则补0）
+
+字段11：磁偏角方向，E=东W=西 
+
+字段16：校验值 
+
+这里，`*`为校验和识别符，其后面的两位数为校验和，代表了`$`和`*`之间所有字符（不包括这两个字符）的异或值的十六进制值。上面这条例句的校验和是十六进制的50，也就是十进制的80。
+
+提示：^运算符的作用是异或。将$和*之间所有的字符做^运算(第一个字符和第二个字符异或，结果再和第三个字符异或，依此类推)之后的值对65536取余后的结果，应该和*后面的两个十六进制数字的值相等，否则的话说明这条语句在传输中发生了错误。注意这个十六进制值中是会出现A-F的大写字母的。
+
+现在，你的程序要读入一系列GPS输出，其中包含$GPRMC，也包含其他语句。在数据的最后，有一行单独的 END 表示数据的结束。 
+
+你的程序要从中找出$GPRMC语句，计算校验和，找出其中校验正确，并且字段2表示已定位的语句，从中计算出时间，换算成北京时间。一次数据中会包含多条$GPRMC语句，以最后一条语句得到的北京时间作为结果输出。 你的程序一定会读到一条有效的$GPRMC语句。 
+
+**输入格式:**
+
+ 多条GPS语句，每条均以回车换行结束。最后一行是END三个大写字母。 
+
+**输出格式：** 
+
+6位数时间，表达为： `hh:mm:ss` 其中，hh是两位数的小时，不足两位时前面补0；mm是两位数的分钟，不足两位时前面补0；ss是两位数的秒，不足两位时前面补0。 
+
+**输入样例：**
+
+$GPRMC,024813.640,A,3158.4608,N,11848.3737,E,10.05,324.27,150706,,,A*50 
+
+END
+
+**输出样例：**
+
+10:48:13
+
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int checkStr(char *str);
+void copy(char *, char *, int start, int end);
+void getTime(char str[100], int *h, int *m, int *s);
+
+int main()
+{
+  char str[100];
+  int h, m, s;
+  scanf("%s", str);
+  while (strcmp(str, "END") != 0)
+  {
+    if (checkStr(str)) {
+      getTime(str, &h, &m, &s);
+    }
+    scanf("%s", str);
+  }
+  printf("%02d:%02d:%02d\n", h, m, s);
+  return 0;
+}
+int checkStr(char *str){
+  int valid = 1;
+  char *validStr = "$GPRMC";
+  for (int i = 0; i < 6; i++)
+  {
+    if (validStr[i] != str[i])
+    {
+      valid = 0;
+      break;
+    }
+  }
+  return valid;
+}
+void copy(char *dest, char *src, int start, int end){
+  int j = 0;
+  for (int i = start; i < end; i++)
+  {
+    dest[j++] = src[i];
+  }
+  dest[j] = '\0';
+}
+void getTime(char str[100], int *h, int *m, int *s)
+{
+  int res = str[1];
+  int i;
+  for (i = 2; str[i] != '*'; i++)
+  {
+    res ^= str[i];
+  }
+  char xRes[10];
+  sprintf(xRes, "%X", res % 65536);
+  char check[3];
+  check[0] = str[i + 1];
+  check[1] = str[i + 2];
+  check[2] = '\0';
+  if (!strcmp(xRes, check))
+  {
+    char time[8];
+    copy(time, str, 7, 13);
+    int ret = atoi(time);
+    ret /= 1;
+    *s = ret % 100;
+    ret /= 100;
+    *m = ret % 100;
+    *h = ret / 100;
+    *h += 8;
+    if (*h >= 24)
+    {
+      *h -= 24;
+    }
+  }
+}
+```
+
+### 文件I/O
+
+通过标准库 `stdio.h` 里面的 `fopen` 函数读取文件的内容，如果读取出错，会返回一个空指针 NULL
+
+```c
+#include <stdio.h>
+
+int main()
+{
+  FILE *fp;
+  fp = fopen("./file2.txt", "r");
+  if (fp == NULL)
+  {
+    perror("打开文件时发生错误");
+    return -1;
+  }
+  int c;
+  while (1) {
+    c = fgetc(fp);
+    // 读取到文件末尾
+    if (feof(fp)) {
+      break;
+    }
+    printf("%c", c);
+  }
+  fclose(fp);
+  return 0;
+}
+```
+
+具体相关函数及使用可以在[标准库](https://www.runoob.com/cprogramming/c-standard-library-stdio-h.html)中查到。
