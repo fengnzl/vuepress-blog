@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>微信小程序商城构建全栈应用（二） | 城南花已开</title>
+    <meta name="generator" content="VuePress 1.8.3">
+    <link rel="icon" href="/blog/assets/logo.ico">
+    <meta name="description" content="所爱隔山海，城南花已开">
+    
+    <link rel="preload" href="/blog/assets/css/0.styles.15804160.css" as="style"><link rel="preload" href="/blog/assets/js/app.2cc39ea3.js" as="script"><link rel="preload" href="/blog/assets/js/2.fb25410d.js" as="script"><link rel="preload" href="/blog/assets/js/44.d5025ccd.js" as="script"><link rel="prefetch" href="/blog/assets/js/10.497e2948.js"><link rel="prefetch" href="/blog/assets/js/11.b4461378.js"><link rel="prefetch" href="/blog/assets/js/12.ed4ac828.js"><link rel="prefetch" href="/blog/assets/js/13.5dd73a9c.js"><link rel="prefetch" href="/blog/assets/js/14.31f9a01b.js"><link rel="prefetch" href="/blog/assets/js/15.9a23c20a.js"><link rel="prefetch" href="/blog/assets/js/16.39eadc81.js"><link rel="prefetch" href="/blog/assets/js/17.254cea96.js"><link rel="prefetch" href="/blog/assets/js/18.23b5d51c.js"><link rel="prefetch" href="/blog/assets/js/19.e1755fff.js"><link rel="prefetch" href="/blog/assets/js/20.9f8568a1.js"><link rel="prefetch" href="/blog/assets/js/21.8a27a340.js"><link rel="prefetch" href="/blog/assets/js/22.f8967a83.js"><link rel="prefetch" href="/blog/assets/js/23.e5122aa7.js"><link rel="prefetch" href="/blog/assets/js/24.a6eab485.js"><link rel="prefetch" href="/blog/assets/js/25.61cd9fb4.js"><link rel="prefetch" href="/blog/assets/js/26.c967bdd1.js"><link rel="prefetch" href="/blog/assets/js/27.8d87ac3f.js"><link rel="prefetch" href="/blog/assets/js/28.e1e3ee35.js"><link rel="prefetch" href="/blog/assets/js/29.698de22f.js"><link rel="prefetch" href="/blog/assets/js/3.9d9152b8.js"><link rel="prefetch" href="/blog/assets/js/30.583568d8.js"><link rel="prefetch" href="/blog/assets/js/31.ea143d34.js"><link rel="prefetch" href="/blog/assets/js/32.fe48e2d4.js"><link rel="prefetch" href="/blog/assets/js/33.a282bb1e.js"><link rel="prefetch" href="/blog/assets/js/34.1fec4436.js"><link rel="prefetch" href="/blog/assets/js/35.35cb13dd.js"><link rel="prefetch" href="/blog/assets/js/36.0799adb7.js"><link rel="prefetch" href="/blog/assets/js/37.ea4c6e45.js"><link rel="prefetch" href="/blog/assets/js/38.e6eef6cd.js"><link rel="prefetch" href="/blog/assets/js/39.f21187a2.js"><link rel="prefetch" href="/blog/assets/js/4.68c8a258.js"><link rel="prefetch" href="/blog/assets/js/40.fd71bc09.js"><link rel="prefetch" href="/blog/assets/js/41.e4871cf0.js"><link rel="prefetch" href="/blog/assets/js/42.2293a5fd.js"><link rel="prefetch" href="/blog/assets/js/43.a203256f.js"><link rel="prefetch" href="/blog/assets/js/45.553e5875.js"><link rel="prefetch" href="/blog/assets/js/46.e56c63c2.js"><link rel="prefetch" href="/blog/assets/js/47.0919b21b.js"><link rel="prefetch" href="/blog/assets/js/48.53bd59a3.js"><link rel="prefetch" href="/blog/assets/js/49.3761c17a.js"><link rel="prefetch" href="/blog/assets/js/5.364dc182.js"><link rel="prefetch" href="/blog/assets/js/50.769815b0.js"><link rel="prefetch" href="/blog/assets/js/51.feb30ae1.js"><link rel="prefetch" href="/blog/assets/js/52.b9c26cac.js"><link rel="prefetch" href="/blog/assets/js/53.f3610b84.js"><link rel="prefetch" href="/blog/assets/js/54.ed2d6c3b.js"><link rel="prefetch" href="/blog/assets/js/55.82ec5ba6.js"><link rel="prefetch" href="/blog/assets/js/56.05494772.js"><link rel="prefetch" href="/blog/assets/js/57.6c4d31de.js"><link rel="prefetch" href="/blog/assets/js/58.adaea99b.js"><link rel="prefetch" href="/blog/assets/js/59.8d7b110e.js"><link rel="prefetch" href="/blog/assets/js/6.075ad0d6.js"><link rel="prefetch" href="/blog/assets/js/60.a824ac80.js"><link rel="prefetch" href="/blog/assets/js/61.821778f8.js"><link rel="prefetch" href="/blog/assets/js/62.bd3049c3.js"><link rel="prefetch" href="/blog/assets/js/63.2abd2cf8.js"><link rel="prefetch" href="/blog/assets/js/64.25c1b6fa.js"><link rel="prefetch" href="/blog/assets/js/65.5862d6ed.js"><link rel="prefetch" href="/blog/assets/js/66.5e7b6293.js"><link rel="prefetch" href="/blog/assets/js/67.14f68b2e.js"><link rel="prefetch" href="/blog/assets/js/68.1bf58420.js"><link rel="prefetch" href="/blog/assets/js/69.ea9ae14c.js"><link rel="prefetch" href="/blog/assets/js/7.779683fb.js"><link rel="prefetch" href="/blog/assets/js/70.3da48032.js"><link rel="prefetch" href="/blog/assets/js/71.9fe04adc.js"><link rel="prefetch" href="/blog/assets/js/72.bcd62e5a.js"><link rel="prefetch" href="/blog/assets/js/73.10b3f3a9.js"><link rel="prefetch" href="/blog/assets/js/74.e2626435.js"><link rel="prefetch" href="/blog/assets/js/75.8d7fe3e1.js"><link rel="prefetch" href="/blog/assets/js/76.cd208881.js"><link rel="prefetch" href="/blog/assets/js/77.82b6e614.js"><link rel="prefetch" href="/blog/assets/js/78.50700c6c.js"><link rel="prefetch" href="/blog/assets/js/79.e230f5da.js"><link rel="prefetch" href="/blog/assets/js/8.242b22d8.js"><link rel="prefetch" href="/blog/assets/js/80.63dd0422.js"><link rel="prefetch" href="/blog/assets/js/81.f8f1a9c8.js"><link rel="prefetch" href="/blog/assets/js/82.b6211fce.js"><link rel="prefetch" href="/blog/assets/js/83.6cabba5c.js"><link rel="prefetch" href="/blog/assets/js/84.a0dc3dfa.js"><link rel="prefetch" href="/blog/assets/js/85.b370face.js"><link rel="prefetch" href="/blog/assets/js/86.78137d90.js"><link rel="prefetch" href="/blog/assets/js/87.34e58bfd.js"><link rel="prefetch" href="/blog/assets/js/88.268a29b0.js"><link rel="prefetch" href="/blog/assets/js/9.6ee383ea.js">
+    <link rel="stylesheet" href="/blog/assets/css/0.styles.15804160.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog/" class="home-link router-link-active"><img src="/blog/assets/logo.png" alt="城南花已开" class="logo"> <span class="site-name can-hide">城南花已开</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="日常积累" class="dropdown-title"><span class="title">日常积累</span> <span class="arrow down"></span></button> <button type="button" aria-label="日常积累" class="mobile-dropdown-title"><span class="title">日常积累</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/daily-learn/JavaScript/call-apply-bind-simulator.html" class="nav-link">
+  JavaScript
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/vue/" class="nav-link">
+  Vue
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/CSS/make-talkbubble.html" class="nav-link">
+  CSS
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/PHP/tp51-timestamp-autosave.html" class="nav-link">
+  PHP
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/Git/git-des.html" class="nav-link">
+  Git
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/Scaffold/Introduction.html" class="nav-link">
+  Scaffold
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/HandWriting/Promise.html" class="nav-link">
+  HandWriting
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/Node/Node-Koa1.html" class="nav-link">
+  Node
+</a></li></ul></div></div><div class="nav-item"><a href="/blog/cs-basic/data-structures/base-structures.html" class="nav-link">
+  计算机基础
+</a></div><div class="nav-item"><a href="/blog/translation/Arrays-symbols-and-realms.html" class="nav-link">
+  外文翻译
+</a></div> <a href="https://github.com/fengnzl" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="日常积累" class="dropdown-title"><span class="title">日常积累</span> <span class="arrow down"></span></button> <button type="button" aria-label="日常积累" class="mobile-dropdown-title"><span class="title">日常积累</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog/daily-learn/JavaScript/call-apply-bind-simulator.html" class="nav-link">
+  JavaScript
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/vue/" class="nav-link">
+  Vue
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/CSS/make-talkbubble.html" class="nav-link">
+  CSS
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/PHP/tp51-timestamp-autosave.html" class="nav-link">
+  PHP
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/Git/git-des.html" class="nav-link">
+  Git
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/Scaffold/Introduction.html" class="nav-link">
+  Scaffold
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/HandWriting/Promise.html" class="nav-link">
+  HandWriting
+</a></li><li class="dropdown-item"><!----> <a href="/blog/daily-learn/Node/Node-Koa1.html" class="nav-link">
+  Node
+</a></li></ul></div></div><div class="nav-item"><a href="/blog/cs-basic/data-structures/base-structures.html" class="nav-link">
+  计算机基础
+</a></div><div class="nav-item"><a href="/blog/translation/Arrays-symbols-and-realms.html" class="nav-link">
+  外文翻译
+</a></div> <a href="https://github.com/fengnzl" target="_blank" rel="noopener noreferrer" class="repo-link">
+    GitHub
+    <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></nav>  <ul class="sidebar-links"><li><section class="sidebar-group collapsable depth-0"><p class="sidebar-heading open"><span>微信小程序商城构建全栈应用</span> <span class="arrow down"></span></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/first.html" class="sidebar-link">微信小程序商城构建全栈应用（一）</a></li><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html" aria-current="page" class="active sidebar-link">微信小程序商城构建全栈应用（二）</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html#banner接口定义及自定义控制器多级目录" class="sidebar-link">Banner接口定义及自定义控制器多级目录</a></li><li class="sidebar-sub-header"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html#validate验证器" class="sidebar-link">Validate验证器</a></li><li class="sidebar-sub-header"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html#零食商贩架构体系" class="sidebar-link">零食商贩架构体系</a></li><li class="sidebar-sub-header"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html#rest与restful" class="sidebar-link">REST与RESTFul</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html#soap-rest之前的重要协议" class="sidebar-link">SOAP（REST之前的重要协议）</a></li><li class="sidebar-sub-header"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/second.html#rest与restful-api" class="sidebar-link">REST与RESTFul API</a></li></ul></li></ul></li><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/third.html" class="sidebar-link">微信小程序商城构建全栈应用（三）</a></li><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/fourth.html" class="sidebar-link">微信小程序商城构建全栈应用（四）</a></li><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/fifth.html" class="sidebar-link">微信小程序商城构建全栈应用（五）</a></li><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/sixth.html" class="sidebar-link">微信小程序商城构建全栈应用（六）</a></li><li><a href="/blog/daily-learn/PHP/wx-tp-fullstack/seventh.html" class="sidebar-link">微信小程序商城构建全栈应用（七）</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="微信小程序商城构建全栈应用-二"><a href="#微信小程序商城构建全栈应用-二" class="header-anchor">#</a> 微信小程序商城构建全栈应用（二）</h1> <p>此文主要描述了如何在项目中构建验证层以及介绍了 RESTFul API。</p> <h2 id="banner接口定义及自定义控制器多级目录"><a href="#banner接口定义及自定义控制器多级目录" class="header-anchor">#</a> Banner接口定义及自定义控制器多级目录</h2> <p>banner对应的是页面中的banner位的个数，banner_item对应的是某个banner位的子banner，banner_item的key_word由子banner来的type字段来决定是什么，可能是商品ID或者是专题ID等。banner和banner_item是属于一对多的关系，即一个banner可以有多个banner_item，某个banner_item只能属于一个banner。</p> <div class="language-mysql line-numbers-mode"><pre class="language-text"><code>SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for banner
+-- ----------------------------
+DROP TABLE IF EXISTS `banner`;
+CREATE TABLE `banner` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL COMMENT 'Banner名称，通常作为标识',
+  `description` varchar(255) DEFAULT NULL COMMENT 'Banner描述',
+  `delete_time` int(11) DEFAULT NULL,
+  `update_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='banner管理表';
+
+-- ----------------------------
+-- Records of banner
+-- ----------------------------
+INSERT INTO `banner` VALUES ('1', '首页置顶', '首页轮播图', null, null);
+
+-- ----------------------------
+-- Table structure for banner_item
+-- ----------------------------
+DROP TABLE IF EXISTS `banner_item`;
+CREATE TABLE `banner_item` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `img_id` int(11) NOT NULL COMMENT '外键，关联image表',
+  `key_word` varchar(100) NOT NULL COMMENT '执行关键字，根据不同的type含义不同',
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '跳转类型，可能导向商品，可能导向专题，可能导向其他。0，无导向；1：导向商品;2:导向专题',
+  `delete_time` int(11) DEFAULT NULL,
+  `banner_id` int(11) NOT NULL COMMENT '外键，关联banner表',
+  `update_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COMMENT='banner子项表';
+
+-- ----------------------------
+-- Records of banner_item
+-- ----------------------------
+INSERT INTO `banner_item` VALUES ('1', '65', '6', '1', null, '1', null);
+INSERT INTO `banner_item` VALUES ('2', '2', '25', '1', null, '1', null);
+INSERT INTO `banner_item` VALUES ('3', '3', '11', '1', null, '1', null);
+INSERT INTO `banner_item` VALUES ('5', '1', '10', '1', null, '1', null);
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br></div></div><p>首先我们要在<code>api/controller/v1</code>文件中新建<code>banner.php</code>控制器文件，然后在里面编写接口</p> <p>以下是比较规范的方法注释</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token keyword">class</span> <span class="token class-name-definition class-name">Banner</span> <span class="token keyword">extends</span> <span class="token class-name">Controller</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/**
+     * 获取指定id的banner信息
+     * @url /banner/:id
+     * @http GET
+     * @id banner的id号
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function-definition function">getBanner</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br></div></div><p>这是我们需要在<code>route.php</code>文件中进行如下设置，才能正确请求接口</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token keyword">use</span> <span class="token package">think<span class="token punctuation">\</span>Route</span><span class="token punctuation">;</span>
+<span class="token class-name static-context">Route</span><span class="token operator">::</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'banner/:id'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'api/v1.Banner/getBanner'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h2 id="validate验证器"><a href="#validate验证器" class="header-anchor">#</a> Validate验证器</h2> <p>**独立验证：**批量验证要使用batch，项目开发较少用  这种方式进行验证。</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function-definition function">getBanner</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token comment">// 独立验证</span>
+        <span class="token variable">$data</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+            <span class="token string single-quoted-string">'name'</span><span class="token operator">=&gt;</span><span class="token string single-quoted-string">'afsdafdsafds'</span><span class="token punctuation">,</span>
+            <span class="token string single-quoted-string">'email'</span><span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'affsdaqq.com'</span>
+        <span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+        <span class="token variable">$validate</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Validate</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+            <span class="token string single-quoted-string">'name'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'require|max:10'</span><span class="token punctuation">,</span>
+            <span class="token string single-quoted-string">'email'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'email'</span>
+        <span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token variable">$result</span> <span class="token operator">=</span> <span class="token variable">$validate</span><span class="token operator">-&gt;</span><span class="token function">batch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-&gt;</span><span class="token function">check</span><span class="token punctuation">(</span><span class="token variable">$data</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">halt</span><span class="token punctuation">(</span><span class="token variable">$validate</span><span class="token operator">-&gt;</span><span class="token function">getError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br></div></div><p>请求之后会提示验证出错</p> <p><img src="https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191127234709.png" alt=""></p> <p>**验证器验证：**他对独立验证进行了很好的封装，也是推荐的一种方式。</p> <p>在<code>api/validate</code>文件夹中新建<code>TestValidate.php</code>文件，然后再该验证器中编写验证规则</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token keyword">namespace</span> <span class="token package">app<span class="token punctuation">\</span>api<span class="token punctuation">\</span>validate</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token package">think<span class="token punctuation">\</span>Validate</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name-definition class-name">TestValidate</span> <span class="token keyword">extends</span> <span class="token class-name">Validate</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">protected</span> <span class="token variable">$rule</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token string single-quoted-string">'name'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'require|max:10'</span><span class="token punctuation">,</span>
+        <span class="token string single-quoted-string">'email'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'email'</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br></div></div><p>然后再需要验证这类参数的地方实例化调用即可。</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token variable">$validate</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TestValidate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$result</span> <span class="token operator">=</span> <span class="token variable">$validate</span><span class="token operator">-&gt;</span><span class="token function">batch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-&gt;</span><span class="token function">check</span><span class="token punctuation">(</span><span class="token variable">$data</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><h2 id="零食商贩架构体系"><a href="#零食商贩架构体系" class="header-anchor">#</a> 零食商贩架构体系</h2> <p>有些服务器的api需要token令牌，有些开放的就不用。传统我们所说的登录的功能就api中就是获取token令牌的过程。小程序与微信服务器也要交互来获取用户信息。</p> <p>通过以下结构图来理清思路，一般中小型项目都满足该架构，如果要使用分布式解决高并发问题，先按以下架构部署后再升级。</p> <p><img src="https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191128001920.png" alt=""></p> <p><img src="https://raw.githubusercontent.com/fengnzl/HexoImages/master/Gridea/20191128002009.png" alt=""></p> <h1 id="构建接口参数校验层"><a href="#构建接口参数校验层" class="header-anchor">#</a> 构建接口参数校验层</h1> <p>如果按照之前独立验证的方式进行请求参数的验证，当使用相同的验证机制时，就会出现大量重复的代码，如果需要验证的参数的多了也会变得重复，而且将验证值封装成一个函数，也不是最优解。因此需要使用验证器进行验证。</p> <p>随着项目的深入，会定义一系列验证一类的验证器。验证一类的验证可在多个处理业务逻辑上实现复用，也可减少代码冗长。当验证器足够多的时候甚至可以成为一个类库，供其它项目调用。处理某个业务逻辑当然也可以用多个验证器。</p> <p>由于项目中验证器都会使用到<code>goCheck</code>方法，需要封装一个公共验证器类，则其它验证器类继承该基类即可，该基类中需要定义一个<code>goCheck</code>方法。 用于检测<code>http</code>传递的参数是否正确，当然自定义的方法也可以写入。</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token keyword">namespace</span> <span class="token package">app<span class="token punctuation">\</span>api<span class="token punctuation">\</span>validate</span><span class="token punctuation">;</span>
+
+
+<span class="token keyword">use</span> <span class="token package">think<span class="token punctuation">\</span>Exception</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token package">think<span class="token punctuation">\</span>Request</span><span class="token punctuation">;</span>
+<span class="token keyword">use</span> <span class="token package">think<span class="token punctuation">\</span>Validate</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name-definition class-name">BaseValidate</span> <span class="token keyword">extends</span> <span class="token class-name">Validate</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/**
+     * 对http传递的参数进行验证
+     * @return bool  true
+     * @throws Exception 验证的错误信息
+     */</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function-definition function">goCheck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token comment">// 获取Http传递的所有参数，并对参数进行校验</span>
+        <span class="token variable">$params</span> <span class="token operator">=</span> <span class="token class-name static-context">Request</span><span class="token operator">::</span><span class="token function">param</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 调用验证器中的check()对参数进行验证</span>
+        <span class="token variable">$result</span> <span class="token operator">=</span> <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token function">check</span><span class="token punctuation">(</span><span class="token variable">$params</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 判断验证是否通过</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$result</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token constant boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+            <span class="token comment">// 未设置全局异常处理的情况下直接抛出错误</span>
+            <span class="token variable">$error</span> <span class="token operator">=</span> <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token function">getError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Exception</span><span class="token punctuation">(</span><span class="token variable">$error</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br></div></div><p>然后在相关的验证器中继承<code>BaseValidate</code>,并填写相关验证规则如<code>IDMustBePositiveInt</code>验证器用于判断是否为正整数</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token comment">/**
+ * 判断id是否是正整数的验证器
+ * @package app\api\validate
+ */</span>
+<span class="token keyword">class</span> <span class="token class-name-definition class-name">IDMustBePositiveInt</span> <span class="token keyword">extends</span> <span class="token class-name">BaseValidate</span>
+<span class="token punctuation">{</span>
+    <span class="token comment">/**
+     * 定义验证规则
+     * 格式：'字段名'    =&gt; ['规则1','规则2'...]
+     * @var array
+     */</span>    
+   <span class="token keyword">protected</span> <span class="token variable">$rule</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+       <span class="token string single-quoted-string">'id'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'require|IsPositiveInt'</span><span class="token punctuation">,</span>
+       <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">/**
+     * 定义错误信息
+     * 格式：'字段名.规则名'    =&gt; '错误信息'
+     * @var array
+     */</span>    
+    <span class="token keyword">protected</span> <span class="token variable">$message</span> <span class="token operator">=</span> <span class="token punctuation">[</span>
+        <span class="token string single-quoted-string">'id.require'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'必须填写相关id值'</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token comment">/**
+     * 自定义验证规则 判断id必须为正整数
+     */</span>
+    <span class="token comment">//                           校验字段的值  校验规则  传递的数据   校验的字段</span>
+    <span class="token keyword">protected</span> <span class="token keyword">function</span> <span class="token function-definition function">IsPositiveInt</span><span class="token punctuation">(</span><span class="token variable">$value</span> <span class="token punctuation">,</span> <span class="token variable">$rule</span><span class="token operator">=</span><span class="token string single-quoted-string">''</span> <span class="token punctuation">,</span><span class="token variable">$data</span><span class="token operator">=</span><span class="token string single-quoted-string">''</span> <span class="token punctuation">,</span><span class="token variable">$field</span><span class="token operator">=</span><span class="token string single-quoted-string">''</span> <span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token function">is_numeric</span><span class="token punctuation">(</span><span class="token variable">$value</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token function">intval</span><span class="token punctuation">(</span><span class="token variable">$value</span><span class="token punctuation">)</span><span class="token operator">.</span><span class="token string single-quoted-string">''</span> <span class="token operator">===</span> <span class="token variable">$value</span><span class="token operator">&amp;&amp;</span><span class="token punctuation">(</span><span class="token variable">$value</span> <span class="token operator">+</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token operator">&gt;</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token constant boolean">true</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span><span class="token keyword">else</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span> <span class="token variable">$field</span><span class="token operator">.</span><span class="token string single-quoted-string">'必须是正整数'</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br></div></div><p>最后在相关控制器中调用相关验证器并调用<code>goCheck()</code>方法进行验证，如果验证不通过则捕获异常，并通过抛出错误或者全局的异常处理机制进行输出或记录到日志中。</p> <div class="language-php line-numbers-mode"><pre class="language-php"><code><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">IDMustBePositiveInt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">-&gt;</span><span class="token function">goCheck</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br></div></div><p><img src="https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128135157.png" alt=""></p> <p>**注：**此时还不能进行批量验证，当使用全局异常处理时再完善此部分内容。</p> <h2 id="rest与restful"><a href="#rest与restful" class="header-anchor">#</a> REST与RESTFul</h2> <h3 id="soap-rest之前的重要协议"><a href="#soap-rest之前的重要协议" class="header-anchor">#</a> SOAP（REST之前的重要协议）</h3> <blockquote><p>SOAP（Simple Object Access Protocol，即简单对象访问协议）是交换数据的一种协议规范，使用在计算机网络Web服务（web service）中，交换带结构信息。SOAP为了简化网页服务器（Web Server）从XML数据库中提取数据时，节省去格式化页面时间，以及不同应用程序之间按照HTTP通信协议，遵从XML格式执行资料互换，使其抽象于语言实现、平台和硬件。</p></blockquote> <p>其主要具有以下特点:</p> <ol><li>重</li> <li>通常来说，使用XML描述数据</li> <li>前端访问公共服务的时候需要先访问网站后台，由网站后台去使用公共服务提供的代理类来访问公共服务，很长的访问过程，间接操作。</li></ol> <h3 id="rest与restful-api"><a href="#rest与restful-api" class="header-anchor">#</a> REST与RESTFul API</h3> <p><strong>REST</strong></p> <blockquote><p>英文：Representational State Transfer，又称具象(表述性)状态传输
+一种风格，约束，设计理念 基于资源
+可以参考这篇文章https://www.zhihu.com/question/27785028
+REST模式与复杂的SOAP和XML-RPC相比更加简洁</p></blockquote> <p><strong>RESTFul API</strong></p> <blockquote><p>REST 指的是一组架构约束条件和原则。满足这些约束条件和原则的应用程序或设计就是 RESTful。
+使用 RPC 样式架构构建的基于 SOAP 的 Web 服务成为实现 SOA 最常用的方法。RPC 样式的 Web 服务客户端将一个装满数据的信封（包括方法和参数信息）通过 HTTP 发送到服务器。服务器打开信封并使用传入参数执行指定的方法。方法的结果打包到一个信封并作为响应发回客户端。客户端收到响应并打开信封。每个对象都有自己独特的方法以及仅公开一个 URI 的 RPC 样式 Web 服务，URI 表示单个端点。它忽略 HTTP 的大部分特性且仅支持 POST 方法。</p></blockquote> <p>Restful Api基于REST的API设计理论，就是REST在Web接口中的一种应用和延伸。其主要有以下特点：</p> <ol><li>轻</li> <li>通常来说，使用JSON描述数据（基本上web应用方面都是用json）</li> <li>无状态（假设有两个请求，这两个请求是没有先后顺序之分的，没有直接关系，互相也不依赖），区别于有状态，有状态的就比如说连接数据库，只有先连接成功数据库才可以进行一系列的操作，操作完成后要关掉连接。</li> <li>基于资源，增删改查都只是对于资源状态的转变*，使用url来表示资源（不要出现动词，使用名词）</li> <li>使用Http动词来操作资源（get、post、delete、put）</li></ol> <p>总结：在传统的web开发里面我们选择get和post的依据是如果你的参数足够简单的话，不管你的操作是增、删还</p> <p>是改都会选择get，如果参数比较复杂的话就会用post方式，在restful不是由以上这些决定的，而是取决你的操作</p> <p>是查询操作还是新增操作</p> <p><strong>例子：</strong></p> <div class="language-http line-numbers-mode"><pre class="language-http"><code>/getmovie/:mid(不建议，动词操作)
+GET：/movie/:mid
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br></div></div><p><strong>RESTFul API 最佳实践</strong></p> <p>HTTP动词（幂等性，资源安全性）</p> <ol><li>POST：创建</li> <li>PUT：更新</li> <li>GET：查询</li> <li>DELETE：删除</li></ol> <p>状态码 ：404 400 200 201 202 401 403（A用户操作B用户的数据如果检测到要返回403） 500（未知的，或者知道错误但是不会返回给客户端查看时返回500）</p> <p>错误码：自定义的错误ID号</p> <p>统一描述错误：错误码、错误信息当前URL</p> <p>使用Token令牌来授权和验证身份</p> <p>版本控制，测试环境与生产环境分开：<a href="http://api.xxx.com/" target="_blank" rel="noopener noreferrer">api.xxx.com<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> <a href="http://dev.api.xxx.com/" target="_blank" rel="noopener noreferrer">dev.api.xxx.com<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></p> <p>URL语义要明确，最好可以“望文知意”</p> <p>最好是有一份比较标准的文档（中大型企业要有）</p> <p><img src="https://raw.githubusercontent.com/fengnzl/HexoImages/master/blog/20191128142045.png" alt=""></p> <p><strong>学习RESTFul API</strong></p> <p>可以模仿豆瓣API或者Github开发者API（标准）</p> <p>RestFul API的合理使用（切勿盲目照搬标准REST，有些业务复杂的照搬很难操作）</p></div> <footer class="page-edit"><div class="edit-link"><a href="https://github.com/fengnzl/vuepress-blog/edit/master/docs/daily-learn/PHP/wx-tp-fullstack/second.md" target="_blank" rel="noopener noreferrer">在 GitHub 上编辑此页</a> <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></div> <div class="last-updated"><span class="prefix">上次更新:</span> <span class="time">12/10/2022, 4:19:06 PM</span></div></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/blog/daily-learn/PHP/wx-tp-fullstack/first.html" class="prev">
+        微信小程序商城构建全栈应用（一）
+      </a></span> <span class="next"><a href="/blog/daily-learn/PHP/wx-tp-fullstack/third.html">
+        微信小程序商城构建全栈应用（三）
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"><!----><div></div></div></div>
+    <script src="/blog/assets/js/app.2cc39ea3.js" defer></script><script src="/blog/assets/js/2.fb25410d.js" defer></script><script src="/blog/assets/js/44.d5025ccd.js" defer></script>
+  </body>
+</html>
