@@ -1,4 +1,5 @@
 ---
+
 typora-copy-images-to: ./images
 ---
 
@@ -584,6 +585,29 @@ return_type function_name(parameter_list)
 
 可以通过 `man func_name` 来查看函数库中的函数如何使用
 
+### 程序参数
+
+`int main(int argc, char const *argv[])`
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char const *argv[]) {
+  int i = 0;
+  for (i = 0; i < argc;i++) {
+    printf("%d:%s\n", i, argv[i]);
+  }
+  return 0;
+}
+/**
+ *./hello2 1 2 3
+  0:./hello2
+  1:1
+  2:2
+*/
+```
+
 ### 随机数
 
 **`void srand(unsigned seed);`**
@@ -785,6 +809,34 @@ int main()
 `printf("%x\n", (int)&a);`我们可以通过上述方法输出变量的内存地址。但是你也可能会看到以下警告信息：
 
 <span style="color:red">warning: cast from pointer to integer of different size</span> 这是由于当前电脑为 64 位电脑，上述代码将 64 位内存地址转换为 32 位整数。因此在 64 位电脑，需要修改成以下代码 `printf("%lx\n", (long int)&a);`
+
+**指针加1实际加的是 sizeof(type) 的大小, 指针减1也是类似,指针可以做比较，实际比较地址的值；不同类型的指针不能相互赋值**
+
+```c
+#include <stdio.h>
+
+int main() {
+  char ac[] = {0, 1, 2, 3, 4,5,6,7,8,9};
+  char *p = ac; // <=> *p = &ac[0]
+  char *p1 = &ac[5];
+  printf("p  =%p\n", p);     // p  =0x7ff7b2b5d257
+  printf("p+1=%p\n", p + 1); // p+1=0x7ff7b2b5d258
+  printf("*(p+1)=%d\n", *(p + 1)); // *(p+1)=1  *(p + n) <=> &ac[n]
+  printf("p1-p=%d\n", p1 - p);     // p1-p=5
+  int ai[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+  int *q = ai;
+  int *q1 = &ai[6];
+  printf("q  =%p\n", q);     // q  =0x7ff7b2b5d260
+  printf("q+1=%p\n", q + 1); // q+1=0x7ff7b2b5d264
+  printf("*(q+1)=%d\n", *(q + 1)); //*(q+1)=1 <=> ai[1]
+  printf("q1-q=%d\n", q1 - q);     // q1-q=6
+  return 0;
+}
+```
+
+![image-20231212224514032](./images/image-20231212224514032.png)
+
+![image-20231212224918923](./images/image-20231212224918923.png)
 
 ### 引用参数
 
@@ -1472,6 +1524,45 @@ C 语言的字符串是以字符数组的形态存在的
 - `char *`不一定是字符串，本意是指向字符的指针，可能指向的是字符的数组（类似 int* 一样）
 - 只有它所指的字符串数组有结尾 0,才能说它所指的是字符串
 
+```c
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main(int argc, char const *argv[]) {
+  char s[] = "hello";
+  char *p = strchr(s, 'l');
+  printf("%s\n", p); // llo
+  char *t = (char *)malloc(strlen(p) + 1);
+  strcpy(t, p);
+  printf("t=%s\n", t); // t=llo 获取第一个 l 之后的字符串
+  p = strchr(p + 1, 'l'); // 查找第二个 l
+  printf("%s\n", p); // lo
+  return 0;
+}
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main(int argc, char const *argv[]) {
+  // 获取第一个l 之前的字符串
+  char s[] = "hello";
+  char *p = strchr(s, 'l');
+  char c = *p;
+  *p = '\0';
+  char *t = (char *)malloc(strlen(s) + 1);
+  strcpy(t, s);
+  // 将字符还原
+  *p = c;
+  printf("s=%s\n", s); // s=hello
+  printf("t=%s\n", t); // t=he
+  return 0;
+}
+```
+
+
+
 ### 字符串输入输出
 
 使用 `%s`， `scanf("%s", str);` 读入一个单词，遇到空格、tab或回车为止，但是不安全，因为不知道要读取的内容的长度。
@@ -1494,7 +1585,20 @@ int main() {
 */
 ```
 
-**`getchar()` 将每次只能读取一个字符**
+**`getchar()` 将每次只能读取一个字符,`putChar()`输出写一个字符，返回写了几个字符，EOF(-1)表示写失败**
+
+```c
+// 获取带有空格的输入
+void getStr(char a[]);
+void getStr(char a[]) {
+  int i = 0;
+  char c;
+  while ((c = getchar()) != '\n')
+  {
+    a[i++] = c;
+  }
+}
+```
 
 ![image-20231129233614236](./images/image-20231129233614236.png)
 
@@ -1705,6 +1809,75 @@ void getTime(char str[100], int *h, int *m, int *s)
 }
 ```
 
+### 字符串对比
+
+题目内容： 题目说起来很简单，你会读到两个字符串，每个字符串占据一行，每个字符串的长度均小于10000字符，而且第一个字符串的长度小于第二个字符串的。你的程序要找出第一个字符串在第二个字符串中出现的位置，输出这些位置，如果找不到，则输出-1。 
+
+注意，第一个字符的位置是0。 
+
+注意，第一个字符串在第二个字符串中的位置可能不止一处。
+
+注意，字符串中可能含有空格。 
+
+注意，两个字符串的长度一定大于0。 
+
+输入格式: 两个字符串，一行一个。 
+
+输出格式： 第一个字符串在第二个字符串中出现的位置，按照从小到到的顺序排列，每个数字后面有一个空格。 如果在第二个字符串中找不到第一个字符串，则输出-1。 
+
+输入样例：
+
+ abba
+
+ ababbba abbabbabbabbaacc
+
+ 输出样例：
+
+ 8 11 14 17
+
+```c
+#include <stdio.h>
+#include <string.h>
+void getStr(char a[]);
+int main(int argc, char const *argv[])
+{
+  char a[10000];
+  char b[10000];
+  int hasPrint = 0;
+  getStr(a);
+  getStr(b);
+  // c 为指向重合位置的指针
+  char *c = b - 1;
+  while (c != NULL)
+  {
+    // 每次都在上一次 s2 找到重合位置的下一位置开始查找
+    c = strstr(c + 1, a);
+    if(c != NULL) {
+      // 输出位置（指针差）
+      printf("%ld ", c - b);
+      hasPrint = 1;
+    }
+  }
+
+  if (!hasPrint)
+  {
+    printf("-1");
+  }
+  printf("\n");
+  return 0;
+}
+
+void getStr(char a[]) {
+  int i = 0;
+  char c;
+  while ((c = getchar()) != '\n')
+  {
+    a[i++] = c;
+  }
+  a[i] = '\0';
+}
+```
+
 ### 文件I/O
 
 通过标准库 `stdio.h` 里面的 `fopen` 函数读取文件的内容，如果读取出错，会返回一个空指针 NULL
@@ -1736,3 +1909,51 @@ int main()
 ```
 
 具体相关函数及使用可以在[标准库](https://www.runoob.com/cprogramming/c-standard-library-stdio-h.html)中查到。
+
+## 动态内存分配
+
+动态分配数组大小，可以使用 malloc 函数来申请内存空间，返回的结果是 void*,需要类型转换自己需要的类型。malloc函数的参数是以字节为单位的内存大小,需要使用sizeof运算符来计算所需的字节数 申请到的内存空间可以当作数组来使用,但在使用完毕后需要使用free函数将其释放。
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+  int number;
+  int *a;
+  int i = 0;
+  printf("输入数量: ");
+  scanf("%d", &number);
+  // int a[number]
+  a = (int *)malloc(number * sizeof(int));
+  for (i = 0; i < number;i++) {
+    scanf("%d", &a[i]);
+  }
+  for (i = number - 1; i >= 0;i--) {
+    printf("%d ", a[i]);
+  }
+  printf("\n");
+  free(a);
+  return 0;
+}
+```
+
+**如果申请失败则返回0 或者 NULL。**
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+  void *p;
+  int cnt = 0;
+  while((p = malloc(100 * 1024 * 1024))) {
+    cnt++;
+  }
+  printf("申请了%d100兆的内存\n", cnt);
+  return 0;
+}
+```
+
+为了避免 free 函数报错，我们可以在初始化变量时赋值 0；
+
